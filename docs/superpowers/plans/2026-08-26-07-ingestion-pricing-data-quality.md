@@ -61,7 +61,7 @@ Track last successful sync, last failure, provider version, and freshness.
 
 ```bash
 git add packages/ingestion
- git commit -m "feat: add provider-independent ingestion pipeline"
+git commit -m "feat: add provider-independent ingestion pipeline"
 ```
 
 ---
@@ -101,7 +101,7 @@ A second import of the same source revision must not duplicate products/observat
 
 ```bash
 git add packages/ingestion scripts/ingestion docs/data
- git commit -m "feat: seed catalog from BuildCores OpenDB"
+git commit -m "feat: seed catalog from BuildCores OpenDB"
 ```
 
 ---
@@ -138,7 +138,7 @@ Examples: same GPU chipset across multiple board-partner SKUs; same marketing se
 
 ```bash
 git add packages/ingestion/src/identity
- git commit -m "feat: add canonical hardware identity resolution"
+git commit -m "feat: add canonical hardware identity resolution"
 ```
 
 ---
@@ -151,12 +151,14 @@ git add packages/ingestion/src/identity
 - Create: `packages/ingestion/src/conflicts/detect.ts`
 - Create: `packages/ingestion/src/conflicts/tolerance.ts`
 - Create: `packages/ingestion/src/conflicts/canonicalize.ts`
+- Create: `packages/ingestion/src/conflicts/report.ts`
 - Create: `packages/db/src/schema/conflict.ts`
-- Create: `apps/web/src/app/admin/data-conflicts/page.tsx` only if admin UI is worth P1; otherwise CLI/report first
+- Create: `scripts/data/conflict-report.ts`
 - Test: conflict tests
 
 **Interfaces:**
 - Produces auditable canonical field selection and `DataConflict` records.
+- P0 exposes conflicts through a CLI/report. A browser admin review UI is explicitly post-hackathon/P1 and is not part of this task.
 
 - [ ] **Step 1: Define field-specific conflict tolerances**
 
@@ -170,11 +172,15 @@ Manufacturer evidence usually outranks retailer/community observations but every
 
 Store chosen value, reviewer, reason, evidence, timestamp; keep it reversible.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 4: Generate a deterministic conflict report**
+
+The report lists unresolved conflicts and current canonical selection without requiring an admin web page.
+
+- [ ] **Step 5: Commit**
 
 ```bash
-git add packages/ingestion packages/db apps/web/src/app/admin 2>/dev/null || true
- git commit -m "feat: add auditable hardware data conflict resolution"
+git add packages/ingestion packages/db scripts/data
+git commit -m "feat: add auditable hardware data conflict resolution"
 ```
 
 ---
@@ -206,7 +212,7 @@ If no Icecat entitlement/config exists, ingestion pipeline still passes and appl
 
 ```bash
 git add packages/ingestion/src/providers/icecat docs/data
- git commit -m "feat: add optional Icecat catalog enrichment"
+git commit -m "feat: add optional Icecat catalog enrichment"
 ```
 
 ---
@@ -243,7 +249,7 @@ The UI/agent must be able to say when/where a price was observed.
 
 ```bash
 git add packages/db packages/ingestion scripts/ingestion
- git commit -m "feat: add retailer offer observations"
+git commit -m "feat: add retailer offer observations"
 ```
 
 ---
@@ -276,7 +282,7 @@ Examples: current, discontinued, unknown.
 
 ```bash
 git add packages/ingestion/src/availability
- git commit -m "feat: classify hardware production and market availability"
+git commit -m "feat: classify hardware production and market availability"
 ```
 
 ---
@@ -312,7 +318,7 @@ firmware_topology: VERIFIED | PARTIAL | NONE
 
 ```bash
 git add packages/ingestion scripts/data docs/data
- git commit -m "feat: report hardware catalog coverage and quality"
+git commit -m "feat: report hardware catalog coverage and quality"
 ```
 
 ## Exit criteria
