@@ -180,7 +180,7 @@ Plan: `docs/superpowers/plans/2026-08-26-08-integration-verification-deployment-
 
 ## Recommended quota strategy
 
-### 1. Spend High only on the 21 High-designated jobs
+### 1. Spend High only on the 22 High-designated jobs
 
 The High jobs are where cross-system mistakes are most likely to be expensive. Do not turn every medium-sized task into High “just to be safe.”
 
