@@ -17,7 +17,8 @@
     "next": "16.3.3",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "three": "^0.185.1"
+    "three": "^0.185.1",
+    "@howtopc/webmcp": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
