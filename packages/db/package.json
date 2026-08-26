@@ -1,0 +1,22 @@
+{
+  "name": "@howtopc/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts", "./schema": "./src/schema/index.ts" },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --dir ../.. exec vitest run --project db --passWithNoTests",
+    "db:generate": "drizzle-kit generate --config drizzle.config.ts"
+  },
+  "dependencies": {
+    "@howtopc/domain": "workspace:*",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^0.31.10"
+  }
+}
