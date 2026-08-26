@@ -10,3 +10,4 @@ export * from "./categories/storage";
 export * from "./categories/network";
 export * from "./reference";
 export * from "./search";
+export * from "./offers";
