@@ -9,6 +9,7 @@ function compareRule(ruleId:string,a:ReferenceProduct|undefined,b:ReferenceProdu
 export function evaluateMvpRules(products:BuildProducts):CompatibilityRuleResult[]{
  const cpu=first(products,"CPU"),board=first(products,"MOTHERBOARD"),memory=first(products,"MEMORY"),gpu=first(products,"GPU"),pcCase=first(products,"CASE"),psu=first(products,"PSU"),cooler=first(products,"COOLER");
  const results:CompatibilityRuleResult[]=[];
+ const required=["CPU","MOTHERBOARD","MEMORY","CASE","PSU","COOLER"]; const missing=required.filter(category=>!first(products,category)); if(missing.length)results.push({ruleId:"required-build-components",status:"UNKNOWN",message:`Build is incomplete: missing ${missing.join(", ")}.`,involvedIds:[]});
  const pairs=[
  compareRule("cpu-motherboard-socket",cpu,board,(c,b)=>c.socket===b.socket,"CPU socket matches motherboard.","CPU socket does not match motherboard."),
  compareRule("memory-motherboard",memory,board,(m,b)=>m.type===b.memoryType,"Memory generation matches motherboard.","Memory generation does not match motherboard."),

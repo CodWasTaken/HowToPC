@@ -7,3 +7,7 @@ export function productsFor(ids:readonly string[]):ReferenceProduct[]{return ids
 export function snapshot(ids:readonly string[]):BuilderSnapshot { const products=productsFor(ids); return {ids:[...ids],products,report:evaluateBuild(products),totalPriceEur:products.reduce((sum,p)=>sum+p.priceEur,0)}; }
 export function createInitialBuild():BuilderSnapshot{return snapshot(initialBuildIds);}
 export function replacePart(ids:readonly string[],replacementId:string){const result=applySafeReplacement(ids,replacementId);return {...result,snapshot:snapshot(result.revisionIds),candidate:snapshot(result.candidateIds)};}
+
+export function removePart(ids: readonly string[], productId: string): BuilderSnapshot {
+  return snapshot(ids.filter((id) => id !== productId));
+}
