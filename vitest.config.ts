@@ -13,6 +13,7 @@ export default defineConfig({
       project("catalog", "./packages/catalog"),
       project("compatibility", "./packages/compatibility"),
       project("geometry", "./packages/geometry"),
+      project("ingestion", "./packages/ingestion"),
       project("webmcp", "./packages/webmcp"),
       project("web", "./apps/web"),
       project("shared", "./packages/shared")
