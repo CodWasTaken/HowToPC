@@ -1,0 +1,12 @@
+{
+  "name": "@howtopc/compatibility",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "pnpm --dir ../.. exec vitest run --project compatibility --passWithNoTests"
+  },
+  "dependencies": { "@howtopc/catalog": "workspace:*", "@howtopc/domain": "workspace:*" }
+}
