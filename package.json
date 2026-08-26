@@ -11,6 +11,7 @@
     "verify": "pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
+    "next": "16.3.3",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },
