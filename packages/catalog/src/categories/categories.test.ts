@@ -10,4 +10,8 @@ describe("P0 hardware schemas",()=>{
   test("all MVP schemas require version 1",()=>{
     for(const schema of [caseSpecSchema,coolerSpecSchema,cpuSpecSchema,fanSpecSchema,gpuSpecSchema,memorySpecSchema,motherboardSpecSchema,networkSpecSchema,psuSpecSchema,storageSpecSchema]) expect(schema.safeParse({schemaVersion:2}).success).toBe(false);
   });
+  test("supports DDR3-era memory and motherboards",()=>{
+    expect(memorySpecSchema.safeParse({schemaVersion:1,type:"DDR3",modules:2,moduleCapacityBytes:8*1024**3,speedMt:1600,ecc:false}).success).toBe(true);
+    expect(motherboardSpecSchema.safeParse({schemaVersion:1,socket:"LGA1155",formFactor:"MATX",memoryType:"DDR3",dimmSlots:2,maxMemoryBytes:16*1024**3,pcieSlots:3,m2Slots:0,sataPorts:4}).success).toBe(true);
+  });
 });
