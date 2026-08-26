@@ -1,13 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { referenceCatalog } from "@howtopc/catalog";
-import { createInitialBuild, removePart, replacePart, snapshot } from "@/lib/builder";
+import { bestReferenceOffer, referenceCatalog } from "@howtopc/catalog";
+import { createBudgetHomelabBuild, createInitialBuild, removePart, replacePart, snapshot } from "@/lib/builder";
 import { DigitalTwin } from "./digital-twin";
 import { ThemeToggle } from "./theme-toggle";
 import { WebMcpInspector } from "./webmcp-inspector";
 
 const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK"];
+const formatPln = (amount: number) => `${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(amount)} zł`;
+const offerTitle = (productId: string) => {
+  const offer = bestReferenceOffer(productId);
+  return offer ? `${offer.source} · ${offer.condition} · observed ${new Date(offer.observedAt).toLocaleDateString("pl-PL")}` : "No price observation";
+};
 
 export function BuilderWorkspace() {
   const initial = createInitialBuild();
@@ -41,7 +46,7 @@ export function BuilderWorkspace() {
         <div className="top-status">
           <span className={`status-dot ${current.report.status.toLowerCase()}`} />
           {current.report.status}
-          <span>€{current.totalPriceEur}</span>
+          <span>{formatPln(current.totalPricePln)}</span>
           <ThemeToggle />
         </div>
       </header>
@@ -59,7 +64,7 @@ export function BuilderWorkspace() {
             {visible.map((product) => (
               <button key={product.id} className={`part-row ${installed.has(product.id) ? "installed" : ""}`} onClick={() => choose(product.id)}>
                 <span><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}</small></span>
-                <span>€{product.priceEur}</span>
+                <span className="price-cell" title={offerTitle(product.id)}><b>{bestReferenceOffer(product.id) ? formatPln(bestReferenceOffer(product.id)!.amountPln) : "—"}</b><small>{bestReferenceOffer(product.id)?.condition ?? "NO PRICE"} · {bestReferenceOffer(product.id)?.kind === "LISTING" ? "observed" : "estimate"}</small></span>
               </button>
             ))}
           </div>
@@ -67,7 +72,7 @@ export function BuilderWorkspace() {
         <section className="panel twin-panel">
           <div className="panel-title-row">
             <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
-            <button className="plain-button" onClick={() => { setIds([...initial.ids]); setPreview(null); }}>Reset</button>
+            <div className="twin-actions"><button className="plain-button" onClick={() => { setIds([...createBudgetHomelabBuild().ids]); setPreview(null); }}>Budget homelab ≤500 zł</button><button className="plain-button" onClick={() => { setIds([...initial.ids]); setPreview(null); }}>Reset</button></div>
           </div>
           <DigitalTwin products={current.products} />
           {preview && !preview.committed ? (
@@ -85,7 +90,7 @@ export function BuilderWorkspace() {
                 <span className="category-code">{product.category}</span>
                 <span>{product.displayName}</span>
                 <div className="installed-actions">
-                  <b>€{product.priceEur}</b>
+                  <span className="installed-price" title={offerTitle(product.id)}><b>{bestReferenceOffer(product.id) ? formatPln(bestReferenceOffer(product.id)!.amountPln) : "—"}</b><small>{bestReferenceOffer(product.id)?.condition ?? "NO PRICE"}</small></span>
                   <button className="remove-button" onClick={() => remove(product.id)} aria-label={`Remove ${product.displayName}`}>Remove</button>
                 </div>
               </div>

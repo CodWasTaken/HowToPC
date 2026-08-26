@@ -1,12 +1,12 @@
 "use client";
 import {useEffect,useRef,useState,type Dispatch,type SetStateAction} from "react";
-import {referenceCatalog,searchProducts} from "@howtopc/catalog";
+import {bestReferenceOffer,referenceCatalog,searchProducts} from "@howtopc/catalog";
 import {optimizeForPrice} from "@howtopc/compatibility";
 import {registerHowToPcTools,TOOL_NAMES} from "@howtopc/webmcp";
 import {replacePart,snapshot} from "@/lib/builder";
 export function WebMcpInspector({ids,setIds}:{ids:string[];setIds:Dispatch<SetStateAction<string[]>>}){
  const [status,setStatus]=useState("checking");const history=useRef<string[][]>([]);const goals=useRef<Record<string,unknown>>({});const workloads=useRef<string[]>(["1440p gaming"]);
- useEffect(()=>{let active=true;let controller:AbortController|null=null;const summary=(p:any)=>({id:p.id,name:p.displayName,manufacturer:p.manufacturer,category:p.category,referencePriceEur:p.priceEur,specs:p.specs});
+ useEffect(()=>{let active=true;let controller:AbortController|null=null;const summary=(p:any)=>{const offer=bestReferenceOffer(p.id);return {id:p.id,name:p.displayName,manufacturer:p.manufacturer,category:p.category,referencePricePln:offer?.amountPln,priceCondition:offer?.condition,priceObservedAt:offer?.observedAt,priceSource:offer?.source,priceKind:offer?.kind,specs:p.specs};};
   registerHowToPcTools({
    getBuild:()=>({...snapshot(ids),goals:goals.current,workloads:workloads.current}),
    searchComponents:(input:any)=>searchProducts(referenceCatalog,input).slice(0,12).map(summary),
