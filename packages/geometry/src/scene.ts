@@ -68,6 +68,7 @@ function placementFor(
 
   if (!board) return [0, 0, 0];
   const boardFace = board.position[0] + board.size[0] / 2;
+  const compactBoard = board.size[1] <= 180 && board.size[2] <= 180;
   const socketY = board.position[1] + Math.min(52, board.size[1] * 0.18);
   const socketZ = board.position[2] + Math.min(45, board.size[2] * 0.2);
 
@@ -77,14 +78,18 @@ function placementFor(
     case "COOLER":
       return [boardFace + 5 + boxSize[0] / 2, socketY, socketZ];
     case "MEMORY":
-      return [boardFace + boxSize[0] / 2, socketY, socketZ - 72];
+      return compactBoard
+        ? [boardFace + boxSize[0] / 2, board.position[1] + 28, board.position[2] - 58]
+        : [boardFace + boxSize[0] / 2, socketY, socketZ - 72];
     case "GPU":
       return [boardFace + 8 + boxSize[0] / 2, board.position[1] - 68, rear - boxSize[2] / 2];
     case "NETWORK":
       return [boardFace + 8 + boxSize[0] / 2, board.position[1] - 110, rear - boxSize[2] / 2];
     case "STORAGE": {
       const isM2 = String(specs(product).formFactor).includes("M.2");
-      if (isM2) return [boardFace + boxSize[0] / 2, board.position[1] - 28, board.position[2] - 24];
+      if (isM2) return compactBoard
+        ? [boardFace + boxSize[0] / 2, board.position[1] - 58, board.position[2] + 28]
+        : [boardFace + boxSize[0] / 2, board.position[1] - 28, board.position[2] - 24];
       return [0, floor + 45 + boxSize[1] / 2, -caseDepth / 2 + 85];
     }
     default:
