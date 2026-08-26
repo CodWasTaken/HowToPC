@@ -15,6 +15,12 @@ function byCategory(category: string) {
   return { scene, box };
 }
 
+function overlaps(a: { position: readonly number[]; size: readonly number[] }, b: { position: readonly number[]; size: readonly number[] }) {
+  return [0, 1, 2].every((axis) =>
+    Math.abs(a.position[axis] - b.position[axis]) < (a.size[axis] + b.size[axis]) / 2,
+  );
+}
+
 describe("parametric digital twin", () => {
   test("uses X width, Y vertical, Z depth for motherboard and GPU", () => {
     const board = byCategory("MOTHERBOARD").box;
@@ -47,5 +53,14 @@ describe("parametric digital twin", () => {
       const part = scene.components.find((p) => p.category === category)!;
       expect(part.position[0] - part.size[0] / 2).toBeGreaterThanOrEqual(boardFace - 0.01);
     }
+  });
+
+  test("keeps Mini-ITX DIMMs and M.2 storage in separate mount zones", () => {
+    const itxIds = ids.map((id) => id === "mb-b650-atx" ? "mb-b650-itx" : id);
+    const itxProducts = referenceCatalog.filter((product) => itxIds.includes(product.id));
+    const scene = buildParametricScene(itxProducts);
+    const memory = scene.components.find((part) => part.category === "MEMORY")!;
+    const storage = scene.components.find((part) => part.category === "STORAGE")!;
+    expect(overlaps(memory, storage)).toBe(false);
   });
 });
