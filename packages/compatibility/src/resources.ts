@@ -19,8 +19,7 @@ const specs = (product: ReferenceProduct) => product.specs as Record<string, any
 const capacity = (value: unknown): number | null =>
   typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : null;
 
-export function calculateResourceUsage(lines: readonly BuildLine[]): ResourceUsage {
-  const products = expandBuildLines(lines);
+export function calculateResourceUsageForProducts(products: readonly ReferenceProduct[]): ResourceUsage {
   const board = products.find((product) => product.category === "MOTHERBOARD");
   const boardSpecs = board ? specs(board) : {};
   let dimmUsed = 0, memoryUsed = 0, m2Used = 0, sataUsed = 0, gpuUsed = 0, pcieUsed = 0;
@@ -45,4 +44,8 @@ export function calculateResourceUsage(lines: readonly BuildLine[]): ResourceUsa
     gpuPcie: { used: gpuUsed, available: capacity(boardSpecs.gpuPcieSlots) },
     generalPcie: { used: pcieUsed, available: capacity(boardSpecs.pcieSlots) },
   };
+}
+
+export function calculateResourceUsage(lines: readonly BuildLine[]): ResourceUsage {
+  return calculateResourceUsageForProducts(expandBuildLines(lines));
 }
