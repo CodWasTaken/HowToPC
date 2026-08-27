@@ -10,6 +10,10 @@ export function toCatalogSeedProduct(observation: NormalizedProductObservation):
     displayName: observation.displayName,
     category: observation.category,
     specs: observation.specs,
+    identifiers: observation.identifiers,
+    series: observation.series,
+    variant: observation.variant,
+    releaseYear: observation.releaseYear,
     source: {
       label: "BuildCores OpenDB",
       url: observation.sourceRecordUrl,

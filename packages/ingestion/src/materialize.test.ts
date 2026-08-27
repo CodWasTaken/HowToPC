@@ -7,12 +7,13 @@ describe("catalog materialization", () => {
     expect(toCatalogSeedProduct).toBeDefined();
     const product = toCatalogSeedProduct({
       providerId:"buildcores-opendb",sourceRecordId:"abc-123",sourceRecordUrl:"https://example.test/source",
-      manufacturer:"Intel",displayName:"Intel Example",category:"CPU",identifiers:[],
+      manufacturer:"Intel",displayName:"Intel Example",category:"CPU",identifiers:[{type:"MPN",value:"ABC-123",sourceId:"buildcores-opendb"}],series:"Series X",variant:"V1",releaseYear:2024,
       specs:{schemaVersion:1,socket:"LGA1155",tdpWatts:77,integratedGraphics:true},
     });
     expect(product).toMatchObject({
       id:"buildcores-abc-123",revisionId:"buildcores-abc-123-r1",manufacturer:"Intel",displayName:"Intel Example",category:"CPU",
       source:{label:"BuildCores OpenDB",url:"https://example.test/source",evidence:"OPEN_DATA"},
+      identifiers:[{type:"MPN",value:"ABC-123",sourceId:"buildcores-opendb"}],series:"Series X",variant:"V1",releaseYear:2024,
     });
     expect((product as any).priceEur).toBeUndefined();
     expect((product as any).pricePln).toBeUndefined();

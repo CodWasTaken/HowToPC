@@ -1,3 +1,3 @@
 import { z } from "zod";
-export const networkSpecSchema=z.object({ schemaVersion:z.literal(1), interface:z.enum(["PCIE","USB","ONBOARD"]), speedMbps:z.number().positive(), ports:z.number().int().positive() });
+export const networkSpecSchema=z.object({schemaVersion:z.literal(1),interface:z.enum(["PCIE","USB","ONBOARD"]),speedMbps:z.number().positive(),ports:z.number().int().positive(),wireless:z.boolean().optional(),standard:z.string().min(1).optional()});
 export type NetworkSpec=z.infer<typeof networkSpecSchema>;

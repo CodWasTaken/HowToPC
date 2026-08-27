@@ -39,7 +39,7 @@ describe("BuildCores OpenDB mapping", () => {
       opendb_id:"mb-1", socket:"LGA 1700", form_factor:"Micro ATX",
       memory:{max:64,ram_type:"DDR4",slots:2},
       storage_devices:{sata_6_gb_s:4,sata_3_gb_s:0},
-      pcie_slots:[{quantity:1},{quantity:2}], m2_slots:[{},{}],
+      pcie_slots:[{quantity:1},{quantity:2}], m2_slots:[{key:"M"},{key:"M"}],
       metadata:{name:"ASUS Example B760M",manufacturer:"ASUS",part_numbers:["MB-1"]},
     });
     expect(result?.category).toBe("MOTHERBOARD");
@@ -49,7 +49,7 @@ describe("BuildCores OpenDB mapping", () => {
   });
 
   test("rejects unsupported or ambiguous source values instead of guessing", () => {
-    expect(map("RAM", {opendb_id:"bad",ram_type:"DDR2",modules:{quantity:1,capacity_gb:1},ecc:"Unknown",metadata:{name:"Old RAM",manufacturer:"X"}})).toBeNull();
+    expect(map("RAM", {opendb_id:"bad",ram_type:"DDR6",modules:{quantity:1,capacity_gb:1},ecc:"Unknown",metadata:{name:"Future RAM",manufacturer:"X"}})).toBeNull();
     expect(map("Keyboard", {opendb_id:"bad"})).toBeNull();
   });
 });

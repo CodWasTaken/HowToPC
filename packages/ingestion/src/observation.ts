@@ -10,4 +10,7 @@ export interface NormalizedProductObservation {
   identifiers: readonly ProductIdentifier[];
   specs: Record<string, unknown>;
   manufacturerUrl?: string;
+  series?: string;
+  variant?: string;
+  releaseYear?: number;
 }

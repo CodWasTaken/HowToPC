@@ -1,0 +1,3 @@
+import { networkSpecSchema } from "@howtopc/catalog";
+import { finite, reject, text, validate, type BuildCoresMappingResult } from "./common";
+export function mapNetwork(raw:Record<string,any>):BuildCoresMappingResult {const speed=finite(raw.speed_mbps),ports=finite(raw.ports),iface=text(raw.interface)?.toUpperCase();const canonical=iface?.includes("PCIE")?"PCIE":iface?.includes("USB")?"USB":iface?.includes("ONBOARD")?"ONBOARD":null;if(!speed||speed<=0||!ports||!Number.isInteger(ports)||ports<=0||!canonical)return reject("MISSING_REQUIRED_FIELD","Network speed, ports, and interface are required; identity-only records are not guessed");return validate(networkSpecSchema,"NETWORK",raw,{schemaVersion:1 as const,interface:canonical,speedMbps:speed,ports});}
