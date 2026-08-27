@@ -1,6 +1,12 @@
 import { cpuSpecSchema, memorySpecSchema, motherboardSpecSchema } from "@howtopc/catalog";
 import type { ProductCategory, ProductIdentifier } from "@howtopc/domain";
 import type { NormalizedProductObservation } from "./observation";
+import { mapGpu } from "./buildcores/gpu";
+import { mapStorage } from "./buildcores/storage";
+import { mapPsu } from "./buildcores/psu";
+import { mapCase } from "./buildcores/case";
+import { mapCooler } from "./buildcores/cooler";
+import { mapFan } from "./buildcores/fan";
 
 const GIB = 1024 ** 3;
 const rec = (value: unknown): Record<string, any> | null => value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, any> : null;
@@ -86,5 +92,11 @@ export function mapBuildCoresProduct(category: string, value: unknown): Normaliz
   if (category === "CPU") return mapCpu(raw);
   if (category === "RAM") return mapRam(raw);
   if (category === "Motherboard") return mapMotherboard(raw);
+  if (category === "GPU") return mapGpu(raw);
+  if (category === "Storage") return mapStorage(raw);
+  if (category === "PSU") return mapPsu(raw);
+  if (category === "PCCase") return mapCase(raw);
+  if (category === "CPUCooler") return mapCooler(raw);
+  if (category === "CaseFan") return mapFan(raw);
   return null;
 }

@@ -68,6 +68,30 @@ describe("MVP compatibility rules", () => {
     expect(report.status).toBe("UNKNOWN");
   });
 
+  test("returns UNKNOWN when case PSU form-factor support is not known", () => {
+    const baseCase = pick("case-atx-340");
+    const unknownCase: ReferenceProduct = {
+      ...baseCase,
+      id:"case-unknown-psu-test", revisionId:"case-unknown-psu-test-r1",
+      specs:Object.fromEntries(Object.entries(baseCase.specs).filter(([key]) => key !== "psuFormFactors")),
+    };
+    const report = evaluateBuild([...build(["cpu-am5-7600","mb-b650-atx","ram-ddr5-32","psu-atx-750","cooler-air-158"]), unknownCase]);
+    expect(report.results.find((result) => result.ruleId === "psu-case-form-factor")?.status).toBe("UNKNOWN");
+    expect(report.status).toBe("UNKNOWN");
+  });
+
+  test("returns UNKNOWN when GPU connector requirements are not known", () => {
+    const baseGpu = pick("gpu-mid-300");
+    const unknownGpu: ReferenceProduct = {
+      ...baseGpu,
+      id:"gpu-unknown-connectors-test", revisionId:"gpu-unknown-connectors-test-r1",
+      specs:Object.fromEntries(Object.entries(baseGpu.specs).filter(([key]) => key !== "powerConnectors")),
+    };
+    const report = evaluateBuild([...build([...am5Core, "ram-ddr5-32"]), unknownGpu]);
+    expect(report.results.find((result) => result.ruleId === "gpu-psu-connectors")?.status).toBe("UNKNOWN");
+    expect(report.status).toBe("UNKNOWN");
+  });
+
   test("explains key hard failures", () => {
     const report = evaluateBuild(build(["cpu-am4-5600", "mb-b650-itx", "ram-ddr4-32", "gpu-long-345", "case-itx-320", "psu-atx-750", "cooler-air-158"]));
     expect(report.status).toBe("INCOMPATIBLE");

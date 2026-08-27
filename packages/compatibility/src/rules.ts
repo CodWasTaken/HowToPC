@@ -34,10 +34,19 @@ export function evaluateMvpRules(products: BuildProducts): CompatibilityRuleResu
   const pairs = [
     compareRule("cpu-motherboard-socket", cpu, board, (c, b) => c.socket === b.socket, "CPU socket matches motherboard.", "CPU socket does not match motherboard."),
     compareRule("motherboard-case-form-factor", board, pcCase, (b, c) => (c.supportedMotherboardFormFactors as string[]).includes(b.formFactor), "Motherboard form factor fits case.", "Motherboard form factor is not supported by case."),
-    compareRule("psu-case-form-factor", psu, pcCase, (p, c) => (c.psuFormFactors as string[]).includes(p.formFactor), "PSU form factor fits case.", "PSU form factor is not supported by case."),
     compareRule("cooler-cpu-socket", cooler, cpu, (c, p) => (c.supportedSockets as string[]).includes(p.socket), "Cooler supports CPU socket.", "Cooler does not support CPU socket."),
   ];
   for (const result of pairs) if (result) results.push(result);
+
+  if (psu && pcCase) {
+    const supported = specs(pcCase).psuFormFactors;
+    if (!Array.isArray(supported)) {
+      results.push({ ruleId:"psu-case-form-factor", status:"UNKNOWN", message:"Case PSU form-factor support is unknown.", involvedIds:[psu.id, pcCase.id] });
+    } else {
+      const fits = supported.includes(specs(psu).formFactor);
+      results.push({ ruleId:"psu-case-form-factor", status:fits ? "COMPATIBLE" : "INCOMPATIBLE", message:fits ? "PSU form factor fits case." : "PSU form factor is not supported by case.", involvedIds:[psu.id, pcCase.id] });
+    }
+  }
 
   if (board && memories.length) {
     const fits = memories.every((memory) => specs(memory).type === specs(board).memoryType);
@@ -97,15 +106,18 @@ export function evaluateMvpRules(products: BuildProducts): CompatibilityRuleResu
   }
 
   if (psu && gpus.length) {
-    const required: Record<string, number> = {};
-    for (const gpu of gpus) {
-      for (const [kind, count] of Object.entries((specs(gpu).powerConnectors as Record<string, number> | undefined) ?? {})) {
-        required[kind] = (required[kind] ?? 0) + count;
+    const gpuConnectorSets = gpus.map((gpu) => specs(gpu).powerConnectors as Record<string, number> | undefined);
+    const available = specs(psu).connectors as Record<string, number> | undefined;
+    if (!available || gpuConnectorSets.some((connectors) => connectors === undefined)) {
+      results.push({ ruleId:"gpu-psu-connectors", status:"UNKNOWN", message:"GPU or PSU connector requirements are unknown.", involvedIds:[psu.id, ...involved(gpus)] });
+    } else {
+      const required: Record<string, number> = {};
+      for (const connectors of gpuConnectorSets) {
+        for (const [kind, count] of Object.entries(connectors!)) required[kind] = (required[kind] ?? 0) + count;
       }
+      const fits = Object.entries(required).every(([kind, count]) => (available[kind] ?? 0) >= count);
+      results.push({ ruleId:"gpu-psu-connectors", status:fits ? "COMPATIBLE" : "INCOMPATIBLE", message:fits ? "PSU has the native GPU power connectors required." : "PSU lacks enough native GPU power connectors for all installed GPUs.", involvedIds:[psu.id, ...involved(gpus)] });
     }
-    const available = (specs(psu).connectors as Record<string, number> | undefined) ?? {};
-    const fits = Object.entries(required).every(([kind, count]) => (available[kind] ?? 0) >= count);
-    results.push({ ruleId: "gpu-psu-connectors", status: fits ? "COMPATIBLE" : "INCOMPATIBLE", message: fits ? "PSU has the native GPU power connectors required." : "PSU lacks enough native GPU power connectors for all installed GPUs.", involvedIds: [psu.id, ...involved(gpus)] });
   }
 
   return results;
