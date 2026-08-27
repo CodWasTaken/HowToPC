@@ -6,3 +6,5 @@ export * from "./optimizer";
 export * from "./build-lines";
 export * from "./resources";
 export * from "./quantity-transaction";
+
+export * from "./mutation-decision";
