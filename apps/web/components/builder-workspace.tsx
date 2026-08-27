@@ -2,7 +2,17 @@
 
 import { useMemo, useState } from "react";
 import { bestReferenceOffer, referenceCatalog } from "@howtopc/catalog";
-import { createBudgetHomelabBuild, createInitialBuild, removePart, replacePart, snapshot } from "@/lib/builder";
+import {
+  addPart,
+  createBudgetHomelabBuild,
+  createInitialBuild,
+  isRepeatableProduct,
+  maxPartQuantity,
+  partQuantity,
+  removePart,
+  replacePart,
+  snapshot,
+} from "@/lib/builder";
 import { catalogApplyState, sortCatalogForBuild } from "@/lib/catalog-compatibility";
 import { DigitalTwin } from "./digital-twin";
 import { ThemeToggle } from "./theme-toggle";
@@ -20,32 +30,46 @@ const offerDisplay = (productId: string) => {
   };
 };
 
+const resourceText = (label: string, used: number, available: number | null) =>
+  available === null ? null : `${label} ${used}/${available}`;
+
 export function BuilderWorkspace() {
   const initial = createInitialBuild();
-  const [ids, setIds] = useState<string[]>(initial.ids);
+  const [lines, setLines] = useState(initial.lines);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("ALL");
-  const [preview, setPreview] = useState<ReturnType<typeof replacePart> | null>(null);
-  const current = useMemo(() => snapshot(ids), [ids]);
+  const [preview, setPreview] = useState<ReturnType<typeof addPart> | null>(null);
+  const current = useMemo(() => snapshot(lines), [lines]);
   const filtered = referenceCatalog.filter((product) =>
     (category === "ALL" || product.category === category) &&
     (!query || `${product.manufacturer} ${product.displayName}`.toLowerCase().includes(query.toLowerCase()))
   );
-  const visible = sortCatalogForBuild(ids, filtered);
-  const installed = new Set(ids);
+  const visible = sortCatalogForBuild(lines, filtered);
+  const installed = new Set(lines.map((line) => line.productId));
+  const resources = [
+    resourceText("DIMM", current.resourceUsage.dimm.used, current.resourceUsage.dimm.available),
+    resourceText("M.2", current.resourceUsage.m2.used, current.resourceUsage.m2.available),
+    resourceText("SATA", current.resourceUsage.sata.used, current.resourceUsage.sata.available),
+    resourceText("GPU PCIe", current.resourceUsage.gpuPcie.used, current.resourceUsage.gpuPcie.available),
+    resourceText("PCIe", current.resourceUsage.generalPcie.used, current.resourceUsage.generalPcie.available),
+  ].filter((value): value is string => Boolean(value));
 
-  function choose(id: string) {
-    const result = replacePart(ids, id);
+  function selectPart(id: string) {
+    const result = replacePart(lines, id);
     setPreview(result);
-    if (result.committed) setIds(result.revisionIds);
+    if (result.committed) setLines(result.snapshot.lines);
   }
 
-  function remove(id: string) {
-    const result = removePart(ids, id);
-    setIds(result.ids);
+  function increment(id: string) {
+    const result = addPart(lines, id);
+    setPreview(result);
+    if (result.committed) setLines(result.snapshot.lines);
+  }
+
+  function decrement(id: string) {
+    setLines(removePart(lines, id).lines);
     setPreview(null);
   }
-
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -71,17 +95,29 @@ export function BuilderWorkspace() {
           <div className="part-list">
             {visible.map((product) => {
               const offer = offerDisplay(product.id);
-              const applyState = catalogApplyState(ids, product.id);
+              const repeatable = isRepeatableProduct(product.id);
+              const quantity = partQuantity(lines, product.id);
+              const max = repeatable ? maxPartQuantity(lines, product.id) : 1;
+              const applyState = catalogApplyState(lines, product.id);
               const canApply = applyState === "CAN_APPLY";
               const applyLabel = canApply ? "Can add to current build" : "Cannot add to current build";
               return (
-                <button key={product.id} className={`part-row ${installed.has(product.id) ? "installed" : ""}`} onClick={() => choose(product.id)}>
-                  <span className="part-main">
-                    <span className={`part-compat-dot ${canApply ? "can-apply" : "cannot-apply"}`} aria-label={applyLabel} title={applyLabel} />
-                    <span className="part-copy"><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}{product.source?.evidence === "OPEN_DATA" ? " · OpenDB" : ""}</small></span>
-                  </span>
-                  <span className="price-cell" title={offer.title}><b>{offer.amount}</b><small>{offer.detail}</small></span>
-                </button>
+                <div key={product.id} className={`part-row ${installed.has(product.id) ? "installed" : ""}`}>
+                  <button className="part-select" onClick={() => repeatable ? increment(product.id) : selectPart(product.id)}>
+                    <span className="part-main">
+                      <span className={`part-compat-dot ${canApply ? "can-apply" : "cannot-apply"}`} aria-label={applyLabel} title={applyLabel} />
+                      <span className="part-copy"><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}{product.source?.evidence === "OPEN_DATA" ? " · OpenDB" : ""}</small></span>
+                    </span>
+                    <span className="price-cell" title={offer.title}><b>{offer.amount}</b><small>{offer.detail}</small></span>
+                  </button>
+                  {repeatable ? (
+                    <div className="quantity-control">
+                      <button onClick={() => decrement(product.id)} disabled={quantity === 0} aria-label={`Remove one ${product.displayName}`}>−</button>
+                      <span>{quantity}/{max}</span>
+                      <button onClick={() => increment(product.id)} disabled={!canApply} aria-label={`Add one ${product.displayName}`}>+</button>
+                    </div>
+                  ) : null}
+                </div>
               );
             })}
           </div>
@@ -89,28 +125,34 @@ export function BuilderWorkspace() {
         <section className="panel twin-panel">
           <div className="panel-title-row">
             <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
-            <div className="twin-actions"><button className="plain-button" onClick={() => { setIds([...createBudgetHomelabBuild().ids]); setPreview(null); }}>Budget homelab ≤500 zł</button><button className="plain-button" onClick={() => { setIds([...initial.ids]); setPreview(null); }}>Reset</button></div>
+            <div className="twin-actions">
+              <button className="plain-button" onClick={() => { setLines(createBudgetHomelabBuild().lines); setPreview(null); }}>Budget homelab ≤500 zł</button>
+              <button className="plain-button" onClick={() => { setLines(initial.lines); setPreview(null); }}>Reset</button>
+            </div>
           </div>
           <DigitalTwin products={current.products} />
           {preview && !preview.committed ? (
             <div className="rejected" role="alert">
               <b>Change not committed</b>
-              <span>{preview.candidate.report.results.find((result) => result.status === "INCOMPATIBLE")?.message}</span>
+              <span>{preview.candidate.report.results.find((result) => result.status === "INCOMPATIBLE" || result.status === "UNKNOWN")?.message}</span>
             </div>
           ) : null}
         </section>
         <aside className="panel build-panel">
           <div className="panel-head"><h2>Build</h2><span>{current.products.length} items</span></div>
+          {resources.length ? <div className="resource-summary">{resources.map((item) => <span key={item}>{item}</span>)}</div> : null}
           <div className="installed-list">
-            {current.products.map((product) => {
+            {current.lines.map((line) => {
+              const product = referenceCatalog.find((item) => item.id === line.productId);
+              if (!product) return null;
               const offer = offerDisplay(product.id);
               return (
                 <div className="installed-row" key={product.id}>
                   <span className="category-code">{product.category}</span>
-                  <span>{product.displayName}</span>
+                  <span>{product.displayName}{line.quantity > 1 ? ` ×${line.quantity}` : ""}</span>
                   <div className="installed-actions">
                     <span className="installed-price" title={offer.title}><b>{offer.amount}</b><small>{offer.detail.split(" · ")[0]}</small></span>
-                    <button className="remove-button" onClick={() => remove(product.id)} aria-label={`Remove ${product.displayName}`}>Remove</button>
+                    <button className="remove-button" onClick={() => decrement(product.id)} aria-label={`Remove one ${product.displayName}`}>Remove</button>
                   </div>
                 </div>
               );
@@ -126,7 +168,7 @@ export function BuilderWorkspace() {
               </div>
             ))}
           </div>
-          <WebMcpInspector ids={ids} setIds={setIds} />
+          <WebMcpInspector lines={lines} setLines={setLines} />
         </aside>
       </section>
     </main>

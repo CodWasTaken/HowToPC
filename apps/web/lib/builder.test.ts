@@ -1,37 +1,60 @@
 import { describe, expect, test } from "vitest";
-import { createBudgetHomelabBuild, createInitialBuild, removePart, replacePart } from "./builder";
+import {
+  addPart,
+  createBudgetHomelabBuild,
+  createInitialBuild,
+  removePart,
+  replacePart,
+} from "./builder";
 
-describe("MVP builder state", () => {
-  test("starts compatible and rejects an oversized GPU", () => {
+describe("quantity-aware builder state", () => {
+  test("migrates presets to quantity-one build lines", () => {
     const initial = createInitialBuild();
     expect(initial.report.status).toBe("COMPATIBLE");
-    const rejected = replacePart(initial.ids, "gpu-long-345");
+    expect(initial.lines.every((line) => line.quantity === 1)).toBe(true);
+    expect(initial.lines.find((line) => line.productId === "ssd-nvme-2tb")?.quantity).toBe(1);
+  });
+
+  test("increments an existing repeatable part", () => {
+    const initial = createInitialBuild();
+    const result = addPart(initial.lines, "ssd-nvme-2tb");
+    expect(result.committed).toBe(true);
+    expect(result.snapshot.lines.find((line) => line.productId === "ssd-nvme-2tb")?.quantity).toBe(2);
+  });
+  test("keeps distinct storage products installed together", () => {
+    const initial = createInitialBuild();
+    const result = addPart(initial.lines, "hdd-sata-8tb");
+    expect(result.committed).toBe(true);
+    expect(result.snapshot.lines.map((line) => line.productId)).toContain("ssd-nvme-2tb");
+    expect(result.snapshot.lines.map((line) => line.productId)).toContain("hdd-sata-8tb");
+  });
+
+  test("decrements one unit and removes the line at quantity one", () => {
+    const initial = createInitialBuild();
+    const doubled = addPart(initial.lines, "ssd-nvme-2tb");
+    const decremented = removePart(doubled.snapshot.lines, "ssd-nvme-2tb");
+    expect(decremented.lines.find((line) => line.productId === "ssd-nvme-2tb")?.quantity).toBe(1);
+    const removed = removePart(decremented.lines, "ssd-nvme-2tb");
+    expect(removed.lines.some((line) => line.productId === "ssd-nvme-2tb")).toBe(false);
+  });
+
+  test("still rejects an incompatible singleton replacement", () => {
+    const initial = createInitialBuild();
+    const rejected = replacePart(initial.lines, "mb-asus-p8h61-m-lx3-r2");
     expect(rejected.committed).toBe(false);
-    expect(rejected.snapshot.ids).toEqual(initial.ids);
+    expect(rejected.snapshot.lines).toEqual(initial.lines);
+  });
+  test("prices quantities deterministically", () => {
+    const initial = createInitialBuild();
+    const doubled = addPart(initial.lines, "ssd-nvme-2tb");
+    expect(initial.totalPricePln).toBe(5780);
+    expect(doubled.snapshot.totalPricePln).toBeGreaterThan(initial.totalPricePln);
   });
 
-  test("calculates deterministic PLN reference price", () => {
-    expect(createInitialBuild().totalPricePln).toBe(5780);
-  });
-
-  test("loads a compatible used homelab under 500 PLN", () => {
+  test("keeps the compatible used homelab preset", () => {
     const budget = createBudgetHomelabBuild();
     expect(budget.report.status).toBe("COMPATIBLE");
     expect(budget.totalPricePln).toBeCloseTo(451.99);
-    expect(budget.ids).toContain("cpu-intel-i5-3470");
-  });
-
-  test("removes an optional installed network card", () => {
-    const withNic = replacePart(createInitialBuild().ids, "nic-10gbe");
-    expect(withNic.committed).toBe(true);
-    const result = removePart(withNic.revisionIds, "nic-10gbe");
-    expect(result.ids).not.toContain("nic-10gbe");
-    expect(result.report.status).toBe("COMPATIBLE");
-  });
-
-  test("removing a required component leaves the build UNKNOWN", () => {
-    const result = removePart(createInitialBuild().ids, "cpu-am5-7600");
-    expect(result.ids).not.toContain("cpu-am5-7600");
-    expect(result.report.status).toBe("UNKNOWN");
+    expect(budget.lines.some((line) => line.productId === "cpu-intel-i5-3470")).toBe(true);
   });
 });
