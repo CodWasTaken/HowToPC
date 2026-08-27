@@ -64,3 +64,33 @@ describe("parametric digital twin", () => {
     expect(overlaps(memory, storage)).toBe(false);
   });
 });
+
+
+describe("repeated device placement", () => {
+  test("places repeated GPUs and M.2 drives in distinct logical mounts", () => {
+    const gpu = referenceCatalog.find((product) => product.id === "gpu-value-270")!;
+    const storage = referenceCatalog.find((product) => product.id === "ssd-nvme-2tb")!;
+    const base = products.filter((product) => !["GPU", "STORAGE"].includes(product.category));
+    const scene = buildParametricScene([...base, gpu, gpu, storage, storage]);
+    const gpus = scene.components.filter((part) => part.category === "GPU");
+    const drives = scene.components.filter((part) => part.category === "STORAGE");
+    expect(gpus).toHaveLength(2);
+    expect(drives).toHaveLength(2);
+    expect(gpus[0].position).not.toEqual(gpus[1].position);
+    expect(drives[0].position).not.toEqual(drives[1].position);
+    expect(overlaps(gpus[0], gpus[1])).toBe(false);
+    expect(overlaps(drives[0], drives[1])).toBe(false);
+  });
+
+  test("renders every DIMM module from repeated memory kits", () => {
+    const ram = referenceCatalog.find((product) => product.id === "ram-ddr5-32")!;
+    const base = products.filter((product) => product.category !== "MEMORY");
+    const scene = buildParametricScene([...base, ram, ram]);
+    const dimms = scene.components.filter((part) => part.category === "MEMORY");
+    expect(dimms).toHaveLength(4);
+    expect(new Set(dimms.map((part) => part.id)).size).toBe(4);
+    for (let i = 0; i < dimms.length; i += 1) {
+      for (let j = i + 1; j < dimms.length; j += 1) expect(overlaps(dimms[i], dimms[j])).toBe(false);
+    }
+  });
+});
