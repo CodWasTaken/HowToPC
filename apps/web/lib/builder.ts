@@ -7,6 +7,8 @@ import {
   isRepeatableCategory,
   maxSafeQuantity,
   previewAdd,
+  removeOne,
+  replaceSingleton,
   type BuildLine,
   type CompatibilityReport,
   type QuantityMutationResult,
@@ -103,4 +105,12 @@ export function maxPartQuantity(input: BuilderInput, productId: string): number 
 export function isRepeatableProduct(productId: string): boolean {
   const product = byId.get(productId);
   return product ? isRepeatableCategory(product.category) : false;
+}
+
+export function decrementPart(input: BuilderInput, productId: string) {
+  return wrapMutation(removeOne(normalizeLines(input), productId));
+}
+
+export function replaceSingletonPart(input: BuilderInput, productId: string) {
+  return wrapMutation(replaceSingleton(normalizeLines(input), productId));
 }
