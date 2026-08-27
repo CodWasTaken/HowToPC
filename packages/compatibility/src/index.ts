@@ -5,3 +5,4 @@ export * from "./transaction";
 export * from "./optimizer";
 export * from "./build-lines";
 export * from "./resources";
+export * from "./quantity-transaction";
