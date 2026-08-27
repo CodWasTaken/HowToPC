@@ -17,6 +17,7 @@ import { catalogApplyState, sortCatalogForBuild } from "@/lib/catalog-compatibil
 import { DigitalTwin } from "./digital-twin";
 import { ThemeToggle } from "./theme-toggle";
 import { WebMcpInspector } from "./webmcp-inspector";
+import { PartsBrowser } from "./parts-browser";
 
 const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK", "FAN", "HBA"];
 const formatPln = (amount: number) => `${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(amount)} zł`;
@@ -82,46 +83,21 @@ export function BuilderWorkspace() {
         </div>
       </header>
       <section className="workspace">
-        <aside className="panel catalog-panel">
-          <div className="panel-head">
-            <h2>Parts</h2>
-            <input aria-label="Search parts" placeholder="Search parts" value={query} onChange={(event) => setQuery(event.target.value)} />
-          </div>
-          <div className="category-tabs">
-            <button className={category === "ALL" ? "active" : ""} onClick={() => setCategory("ALL")}>All</button>
-            {categories.map((item) => <button key={item} className={category === item ? "active" : ""} onClick={() => setCategory(item)}>{item}</button>)}
-          </div>
-          <div className="catalog-attribution">Specs may include BuildCores OpenDB · ODC-By 1.0. Prices are separate observations.</div>
-          <div className="part-list">
-            {visible.map((product) => {
-              const offer = offerDisplay(product.id);
-              const repeatable = isRepeatableProduct(product.id);
-              const quantity = partQuantity(lines, product.id);
-              const max = repeatable ? maxPartQuantity(lines, product.id) : 1;
-              const applyState = catalogApplyState(lines, product.id);
-              const canApply = applyState === "CAN_APPLY";
-              const applyLabel = canApply ? "Can add to current build" : "Cannot add to current build";
-              return (
-                <div key={product.id} className={`part-row ${installed.has(product.id) ? "installed" : ""}`}>
-                  <button className="part-select" onClick={() => repeatable ? increment(product.id) : selectPart(product.id)}>
-                    <span className="part-main">
-                      <span className={`part-compat-dot ${canApply ? "can-apply" : "cannot-apply"}`} aria-label={applyLabel} title={applyLabel} />
-                      <span className="part-copy"><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}{product.source?.evidence === "OPEN_DATA" ? " · OpenDB" : ""}</small></span>
-                    </span>
-                    <span className="price-cell" title={offer.title}><b>{offer.amount}</b><small>{offer.detail}</small></span>
-                  </button>
-                  {repeatable ? (
-                    <div className="quantity-control">
-                      <button onClick={() => decrement(product.id)} disabled={quantity === 0} aria-label={`Remove one ${product.displayName}`}>−</button>
-                      <span>{quantity}/{max}</span>
-                      <button onClick={() => increment(product.id)} disabled={!canApply} aria-label={`Add one ${product.displayName}`}>+</button>
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-        </aside>
+        <PartsBrowser
+          products={visible}
+          categories={categories}
+          category={category}
+          query={query}
+          installedIds={installed}
+          applyStateFor={(id) => catalogApplyState(lines, id)}
+          repeatableFor={isRepeatableProduct}
+          quantityFor={(id) => partQuantity(lines, id)}
+          maxQuantityFor={(id) => isRepeatableProduct(id) ? maxPartQuantity(lines, id) : 1}
+          onQueryChange={setQuery}
+          onCategoryChange={setCategory}
+          onAdd={(id) => isRepeatableProduct(id) ? increment(id) : selectPart(id)}
+          onDecrement={decrement}
+        />
         <section className="panel twin-panel">
           <div className="panel-title-row">
             <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
