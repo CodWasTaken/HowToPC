@@ -1,10 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { bestReferenceOffer, referenceCatalog } from "@howtopc/catalog";
+import { referenceCatalog } from "@howtopc/catalog";
 import {
   addPart,
-  createBudgetHomelabBuild,
   createInitialBuild,
   isRepeatableProduct,
   maxPartQuantity,
@@ -18,22 +17,10 @@ import { DigitalTwin } from "./digital-twin";
 import { ThemeToggle } from "./theme-toggle";
 import { WebMcpInspector } from "./webmcp-inspector";
 import { PartsBrowser } from "./parts-browser";
+import { BuildSidebar } from "./build-sidebar";
+import { presentBuildStatus } from "@/lib/presentation";
 
 const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK", "FAN", "HBA"];
-const formatPln = (amount: number) => `${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(amount)} zł`;
-const offerDisplay = (productId: string) => {
-  const offer = bestReferenceOffer(productId);
-  if (!offer) return { amount: "—", detail: "NO PRICE · specs only", title: "No price observation yet." };
-  return {
-    amount: formatPln(offer.amountPln),
-    detail: `${offer.condition} · ${offer.kind === "LISTING" ? "observed" : "estimate"}`,
-    title: `${offer.source} · ${offer.condition} · observed ${new Date(offer.observedAt).toLocaleDateString("pl-PL")}`,
-  };
-};
-
-const resourceText = (label: string, used: number, available: number | null) =>
-  available === null ? null : `${label} ${used}/${available}`;
-
 export function BuilderWorkspace() {
   const initial = createInitialBuild();
   const [lines, setLines] = useState(initial.lines);
@@ -47,13 +34,7 @@ export function BuilderWorkspace() {
   );
   const visible = sortCatalogForBuild(lines, filtered);
   const installed = new Set(lines.map((line) => line.productId));
-  const resources = [
-    resourceText("DIMM", current.resourceUsage.dimm.used, current.resourceUsage.dimm.available),
-    resourceText("M.2", current.resourceUsage.m2.used, current.resourceUsage.m2.available),
-    resourceText("SATA", current.resourceUsage.sata.used, current.resourceUsage.sata.available),
-    resourceText("GPU PCIe", current.resourceUsage.gpuPcie.used, current.resourceUsage.gpuPcie.available),
-    resourceText("PCIe", current.resourceUsage.generalPcie.used, current.resourceUsage.generalPcie.available),
-  ].filter((value): value is string => Boolean(value));
+  const presentedStatus = presentBuildStatus(current.report);
 
   function selectPart(id: string) {
     const result = replacePart(lines, id);
@@ -76,9 +57,8 @@ export function BuilderWorkspace() {
       <header className="topbar">
         <div><strong>HowToPC</strong><span>engineering configurator</span></div>
         <div className="top-status">
-          <span className={`status-dot ${current.report.status.toLowerCase()}`} />
-          {current.report.status}
-          <span>{formatPln(current.totalPricePln)}</span>
+          <span className={`status-dot ${presentedStatus.toLowerCase()}`} />
+          {presentedStatus}
           <ThemeToggle />
         </div>
       </header>
@@ -101,10 +81,6 @@ export function BuilderWorkspace() {
         <section className="panel twin-panel">
           <div className="panel-title-row">
             <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
-            <div className="twin-actions">
-              <button className="plain-button" onClick={() => { setLines(createBudgetHomelabBuild().lines); setPreview(null); }}>Budget homelab ≤500 zł</button>
-              <button className="plain-button" onClick={() => { setLines(initial.lines); setPreview(null); }}>Reset</button>
-            </div>
           </div>
           <DigitalTwin products={current.products} />
           {preview && !preview.committed ? (
@@ -114,38 +90,14 @@ export function BuilderWorkspace() {
             </div>
           ) : null}
         </section>
-        <aside className="panel build-panel">
-          <div className="panel-head"><h2>Build</h2><span>{current.products.length} items</span></div>
-          {resources.length ? <div className="resource-summary">{resources.map((item) => <span key={item}>{item}</span>)}</div> : null}
-          <div className="installed-list">
-            {current.lines.map((line) => {
-              const product = referenceCatalog.find((item) => item.id === line.productId);
-              if (!product) return null;
-              const offer = offerDisplay(product.id);
-              return (
-                <div className="installed-row" key={product.id}>
-                  <span className="category-code">{product.category}</span>
-                  <span>{product.displayName}{line.quantity > 1 ? ` ×${line.quantity}` : ""}</span>
-                  <div className="installed-actions">
-                    <span className="installed-price" title={offer.title}><b>{offer.amount}</b><small>{offer.detail.split(" · ")[0]}</small></span>
-                    <button className="remove-button" onClick={() => decrement(product.id)} aria-label={`Remove one ${product.displayName}`}>Remove</button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="analysis">
-            <h3>Compatibility</h3>
-            <div className={`overall ${current.report.status.toLowerCase()}`}>{current.report.status}</div>
-            {current.report.results.map((result) => (
-              <div className="rule" key={result.ruleId}>
-                <span className={`rule-mark ${result.status.toLowerCase()}`}>{result.status === "COMPATIBLE" ? "OK" : result.status}</span>
-                <p>{result.message}</p>
-              </div>
-            ))}
-          </div>
+        <BuildSidebar
+          build={current}
+          onIncrement={increment}
+          onDecrement={decrement}
+          onClear={() => { setLines([]); setPreview(null); }}
+        >
           <WebMcpInspector lines={lines} setLines={setLines} />
-        </aside>
+        </BuildSidebar>
       </section>
     </main>
   );

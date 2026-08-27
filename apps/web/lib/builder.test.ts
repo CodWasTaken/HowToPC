@@ -5,9 +5,17 @@ import {
   createInitialBuild,
   removePart,
   replacePart,
+  snapshot,
 } from "./builder";
+import { presentBuildStatus } from "./presentation";
 
 describe("quantity-aware builder state", () => {
+  test("keeps an empty build as an intentional incomplete editing state", () => {
+    const empty = snapshot([]);
+    expect(empty.lines).toEqual([]);
+    expect(presentBuildStatus(empty.report)).toBe("INCOMPLETE");
+  });
+
   test("migrates presets to quantity-one build lines", () => {
     const initial = createInitialBuild();
     expect(initial.report.status).toBe("COMPATIBLE");
