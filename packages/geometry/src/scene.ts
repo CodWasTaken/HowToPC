@@ -1,4 +1,5 @@
 import type { ReferenceProduct } from "@howtopc/catalog";
+import { sizeForProduct } from "./instances";
 
 export type Vec3 = readonly [number, number, number];
 export interface SceneBox {
@@ -22,28 +23,7 @@ function caseSize(pcCase: ReferenceProduct): Vec3 {
     ? [185, 340, Math.max(360, Number(specs(pcCase).maxGpuLengthMm) + 30)]
     : [230, 470, Math.max(430, Number(specs(pcCase).maxGpuLengthMm) + 70)];
 }
-function boardSize(formFactor: string): Vec3 {
-  if (formFactor === "MINI_ITX") return [8, 170, 170];
-  if (formFactor === "MATX") return [8, 244, 244];
-  if (formFactor === "EATX") return [8, 330, 305];
-  return [8, 305, 244];
-}
-
-function sizeFor(product: ReferenceProduct): Vec3 {
-  const s = specs(product);
-  switch (product.category) {
-    case "MOTHERBOARD": return boardSize(String(s.formFactor));
-    case "GPU": return [Number(s.heightMm ?? 120), Math.max(20, Number(s.slotWidth) * 20.32), Number(s.lengthMm)];
-    case "PSU": return s.formFactor === "SFX" ? [125, 64, 100] : [150, 86, 140];
-    case "COOLER": return s.type === "AIO" ? [30, Number(s.radiatorSizeMm ?? 240), 120] : [Number(s.heightMm ?? 100), 120, 120];
-    case "MEMORY": return [45, 135, 8];
-    case "CPU": return [5, 40, 40];
-    case "STORAGE": return String(s.formFactor).includes("M.2") ? [4, 22, 80] : [102, 26, 147];
-    case "NETWORK": return [70, 20, 120];
-    case "HBA": return [70, 20, 120];
-    default: return [40, 40, 40];
-  }
-}
+function sizeFor(product: ReferenceProduct): Vec3 { return sizeForProduct(product); }
 function placementFor(
   product: ReferenceProduct,
   boxSize: Vec3,
@@ -81,9 +61,9 @@ function placementFor(
     case "COOLER":
       return [boardFace + 5 + boxSize[0] / 2, socketY, socketZ];
     case "MEMORY": {
-      const baseZ = compactBoard ? board.position[2] - 58 : socketZ - 72;
-      const z = baseZ + ((instanceCount - 1) / 2 - instanceIndex) * 12;
-      return [boardFace + boxSize[0] / 2, compactBoard ? board.position[1] + 28 : socketY, z];
+      const z = compactBoard ? board.position[2] - 58 : socketZ - 72;
+      const y = board.position[1] + ((instanceCount - 1) / 2 - instanceIndex) * (boxSize[1] + 6);
+      return [boardFace + boxSize[0] / 2, y, z];
     }
     case "GPU":
       return [boardFace + 8 + boxSize[0] / 2, board.position[1] - 68 - instanceIndex * (boxSize[1] + 12), rear - boxSize[2] / 2];

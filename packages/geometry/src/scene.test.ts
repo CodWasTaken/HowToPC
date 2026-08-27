@@ -26,7 +26,7 @@ describe("parametric digital twin", () => {
     const board = byCategory("MOTHERBOARD").box;
     const gpu = byCategory("GPU").box;
     expect(board.size).toEqual([8, 305, 244]);
-    expect(gpu.size).toEqual([120, 50.8, 300]);
+    expect(gpu.size).toEqual([50.8, 120, 300]);
   });
 
   test("anchors different PSU sizes to the same rear and floor planes", () => {
