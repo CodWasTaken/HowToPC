@@ -1,13 +1,17 @@
 import { buildCoresSnapshot } from "./generated/buildcores-snapshot";
-import {
-  referenceCatalog as curatedReferenceCatalog,
-  type ProductSource,
-  type ReferenceProduct,
-} from "./reference";
+import { curatedRealCatalog } from "./curated-real-catalog";
+import { fixtureCatalog } from "./fixture-catalog";
+import type { ReferenceProduct } from "./product";
 
-export const referenceCatalog = [
-  ...curatedReferenceCatalog,
+export const publicSeedCatalog = [
+  ...curatedRealCatalog,
   ...buildCoresSnapshot,
 ] satisfies readonly ReferenceProduct[];
 
-export type { ProductSource, ReferenceProduct };
+export const referenceCatalog = [
+  ...fixtureCatalog,
+  ...publicSeedCatalog,
+] satisfies readonly ReferenceProduct[];
+
+export { curatedRealCatalog, fixtureCatalog };
+export type { ProductSource, ReferenceProduct } from "./product";

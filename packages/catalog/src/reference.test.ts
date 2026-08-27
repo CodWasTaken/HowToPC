@@ -1,7 +1,14 @@
 import { describe, expect, test } from "vitest";
-import { bestReferenceOffer, referenceCatalog, referenceOffers } from "./index";
+import { bestReferenceOffer, fixtureCatalog, publicSeedCatalog, referenceCatalog, referenceOffers } from "./index";
 
 describe("reference catalog", () => {
+  test("separates public real products from synthetic fixtures", () => {
+    expect(fixtureCatalog.some((product) => product.id === "gpu-mid-300")).toBe(true);
+    expect(publicSeedCatalog.some((product) => product.id === "gpu-mid-300")).toBe(false);
+    expect(publicSeedCatalog.every((product) => product.source?.evidence !== "REFERENCE")).toBe(true);
+    expect(publicSeedCatalog.some((product) => product.id === "cpu-intel-i5-3470")).toBe(true);
+  });
+
   test("contains diverse unique hardware including legacy real parts", () => {
     const categories = new Set(referenceCatalog.map((p) => p.category));
     for (const required of ["CPU","GPU","MOTHERBOARD","MEMORY","CASE","PSU","COOLER","STORAGE","NETWORK"])

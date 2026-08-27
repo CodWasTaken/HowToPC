@@ -14,4 +14,13 @@ describe("P0 hardware schemas",()=>{
     expect(memorySpecSchema.safeParse({schemaVersion:1,type:"DDR3",modules:2,moduleCapacityBytes:8*1024**3,speedMt:1600,ecc:false}).success).toBe(true);
     expect(motherboardSpecSchema.safeParse({schemaVersion:1,socket:"LGA1155",formFactor:"MATX",memoryType:"DDR3",dimmSlots:2,maxMemoryBytes:16*1024**3,pcieSlots:3,m2Slots:0,sataPorts:4}).success).toBe(true);
   });
+  test("retains sourced category fields used by faceted search",()=>{
+    const cpu=cpuSpecSchema.parse({schemaVersion:1,socket:"AM5",tdpWatts:65,family:"Ryzen 7000",cores:6,threads:12,releaseYear:2023});
+    expect(cpu).toMatchObject({family:"Ryzen 7000",cores:6,threads:12,releaseYear:2023});
+    const storage=storageSpecSchema.parse({schemaVersion:1,interface:"NVME",formFactor:"M.2 2280",capacityBytes:2*1024**4,driveType:"SSD",readMbps:7450,writeMbps:6900,pcieGeneration:4});
+    expect(storage).toMatchObject({driveType:"SSD",readMbps:7450,writeMbps:6900,pcieGeneration:4});
+    const psu=psuSpecSchema.parse({schemaVersion:1,formFactor:"ATX",wattage:850,connectors:{},efficiencyRating:"GOLD",modularity:"FULL",atxVersion:"3.1"});
+    expect(psu).toMatchObject({efficiencyRating:"GOLD",modularity:"FULL",atxVersion:"3.1"});
+  });
+
 });

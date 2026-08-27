@@ -1,0 +1,14 @@
+import type { ReferenceProduct } from "./product";
+
+const GiB = 1024 ** 3;
+const GB = 1000 ** 3;
+
+export const curatedRealCatalog: readonly ReferenceProduct[] = [
+  {id:"cpu-intel-i5-3470",revisionId:"cpu-intel-i5-3470-r1",manufacturer:"Intel",displayName:"Core i5-3470",category:"CPU",watts:77,source:{label:"Intel ARK",url:"https://www.intel.com/content/www/us/en/products/sku/68316/intel-core-i5-3470-processor-6m-cache-up-to-3-60-ghz/specifications.html",evidence:"MANUFACTURER"},specs:{schemaVersion:1,socket:"LGA1155",tdpWatts:77,integratedGraphics:true}},
+  {id:"mb-asus-p8h61-m-lx3-r2",revisionId:"mb-asus-p8h61-m-lx3-r2-r1",manufacturer:"ASUS",displayName:"P8H61-M LX3 R2.0",category:"MOTHERBOARD",source:{label:"ASUS manual",url:"https://dlcdnet.asus.com/pub/ASUS/mb/LGA1155/P8H61-M_LX3_R2.0/E7998_P8H61-M_LX3_R2_Series.pdf",evidence:"MANUFACTURER"},specs:{schemaVersion:1,socket:"LGA1155",formFactor:"MATX",memoryType:"DDR3",dimmSlots:2,maxMemoryBytes:16*GiB,pcieSlots:3,gpuPcieSlots:1,m2Slots:0,sataPorts:4}},
+  {id:"ram-kingston-kvr16n11k2-16",revisionId:"ram-kingston-kvr16n11k2-16-r1",manufacturer:"Kingston",displayName:"ValueRAM KVR16N11K2/16 16GB",category:"MEMORY",source:{label:"Kingston discontinued specification",url:"https://www.kingston.com/en/memory/search/discontinuedmodels?partId=KVR16N11K2%2F16",evidence:"MANUFACTURER"},specs:{schemaVersion:1,type:"DDR3",modules:2,moduleCapacityBytes:8*GiB,speedMt:1600,ecc:false}},
+  {id:"case-silentiumpc-brutus-m10",revisionId:"case-silentiumpc-brutus-m10-r1",manufacturer:"SilentiumPC",displayName:"Brutus M10 Pure Black",category:"CASE",source:{label:"x-kom archived specification",url:"https://www.x-kom.pl/p/328760-obudowa-do-komputera-silentiumpc-brutus-m10-pure-black.html",evidence:"RETAILER"},specs:{schemaVersion:1,supportedMotherboardFormFactors:["MINI_ITX","MATX","ATX"],maxGpuLengthMm:320,maxCpuCoolerHeightMm:159,psuFormFactors:["ATX"]}},
+  {id:"psu-chieftec-gps-400aa",revisionId:"psu-chieftec-gps-400aa-r1",manufacturer:"Chieftec",displayName:"GPS-400AA-101 A 400W",category:"PSU",source:{label:"Observed retailer specification",evidence:"RETAILER"},specs:{schemaVersion:1,formFactor:"ATX",wattage:400,connectors:{}}},
+  {id:"cooler-intel-e97379-003",revisionId:"cooler-intel-e97379-003-r1",manufacturer:"Intel",displayName:"E97379-003 Stock Cooler",category:"COOLER",source:{label:"Observed retailer compatibility",evidence:"RETAILER"},specs:{schemaVersion:1,type:"AIR",supportedSockets:["LGA1150","LGA1151","LGA1155","LGA1156"]}},
+  {id:"hdd-wd5000aakx",revisionId:"hdd-wd5000aakx-r1",manufacturer:"Western Digital",displayName:"WD Blue WD5000AAKX 500GB",category:"STORAGE",source:{label:"Observed retailer specification",evidence:"RETAILER"},specs:{schemaVersion:1,interface:"SATA",formFactor:"3.5in",capacityBytes:500*GB}},
+];
