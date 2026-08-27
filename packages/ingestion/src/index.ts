@@ -3,3 +3,4 @@ export * from "./observation";
 export * from "./buildcores";
 export * from "./adapter";
 export * from "./pipeline";
+export * from "./materialize";
