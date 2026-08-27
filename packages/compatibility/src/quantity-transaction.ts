@@ -2,6 +2,7 @@ import { referenceCatalog, type ReferenceProduct } from "@howtopc/catalog";
 import { expandBuildLines, type BuildLine } from "./build-lines";
 import { evaluateBuild } from "./engine";
 import type { CompatibilityReport } from "./rule";
+import { decideMutation, type MutationDecision } from "./mutation-decision";
 
 const byId = new Map(referenceCatalog.map((product) => [product.id, product]));
 const repeatableCategories = new Set<string>(["MEMORY", "GPU", "STORAGE", "FAN", "NETWORK", "HBA"]);
@@ -11,6 +12,7 @@ export interface QuantityMutationResult {
   lines: BuildLine[];
   candidateLines: BuildLine[];
   report: CompatibilityReport;
+  decision: MutationDecision;
 }
 
 export function isRepeatableCategory(category: string): boolean {
@@ -24,7 +26,6 @@ function productFor(productId: string): ReferenceProduct {
 }
 
 const cloneLines = (lines: readonly BuildLine[]) => lines.map((line) => ({ ...line }));
-const canCommit = (report: CompatibilityReport) => report.status !== "INCOMPATIBLE" && report.status !== "UNKNOWN";
 
 function incrementCandidate(lines: readonly BuildLine[], productId: string): BuildLine[] {
   let found = false;
@@ -55,7 +56,8 @@ function singletonCandidate(lines: readonly BuildLine[], product: ReferenceProdu
 
 function previewCandidate(lines: readonly BuildLine[], candidateLines: BuildLine[]): QuantityMutationResult {
   const report = evaluateBuild(expandBuildLines(candidateLines));
-  return { committed: canCommit(report), lines: cloneLines(lines), candidateLines, report };
+  const decision = decideMutation(report);
+  return { committed: decision.allowed, lines: cloneLines(lines), candidateLines, report, decision };
 }
 
 export function previewAdd(lines: readonly BuildLine[], productId: string): QuantityMutationResult {
@@ -82,14 +84,20 @@ export function removeOne(lines: readonly BuildLine[], productId: string): Quant
   const index = lines.findIndex((line) => line.productId === productId);
   if (index < 0) {
     const report = evaluateBuild(expandBuildLines(lines));
-    return { committed: false, lines: cloneLines(lines), candidateLines: cloneLines(lines), report };
+    return { committed: false, lines: cloneLines(lines), candidateLines: cloneLines(lines), report, decision: decideMutation(report) };
   }
   const candidateLines = cloneLines(lines);
   const line = candidateLines[index];
   if (line.quantity > 1) line.quantity -= 1;
   else candidateLines.splice(index, 1);
-  const preview = previewCandidate(lines, candidateLines);
-  return { ...preview, lines: preview.committed ? cloneLines(candidateLines) : cloneLines(lines) };
+  const report = evaluateBuild(expandBuildLines(candidateLines));
+  return {
+    committed: true,
+    lines: cloneLines(candidateLines),
+    candidateLines: cloneLines(candidateLines),
+    report,
+    decision: { allowed: true, state: "ALLOWED" },
+  };
 }
 
 export function maxSafeQuantity(lines: readonly BuildLine[], productId: string): number {
