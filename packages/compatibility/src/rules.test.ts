@@ -12,6 +12,26 @@ const build = (ids: string[]) => ids.map(pick);
 const am5Core = ["cpu-am5-7600", "mb-b650-atx", "case-atx-340", "psu-atx-750", "cooler-air-158"];
 
 describe("MVP compatibility rules", () => {
+  test("classifies mutation blockers separately from missing prerequisites", () => {
+    const empty = evaluateBuild([]);
+    expect(empty.results.find((result) => result.ruleId === "required-build-components")).toMatchObject({
+      status: "UNKNOWN", reasonKind: "MISSING_PREREQUISITE", blocksMutation: false,
+    });
+
+    const socketMismatch = evaluateBuild(build(["cpu-am4-5600", "mb-b650-atx"]));
+    expect(socketMismatch.results.find((result) => result.ruleId === "cpu-motherboard-socket")).toMatchObject({
+      status: "INCOMPATIBLE", reasonKind: "KNOWN_CONFLICT", blocksMutation: true,
+    });
+
+    const unknownTopology = evaluateBuild(build([
+      "cpu-intel-i5-3470", "buildcores-a750515d-6abd-4126-9830-e2700b884aed",
+      "ram-kingston-kvr16n11k2-16", "gpu-value-270", "gpu-value-270",
+      "case-atx-340", "psu-atx-750", "cooler-intel-e97379-003",
+    ]));
+    expect(unknownTopology.results.find((result) => result.ruleId === "gpu-slot-capacity")).toMatchObject({
+      status: "UNKNOWN", reasonKind: "REQUIRED_FACT_UNKNOWN", blocksMutation: true,
+    });
+  });
   test("accepts a coherent AM5 build", () => {
     expect(evaluateBuild(build([...am5Core, "ram-ddr5-32", "gpu-mid-300", "ssd-nvme-2tb"])).status).toBe("COMPATIBLE");
   });
