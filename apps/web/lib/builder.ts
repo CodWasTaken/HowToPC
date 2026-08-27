@@ -1,4 +1,4 @@
-import { referenceCatalog, referencePricePln, type ReferenceProduct } from "@howtopc/catalog";
+import { bestReferenceOffer, referenceCatalog, type ReferenceProduct } from "@howtopc/catalog";
 import {
   addOne,
   calculateResourceUsage,
@@ -38,31 +38,42 @@ export interface BuilderSnapshot {
   products: ReferenceProduct[];
   report: CompatibilityReport;
   resourceUsage: ResourceUsage;
-  totalPricePln: number;
+  pricedTotal: { amount:number | null; currency:string; pricedItems:number; unpricedItems:number };
 }
 
 export function productsFor(input: BuilderInput): ReferenceProduct[] {
   return expandBuildLines(normalizeLines(input));
 }
 
-export function snapshot(input: BuilderInput): BuilderSnapshot {
+export function snapshot(input: BuilderInput, market = "PL"): BuilderSnapshot {
   const lines = normalizeLines(input);
   const products = expandBuildLines(lines);
   const ids = products.map((product) => product.id);
-  const totalPricePln = lines.reduce((sum, line) => sum + (referencePricePln(line.productId) ?? 0) * line.quantity, 0);
-  return { lines, ids, products, report: evaluateBuild(products), resourceUsage: calculateResourceUsage(lines), totalPricePln };
+  let total = 0;
+  let pricedItems = 0;
+  let unpricedItems = 0;
+  let currency = market === "US" ? "USD" : "PLN";
+  for (const line of lines) {
+    const offer = bestReferenceOffer(line.productId, { market });
+    if (!offer) { unpricedItems += line.quantity; continue; }
+    currency = offer.currency;
+    pricedItems += line.quantity;
+    total += offer.amount * line.quantity;
+  }
+  const pricedTotal = { amount:unpricedItems ? null : total, currency, pricedItems, unpricedItems };
+  return { lines, ids, products, report: evaluateBuild(products), resourceUsage: calculateResourceUsage(lines), pricedTotal };
 }
-export function createInitialBuild(): BuilderSnapshot {
-  return snapshot(initialBuildIds);
+export function createInitialBuild(market = "PL"): BuilderSnapshot {
+  return snapshot(initialBuildIds, market);
 }
 
-export function createBudgetHomelabBuild(): BuilderSnapshot {
-  return snapshot(budgetHomelabIds);
+export function createBudgetHomelabBuild(market = "PL"): BuilderSnapshot {
+  return snapshot(budgetHomelabIds, market);
 }
 
-function wrapMutation(result: QuantityMutationResult) {
-  const built = snapshot(result.lines);
-  const candidate = snapshot(result.candidateLines);
+function wrapMutation(result: QuantityMutationResult, market = "PL") {
+  const built = snapshot(result.lines, market);
+  const candidate = snapshot(result.candidateLines, market);
   return {
     ...result,
     snapshot: built,
