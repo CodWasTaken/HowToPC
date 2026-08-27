@@ -13,3 +13,5 @@ html[data-theme="dark"] .mcp-inspector{background:#151719;border-color:#3b3e42}h
 
 .price-cell,.installed-price{display:flex;flex-direction:column;align-items:flex-end;gap:2px;white-space:nowrap}.price-cell small,.installed-price small{font-size:8px;text-transform:uppercase;letter-spacing:.04em;color:#777}.price-cell b,.installed-price b{font-size:10px;font-variant-numeric:tabular-nums}.twin-actions{display:flex;gap:6px;align-items:center}.twin-actions .plain-button:first-child{font-weight:700}
 html[data-theme="dark"] .price-cell small,html[data-theme="dark"] .installed-price small{color:#92979d}
+
+.part-row .part-main{display:flex;flex-direction:row;align-items:center;gap:8px;min-width:0}.part-row .part-copy{display:flex;flex-direction:column;gap:3px;min-width:0}.part-row .part-compat-dot{display:block;width:8px;height:8px;border-radius:50%;flex:0 0 8px}.part-compat-dot.can-apply{background:#16803c}.part-compat-dot.cannot-apply{background:#b42318}

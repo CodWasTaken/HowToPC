@@ -3,11 +3,12 @@
 import { useMemo, useState } from "react";
 import { bestReferenceOffer, referenceCatalog } from "@howtopc/catalog";
 import { createBudgetHomelabBuild, createInitialBuild, removePart, replacePart, snapshot } from "@/lib/builder";
+import { catalogApplyState, sortCatalogForBuild } from "@/lib/catalog-compatibility";
 import { DigitalTwin } from "./digital-twin";
 import { ThemeToggle } from "./theme-toggle";
 import { WebMcpInspector } from "./webmcp-inspector";
 
-const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK"];
+const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK", "FAN", "HBA"];
 const formatPln = (amount: number) => `${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(amount)} zł`;
 const offerDisplay = (productId: string) => {
   const offer = bestReferenceOffer(productId);
@@ -26,10 +27,11 @@ export function BuilderWorkspace() {
   const [category, setCategory] = useState("ALL");
   const [preview, setPreview] = useState<ReturnType<typeof replacePart> | null>(null);
   const current = useMemo(() => snapshot(ids), [ids]);
-  const visible = referenceCatalog.filter((product) =>
+  const filtered = referenceCatalog.filter((product) =>
     (category === "ALL" || product.category === category) &&
     (!query || `${product.manufacturer} ${product.displayName}`.toLowerCase().includes(query.toLowerCase()))
   );
+  const visible = sortCatalogForBuild(ids, filtered);
   const installed = new Set(ids);
 
   function choose(id: string) {
@@ -69,9 +71,15 @@ export function BuilderWorkspace() {
           <div className="part-list">
             {visible.map((product) => {
               const offer = offerDisplay(product.id);
+              const applyState = catalogApplyState(ids, product.id);
+              const canApply = applyState === "CAN_APPLY";
+              const applyLabel = canApply ? "Can add to current build" : "Cannot add to current build";
               return (
                 <button key={product.id} className={`part-row ${installed.has(product.id) ? "installed" : ""}`} onClick={() => choose(product.id)}>
-                  <span><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}{product.source?.evidence === "OPEN_DATA" ? " · OpenDB" : ""}</small></span>
+                  <span className="part-main">
+                    <span className={`part-compat-dot ${canApply ? "can-apply" : "cannot-apply"}`} aria-label={applyLabel} title={applyLabel} />
+                    <span className="part-copy"><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}{product.source?.evidence === "OPEN_DATA" ? " · OpenDB" : ""}</small></span>
+                  </span>
                   <span className="price-cell" title={offer.title}><b>{offer.amount}</b><small>{offer.detail}</small></span>
                 </button>
               );
