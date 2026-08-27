@@ -2,7 +2,15 @@ import { referenceCatalog, referencePricePln, type ReferenceProduct } from "@how
 import { applySafeReplacement } from "./transaction";
 
 const byId = new Map(referenceCatalog.map((product) => [product.id, product]));
-const price = (ids: readonly string[]) => ids.reduce((sum, id) => sum + (referencePricePln(id) ?? 0), 0);
+function price(ids: readonly string[]): number | null {
+  let total = 0;
+  for (const id of ids) {
+    const observed = referencePricePln(id);
+    if (observed === undefined) return null;
+    total += observed;
+  }
+  return total;
+}
 const specs = (product: ReferenceProduct) => product.specs as Record<string, any>;
 
 function preservesMinimumCapability(current: ReferenceProduct, candidate: ReferenceProduct): boolean {
@@ -18,9 +26,10 @@ function preservesMinimumCapability(current: ReferenceProduct, candidate: Refere
 
 export function optimizeForPrice(ids: readonly string[]) {
   const current = price(ids);
+  if (current === null) return null;
   let best: any = null;
   for (const candidate of referenceCatalog) {
-    if (ids.includes(candidate.id)) continue;
+    if (ids.includes(candidate.id) || referencePricePln(candidate.id) === undefined) continue;
     const replacedId = ids.find((id) => byId.get(id)?.category === candidate.category);
     if (!replacedId) continue;
     const replaced = byId.get(replacedId);
@@ -28,6 +37,7 @@ export function optimizeForPrice(ids: readonly string[]) {
     const result = applySafeReplacement(ids, candidate.id);
     if (!result.committed) continue;
     const next = price(result.revisionIds);
+    if (next === null) continue;
     const saving = current - next;
     if (saving > 0 && (!best || saving > best.savingsPln)) {
       best = { componentId:candidate.id, replacesId:replacedId, savingsPln:saving, currentPricePln:current, candidatePricePln:next };
