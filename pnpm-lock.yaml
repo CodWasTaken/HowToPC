@@ -115,6 +115,15 @@ importers:
         specifier: workspace:*
         version: link:../catalog
 
+  packages/ingestion:
+    dependencies:
+      '@howtopc/catalog':
+        specifier: workspace:*
+        version: link:../catalog
+      '@howtopc/domain':
+        specifier: workspace:*
+        version: link:../domain
+
   packages/shared: {}
 
   packages/webmcp: {}

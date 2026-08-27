@@ -13,10 +13,11 @@ describe("reference catalog", () => {
   });
 
   test("keeps price observations separate from hardware products", () => {
-    expect(referenceOffers.length).toBeGreaterThan(referenceCatalog.length);
+    expect(referenceOffers.length).toBeGreaterThan(0);
     const cpuOffer = bestReferenceOffer("cpu-intel-i5-3470", "USED");
     expect(cpuOffer?.amountPln).toBe(13);
     expect(cpuOffer?.source).toContain("Allegro");
-    expect((referenceCatalog.find((p) => p.id === "cpu-intel-i5-3470") as any)?.priceEur).toBeUndefined();
+    for (const product of referenceCatalog) expect((product as any).priceEur).toBeUndefined();
+    expect(bestReferenceOffer("buildcores-d879b83e-b826-46ad-b008-a51b9674da07")).toBeUndefined();
   });
 });
