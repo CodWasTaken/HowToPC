@@ -59,11 +59,24 @@ describe("quantity-aware builder state", () => {
     expect(doubled.snapshot.totalPricePln).toBeGreaterThan(initial.totalPricePln);
   });
 
+  test("totals native offers separately for PL and US markets", () => {
+    const pl = createInitialBuild("PL");
+    const us = createInitialBuild("US");
+    expect(pl.pricedTotal).toEqual({ amount:5780, currency:"PLN", pricedItems:8, unpricedItems:0 });
+    expect(us.pricedTotal).toEqual({ amount:1340, currency:"USD", pricedItems:8, unpricedItems:0 });
+  });
+
+  test("marks an incomplete market total instead of pricing missing offers as zero", () => {
+    const usBudget = createBudgetHomelabBuild("US");
+    expect(usBudget.pricedTotal.amount).toBeNull();
+    expect(usBudget.pricedTotal.unpricedItems).toBeGreaterThan(0);
+  });
+
   test("keeps the used homelab preset honest when case bay capacity is unknown", () => {
     const budget = createBudgetHomelabBuild();
     expect(budget.report.status).toBe("UNKNOWN");
     expect(budget.report.results.some((result) => result.ruleId === "case-storage-bay-capacity" && result.status === "UNKNOWN")).toBe(true);
-    expect(budget.totalPricePln).toBeCloseTo(451.99);
+    expect(budget.pricedTotal).toMatchObject({ amount:451.99, currency:"PLN", unpricedItems:0 });
     expect(budget.lines.some((line) => line.productId === "cpu-intel-i5-3470")).toBe(true);
   });
 });
