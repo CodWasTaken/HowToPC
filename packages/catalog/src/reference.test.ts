@@ -22,7 +22,7 @@ describe("reference catalog", () => {
   test("keeps price observations separate from hardware products", () => {
     expect(referenceOffers.length).toBeGreaterThan(0);
     const cpuOffer = bestReferenceOffer("cpu-intel-i5-3470", "USED");
-    expect(cpuOffer?.amountPln).toBe(13);
+    expect(cpuOffer).toMatchObject({ amount:13, market:"PL", currency:"PLN" });
     expect(cpuOffer?.source).toContain("Allegro");
     for (const product of referenceCatalog) expect((product as any).priceEur).toBeUndefined();
     expect(bestReferenceOffer("buildcores-d879b83e-b826-46ad-b008-a51b9674da07")).toBeUndefined();
