@@ -9,9 +9,14 @@ import { WebMcpInspector } from "./webmcp-inspector";
 
 const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK"];
 const formatPln = (amount: number) => `${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(amount)} zł`;
-const offerTitle = (productId: string) => {
+const offerDisplay = (productId: string) => {
   const offer = bestReferenceOffer(productId);
-  return offer ? `${offer.source} · ${offer.condition} · observed ${new Date(offer.observedAt).toLocaleDateString("pl-PL")}` : "No price observation";
+  if (!offer) return { amount: "—", detail: "NO PRICE · specs only", title: "No price observation yet." };
+  return {
+    amount: formatPln(offer.amountPln),
+    detail: `${offer.condition} · ${offer.kind === "LISTING" ? "observed" : "estimate"}`,
+    title: `${offer.source} · ${offer.condition} · observed ${new Date(offer.observedAt).toLocaleDateString("pl-PL")}`,
+  };
 };
 
 export function BuilderWorkspace() {
@@ -60,13 +65,17 @@ export function BuilderWorkspace() {
             <button className={category === "ALL" ? "active" : ""} onClick={() => setCategory("ALL")}>All</button>
             {categories.map((item) => <button key={item} className={category === item ? "active" : ""} onClick={() => setCategory(item)}>{item}</button>)}
           </div>
+          <div className="catalog-attribution">Specs may include BuildCores OpenDB · ODC-By 1.0. Prices are separate observations.</div>
           <div className="part-list">
-            {visible.map((product) => (
-              <button key={product.id} className={`part-row ${installed.has(product.id) ? "installed" : ""}`} onClick={() => choose(product.id)}>
-                <span><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}</small></span>
-                <span className="price-cell" title={offerTitle(product.id)}><b>{bestReferenceOffer(product.id) ? formatPln(bestReferenceOffer(product.id)!.amountPln) : "—"}</b><small>{bestReferenceOffer(product.id)?.condition ?? "NO PRICE"} · {bestReferenceOffer(product.id)?.kind === "LISTING" ? "observed" : "estimate"}</small></span>
-              </button>
-            ))}
+            {visible.map((product) => {
+              const offer = offerDisplay(product.id);
+              return (
+                <button key={product.id} className={`part-row ${installed.has(product.id) ? "installed" : ""}`} onClick={() => choose(product.id)}>
+                  <span><b>{product.displayName}</b><small>{product.manufacturer} · {product.category}{product.source?.evidence === "OPEN_DATA" ? " · OpenDB" : ""}</small></span>
+                  <span className="price-cell" title={offer.title}><b>{offer.amount}</b><small>{offer.detail}</small></span>
+                </button>
+              );
+            })}
           </div>
         </aside>
         <section className="panel twin-panel">
@@ -85,16 +94,19 @@ export function BuilderWorkspace() {
         <aside className="panel build-panel">
           <div className="panel-head"><h2>Build</h2><span>{current.products.length} items</span></div>
           <div className="installed-list">
-            {current.products.map((product) => (
-              <div className="installed-row" key={product.id}>
-                <span className="category-code">{product.category}</span>
-                <span>{product.displayName}</span>
-                <div className="installed-actions">
-                  <span className="installed-price" title={offerTitle(product.id)}><b>{bestReferenceOffer(product.id) ? formatPln(bestReferenceOffer(product.id)!.amountPln) : "—"}</b><small>{bestReferenceOffer(product.id)?.condition ?? "NO PRICE"}</small></span>
-                  <button className="remove-button" onClick={() => remove(product.id)} aria-label={`Remove ${product.displayName}`}>Remove</button>
+            {current.products.map((product) => {
+              const offer = offerDisplay(product.id);
+              return (
+                <div className="installed-row" key={product.id}>
+                  <span className="category-code">{product.category}</span>
+                  <span>{product.displayName}</span>
+                  <div className="installed-actions">
+                    <span className="installed-price" title={offer.title}><b>{offer.amount}</b><small>{offer.detail.split(" · ")[0]}</small></span>
+                    <button className="remove-button" onClick={() => remove(product.id)} aria-label={`Remove ${product.displayName}`}>Remove</button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="analysis">
             <h3>Compatibility</h3>
