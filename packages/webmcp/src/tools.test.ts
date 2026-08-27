@@ -19,3 +19,10 @@ describe("WebMCP tools", () => {
     expect(schema.properties.quantity).toMatchObject({ type: "integer", minimum: 1, maximum: 64 });
   });
 });
+
+test("budget goals are market-generic rather than EUR-specific", () => {
+  const tool = createTools(bridge).find((item) => item.name === "set_build_goals")!;
+  const schema = tool.inputSchema as any;
+  expect(schema.properties.maxBudgetAmount).toMatchObject({ type:"number", minimum:0 });
+  expect(schema.properties.maxBudgetEur).toBeUndefined();
+});

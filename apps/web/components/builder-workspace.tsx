@@ -15,18 +15,20 @@ import {
 } from "@/lib/builder";
 import { catalogApplyState, sortCatalogForBuild } from "@/lib/catalog-compatibility";
 import { DigitalTwin } from "./digital-twin";
+import { MarketSelector } from "./market-selector";
+import type { SupportedMarket } from "@/lib/market";
 import { ThemeToggle } from "./theme-toggle";
 import { WebMcpInspector } from "./webmcp-inspector";
 
 const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK", "FAN", "HBA"];
-const formatPln = (amount: number) => `${new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(amount)} zł`;
-const offerDisplay = (productId: string) => {
-  const offer = bestReferenceOffer(productId);
+const formatMoney = (amount: number, currency: string, market: SupportedMarket) => new Intl.NumberFormat(market === "PL" ? "pl-PL" : "en-US", { style:"currency", currency, maximumFractionDigits:2 }).format(amount);
+const offerDisplay = (productId: string, market: SupportedMarket) => {
+  const offer = bestReferenceOffer(productId, { market });
   if (!offer) return { amount: "—", detail: "NO PRICE · specs only", title: "No price observation yet." };
   return {
-    amount: formatPln(offer.amountPln),
+    amount: formatMoney(offer.amount, offer.currency, market),
     detail: `${offer.condition} · ${offer.kind === "LISTING" ? "observed" : "estimate"}`,
-    title: `${offer.source} · ${offer.condition} · observed ${new Date(offer.observedAt).toLocaleDateString("pl-PL")}`,
+    title: `${offer.source} · ${offer.condition} · observed ${new Date(offer.observedAt).toLocaleDateString(market === "PL" ? "pl-PL" : "en-US")}`,
   };
 };
 
@@ -36,10 +38,11 @@ const resourceText = (label: string, used: number, available: number | null) =>
 export function BuilderWorkspace() {
   const initial = createInitialBuild();
   const [lines, setLines] = useState(initial.lines);
+  const [market, setMarket] = useState<SupportedMarket>("US");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("ALL");
   const [preview, setPreview] = useState<ReturnType<typeof addPart> | null>(null);
-  const current = useMemo(() => snapshot(lines), [lines]);
+  const current = useMemo(() => snapshot(lines, market), [lines, market]);
   const filtered = referenceCatalog.filter((product) =>
     (category === "ALL" || product.category === category) &&
     (!query || `${product.manufacturer} ${product.displayName}`.toLowerCase().includes(query.toLowerCase()))
@@ -77,7 +80,8 @@ export function BuilderWorkspace() {
         <div className="top-status">
           <span className={`status-dot ${current.report.status.toLowerCase()}`} />
           {current.report.status}
-          <span>{formatPln(current.totalPricePln)}</span>
+          <span>{current.pricedTotal.amount === null ? "NO PRICE" : formatMoney(current.pricedTotal.amount, current.pricedTotal.currency, market)}</span>
+          <MarketSelector market={market} onChange={setMarket} />
           <ThemeToggle />
         </div>
       </header>
@@ -94,7 +98,7 @@ export function BuilderWorkspace() {
           <div className="catalog-attribution">Specs may include BuildCores OpenDB · ODC-By 1.0. Prices are separate observations.</div>
           <div className="part-list">
             {visible.map((product) => {
-              const offer = offerDisplay(product.id);
+              const offer = offerDisplay(product.id, market);
               const repeatable = isRepeatableProduct(product.id);
               const quantity = partQuantity(lines, product.id);
               const max = repeatable ? maxPartQuantity(lines, product.id) : 1;
@@ -126,7 +130,7 @@ export function BuilderWorkspace() {
           <div className="panel-title-row">
             <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
             <div className="twin-actions">
-              <button className="plain-button" onClick={() => { setLines(createBudgetHomelabBuild().lines); setPreview(null); }}>Budget homelab ≤500 zł</button>
+              <button className="plain-button" onClick={() => { setLines(createBudgetHomelabBuild().lines); setPreview(null); }}>Budget homelab preset</button>
               <button className="plain-button" onClick={() => { setLines(initial.lines); setPreview(null); }}>Reset</button>
             </div>
           </div>
@@ -145,7 +149,7 @@ export function BuilderWorkspace() {
             {current.lines.map((line) => {
               const product = referenceCatalog.find((item) => item.id === line.productId);
               if (!product) return null;
-              const offer = offerDisplay(product.id);
+              const offer = offerDisplay(product.id, market);
               return (
                 <div className="installed-row" key={product.id}>
                   <span className="category-code">{product.category}</span>
@@ -168,7 +172,7 @@ export function BuilderWorkspace() {
               </div>
             ))}
           </div>
-          <WebMcpInspector lines={lines} setLines={setLines} />
+          <WebMcpInspector lines={lines} setLines={setLines} market={market} />
         </aside>
       </section>
     </main>
