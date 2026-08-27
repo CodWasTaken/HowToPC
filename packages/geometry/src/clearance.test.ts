@@ -29,3 +29,18 @@ describe("mechanical clearance measurements", () => {
     expect(gpu?.status).toBe("FAIL");
   });
 });
+
+test("uses the longest installed GPU for case clearance", () => {
+  const pick = (id: string) => {
+    const found = referenceCatalog.find((product) => product.id === id);
+    if (!found) throw new Error(`Missing ${id}`);
+    return found;
+  };
+  const build = products().filter((product) => product.category !== "GPU").concat([
+    pick("gpu-mid-300"), pick("gpu-long-345"),
+  ]);
+  const gpu = (geometry as any).measureClearances(build)
+    .find((item: any) => item.id === "gpu-length");
+  expect(gpu?.remainingMm).toBe(-5);
+  expect(gpu?.status).toBe("FAIL");
+});

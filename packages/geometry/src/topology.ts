@@ -50,12 +50,13 @@ export function deriveMountTopology(products: readonly ReferenceProduct[]): Moun
     const center = boardCenter(caseSize, board);
     const boardFace = center[0] + boardSize[0] / 2;
     slots.push({ id: "board-1", kind: "BOARD", position: center, capacityUnits: 1 });
-    slots.push({ id: "cpu-1", kind: "CPU", position: [boardFace + 2.5, center[1] + boardSize[1] * 0.18, center[2] + boardSize[2] * 0.18], capacityUnits: 1 });
+    const socketY = center[1] + boardSize[1] * 0.32;
+    slots.push({ id: "cpu-1", kind: "CPU", position: [boardFace + 2.5, socketY, center[2] + boardSize[2] * 0.18], capacityUnits: 1 });
 
     const dimmCount = Math.max(0, Number(specs(board).dimmSlots ?? 0));
-    const dimmYs = evenlySpaced(dimmCount, center[1] - boardSize[1] * 0.34, center[1] + boardSize[1] * 0.34);
+    const dimmZs = evenlySpaced(dimmCount, center[2] - boardSize[2] * 0.38, center[2] - boardSize[2] * 0.22);
     for (let index = 0; index < dimmCount; index += 1) {
-      slots.push({ id: `dimm-${index + 1}`, kind: "DIMM", position: [boardFace + 4, dimmYs[index], center[2] - boardSize[2] * 0.26], capacityUnits: 1 });
+      slots.push({ id: `dimm-${index + 1}`, kind: "DIMM", position: [boardFace, socketY, dimmZs[index]], capacityUnits: 1 });
     }
 
     const m2Count = Math.max(0, Number(specs(board).m2Slots ?? 0));
@@ -65,7 +66,7 @@ export function deriveMountTopology(products: readonly ReferenceProduct[]): Moun
     }
 
     const pcieCount = Math.max(0, Number(specs(board).pcieSlots ?? 0));
-    const pcieYs = evenlySpaced(pcieCount, center[1] - boardSize[1] * 0.30, center[1] + boardSize[1] * 0.30);
+    const pcieYs = evenlySpaced(pcieCount, center[1] - boardSize[1] * 0.48, center[1] - boardSize[1] * 0.02);
     const knownGpuSlots = specs(board).gpuPcieSlots;
     const gpuCount = Number.isFinite(Number(knownGpuSlots)) ? Math.min(pcieCount, Math.max(0, Number(knownGpuSlots))) : null;
     const gpuIndices = gpuCount === null ? new Set<number>() : new Set(evenlySpaced(gpuCount, 0, Math.max(0, pcieCount - 1)).map((value) => Math.round(value)));

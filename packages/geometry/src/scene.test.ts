@@ -26,7 +26,7 @@ describe("parametric digital twin", () => {
     const board = byCategory("MOTHERBOARD").box;
     const gpu = byCategory("GPU").box;
     expect(board.size).toEqual([8, 305, 244]);
-    expect(gpu.size).toEqual([50.8, 120, 300]);
+    expect(gpu.size).toEqual([120, 50.8, 300]);
   });
 
   test("anchors different PSU sizes to the same rear and floor planes", () => {
@@ -92,5 +92,40 @@ describe("repeated device placement", () => {
     for (let i = 0; i < dimms.length; i += 1) {
       for (let j = i + 1; j < dimms.length; j += 1) expect(overlaps(dimms[i], dimms[j])).toBe(false);
     }
+  });
+});
+
+describe("mount-aware scene integration", () => {
+  const product = (id: string) => {
+    const found = referenceCatalog.find((item) => item.id === id);
+    if (!found) throw new Error(`Missing ${id}`);
+    return found;
+  };
+
+  test("renders a dense supported build without silent overlaps", () => {
+    const dense = [
+      product("cpu-am5-7600"), product("mb-b650-atx"),
+      product("ram-ddr5-32"), product("ram-ddr5-32"),
+      product("gpu-value-270"), product("gpu-value-270"),
+      product("case-atx-340"), product("psu-atx-750"), product("cooler-air-158"),
+      product("ssd-nvme-2tb"), product("ssd-nvme-2tb"), product("ssd-nvme-2tb"),
+      product("hdd-sata-8tb"), product("hdd-wd5000aakx"),
+      product("hdd-sata-8tb"), product("hdd-wd5000aakx"), product("nic-10gbe"),
+    ];
+    const scene = buildParametricScene(dense);
+    expect(scene.placementIssues).toEqual([]);
+    expect(scene.collisions).toEqual([]);
+    expect(new Set(scene.components.map((part) => part.id)).size).toBe(scene.components.length);
+  });
+  test("omits unplaced over-capacity DIMMs instead of stacking meshes", () => {
+    const overfilled = [
+      product("cpu-am5-7600"), product("mb-b650-atx"),
+      product("ram-ddr5-32"), product("ram-ddr5-32"), product("ram-ddr5-32"),
+      product("case-atx-340"), product("psu-atx-750"), product("cooler-air-158"),
+    ];
+    const scene = buildParametricScene(overfilled);
+    expect(scene.components.filter((part) => part.category === "MEMORY")).toHaveLength(4);
+    expect(scene.placementIssues.filter((issue) => issue.code === "NO_MOUNT")).toHaveLength(2);
+    expect(scene.topologyNotes.some((note) => note.includes("parametric"))).toBe(true);
   });
 });

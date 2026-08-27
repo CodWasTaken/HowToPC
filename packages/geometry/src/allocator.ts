@@ -30,6 +30,9 @@ export function allocateMounts(instances: readonly PhysicalInstance[], topology:
     issues.push({ instanceId: instance.id, code: "NO_MOUNT", message: `No free ${kind} mount is available.` });
 
   const gpuInstances = instances.filter((instance) => instance.category === "GPU");
+  const boardSlot = byKind("BOARD")[0];
+  const boardInstance = instances.find((instance) => instance.category === "MOTHERBOARD");
+  const boardFace = boardSlot && boardInstance ? boardSlot.position[0] + boardInstance.size[0] / 2 : null;
   let unknownGpuAssigned = false;
 
   for (const instance of instances) {
@@ -61,7 +64,11 @@ export function allocateMounts(instances: readonly PhysicalInstance[], topology:
     }
     if (instance.category === "MEMORY") {
       const slot = free(byKind("DIMM"));
-      slot ? assign(instance, slot) : noMount(instance, "DIMM");
+      if (!slot) noMount(instance, "DIMM");
+      else {
+        const x = boardFace === null ? slot.position[0] : boardFace + instance.size[0] / 2;
+        assign(instance, slot, [x, slot.position[1], slot.position[2]]);
+      }
       continue;
     }
     if (instance.category === "STORAGE") {

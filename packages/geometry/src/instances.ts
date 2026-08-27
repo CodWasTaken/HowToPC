@@ -23,10 +23,10 @@ export function sizeForProduct(product: ReferenceProduct): Vec3 {
   const s = specs(product);
   switch (product.category) {
     case "MOTHERBOARD": return boardSize(String(s.formFactor));
-    case "GPU": return [Math.max(20.32, Number(s.slotWidth ?? 1) * 20.32), Number(s.heightMm ?? 120), Number(s.lengthMm ?? 250)];
+    case "GPU": return [Number(s.heightMm ?? 120), Math.max(20.32, Number(s.slotWidth ?? 1) * 20.32), Number(s.lengthMm ?? 250)];
     case "PSU": return s.formFactor === "SFX" ? [125, 64, 100] : [150, 86, 140];
     case "COOLER": return s.type === "AIO" ? [30, Number(s.radiatorSizeMm ?? 240), 120] : [Number(s.heightMm ?? 100), 120, 120];
-    case "MEMORY": return [8, 45, 135];
+    case "MEMORY": return [45, 135, 8];
     case "CPU": return [5, 40, 40];
     case "STORAGE": return String(s.formFactor).includes("M.2") ? [4, 22, 80] : [102, 26, 147];
     case "NETWORK":

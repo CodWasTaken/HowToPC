@@ -10,8 +10,8 @@ const product = (id: string) => {
 
 describe("physical geometry instances", () => {
   test("uses global X width, Y vertical, Z depth dimensions", () => {
-    expect(sizeForProduct(product("gpu-mid-300"))).toEqual([50.8, 120, 300]);
-    expect(sizeForProduct(product("ram-ddr5-32"))).toEqual([8, 45, 135]);
+    expect(sizeForProduct(product("gpu-mid-300"))).toEqual([120, 50.8, 300]);
+    expect(sizeForProduct(product("ram-ddr5-32"))).toEqual([45, 135, 8]);
     expect(sizeForProduct(product("ssd-nvme-2tb"))).toEqual([4, 22, 80]);
   });
 

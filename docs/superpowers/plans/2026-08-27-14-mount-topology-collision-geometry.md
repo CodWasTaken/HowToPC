@@ -37,7 +37,7 @@
 
 ```ts
 const gpu = product("gpu-mid-300");
-expect(sizeForProduct(gpu)).toEqual([50.8, 120, 300]);
+expect(sizeForProduct(gpu)).toEqual([120, 50.8, 300]);
 const ram = product("ram-ddr5-32");
 expect(expandPhysicalInstances([ram, ram]).filter(x => x.category === "MEMORY")).toHaveLength(4);
 ```
@@ -50,7 +50,7 @@ Expected: current GPU dimensions are `[120,50.8,300]` and instance helper does n
 
 - [ ] **Step 3: Implement physical expansion and corrected global dimensions**
 
-Use GPU `[slotWidth * 20.32, heightMm, lengthMm]`; DIMM `[8,45,135]`; M.2 `[4,22,80]`; board `[8,height,depth]`. Keep conservative parametric defaults only where the existing category schema already permits a visual fallback; those defaults are visual, not compatibility facts.
+Use GPU `[heightMm, slotWidth * 20.32, lengthMm]`; DIMM `[45,135,8]`; M.2 `[4,22,80]`; board `[8,height,depth]`. These are mounted global extents: GPU/DIMM protrusion is X, vertical extent is Y, and card/module depth or thickness is Z. Keep conservative parametric defaults only where the existing category schema already permits a visual fallback; those defaults are visual, not compatibility facts.
 - [ ] **Step 4: Run geometry typecheck/tests and verify GREEN**
 
 - [ ] **Step 5: Commit**
@@ -171,7 +171,7 @@ git commit -m "feat: detect parametric component collisions"
 
 - [ ] **Step 1: Replace offset-specific tests with scene invariants**
 
-Assert a dense fixture scene has unique assignments and no unexpected collisions. Assert an over-capacity fixture returns placement issues and omits the unplaced mesh. Keep the corrected GPU dimension assertion at `[50.8,120,300]`.
+Assert a dense fixture scene has unique assignments and no unexpected collisions. Assert an over-capacity fixture returns placement issues and omits the unplaced mesh. Keep the corrected mounted GPU dimension assertion at `[120,50.8,300]`.
 
 - [ ] **Step 2: Add clearance aggregation tests**
 
