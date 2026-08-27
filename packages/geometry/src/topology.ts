@@ -3,7 +3,7 @@ import { sizeForProduct } from "./instances";
 import type { Vec3 } from "./scene";
 
 export type MountKind = "CPU" | "DIMM" | "PCIE" | "M2" | "SATA_25" | "SATA_35" | "PSU" | "BOARD";
-export interface MountSlot { id: string; kind: MountKind; position: Vec3; capacityUnits: number }
+export interface MountSlot { id: string; kind: MountKind; position: Vec3; capacityUnits: number; gpuCapable?: boolean }
 export interface MountTopology { caseSize: Vec3; slots: readonly MountSlot[]; notes: readonly string[] }
 
 const specs = (product: ReferenceProduct) => product.specs as Record<string, any>;
@@ -66,8 +66,14 @@ export function deriveMountTopology(products: readonly ReferenceProduct[]): Moun
 
     const pcieCount = Math.max(0, Number(specs(board).pcieSlots ?? 0));
     const pcieYs = evenlySpaced(pcieCount, center[1] - boardSize[1] * 0.30, center[1] + boardSize[1] * 0.30);
+    const knownGpuSlots = specs(board).gpuPcieSlots;
+    const gpuCount = Number.isFinite(Number(knownGpuSlots)) ? Math.min(pcieCount, Math.max(0, Number(knownGpuSlots))) : null;
+    const gpuIndices = gpuCount === null ? new Set<number>() : new Set(evenlySpaced(gpuCount, 0, Math.max(0, pcieCount - 1)).map((value) => Math.round(value)));
     for (let index = 0; index < pcieCount; index += 1) {
-      slots.push({ id: `pcie-${index + 1}`, kind: "PCIE", position: [boardFace + 10, pcieYs[index], caseSize[2] / 2], capacityUnits: 1 });
+      slots.push({
+        id: `pcie-${index + 1}`, kind: "PCIE", position: [boardFace + 10, pcieYs[index], caseSize[2] / 2], capacityUnits: 1,
+        ...(gpuCount === null ? {} : { gpuCapable: gpuIndices.has(index) }),
+      });
     }
   }
 
