@@ -18,6 +18,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { WebMcpInspector } from "./webmcp-inspector";
 import { PartsBrowser } from "./parts-browser";
 import { BuildSidebar } from "./build-sidebar";
+import { WorkspaceNavigation, type MobileWorkspaceView } from "./workspace-navigation";
 import { presentBuildStatus } from "@/lib/presentation";
 
 const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK", "FAN", "HBA"];
@@ -27,6 +28,9 @@ export function BuilderWorkspace() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("ALL");
   const [preview, setPreview] = useState<ReturnType<typeof addPart> | null>(null);
+  const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
+  const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
+  const [mobileView, setMobileView] = useState<MobileWorkspaceView>("TWIN");
   const current = useMemo(() => snapshot(lines), [lines]);
   const filtered = referenceCatalog.filter((product) =>
     (category === "ALL" || product.category === category) &&
@@ -62,8 +66,18 @@ export function BuilderWorkspace() {
           <ThemeToggle />
         </div>
       </header>
-      <section className="workspace">
+      <WorkspaceNavigation
+        leftDrawerOpen={leftDrawerOpen}
+        rightDrawerOpen={rightDrawerOpen}
+        mobileView={mobileView}
+        onToggleParts={() => { setLeftDrawerOpen((open) => !open); setRightDrawerOpen(false); }}
+        onShowTwin={() => { setLeftDrawerOpen(false); setRightDrawerOpen(false); }}
+        onToggleBuild={() => { setRightDrawerOpen((open) => !open); setLeftDrawerOpen(false); }}
+        onMobileView={setMobileView}
+      />
+      <section className="workspace" data-mobile-view={mobileView}>
         <PartsBrowser
+          className={`${leftDrawerOpen ? "drawer-open" : ""} ${mobileView === "PARTS" ? "mobile-active" : ""}`}
           products={visible}
           categories={categories}
           category={category}
@@ -78,7 +92,7 @@ export function BuilderWorkspace() {
           onAdd={(id) => isRepeatableProduct(id) ? increment(id) : selectPart(id)}
           onDecrement={decrement}
         />
-        <section className="panel twin-panel">
+        <section className={`panel twin-panel ${mobileView === "TWIN" ? "mobile-active" : ""}`}>
           <div className="panel-title-row">
             <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
           </div>
@@ -91,6 +105,7 @@ export function BuilderWorkspace() {
           ) : null}
         </section>
         <BuildSidebar
+          className={`${rightDrawerOpen ? "drawer-open" : ""} ${mobileView === "BUILD" ? "mobile-active" : ""}`}
           build={current}
           onIncrement={increment}
           onDecrement={decrement}
@@ -98,6 +113,11 @@ export function BuilderWorkspace() {
         >
           <WebMcpInspector lines={lines} setLines={setLines} />
         </BuildSidebar>
+        <button
+          className={`workspace-backdrop ${leftDrawerOpen || rightDrawerOpen ? "visible" : ""}`}
+          onClick={() => { setLeftDrawerOpen(false); setRightDrawerOpen(false); }}
+          aria-label="Close side panel"
+        />
       </section>
     </main>
   );

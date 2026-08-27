@@ -5,6 +5,7 @@ import { CompatibilitySummary } from "./compatibility-summary";
 import { ResourceSummary } from "./resource-summary";
 
 interface BuildSidebarProps {
+  className?: string;
   build: BuilderSnapshot;
   onIncrement: (productId: string) => void;
   onDecrement: (productId: string) => void;
@@ -12,9 +13,9 @@ interface BuildSidebarProps {
   children?: ReactNode;
 }
 
-export function BuildSidebar({ build, onIncrement, onDecrement, onClear, children }: BuildSidebarProps) {
+export function BuildSidebar({ build, onIncrement, onDecrement, onClear, children, className }: BuildSidebarProps) {
   return (
-    <aside className="panel build-panel">
+    <aside className={`panel build-panel ${className ?? ""}`}>
       <div className="build-panel-head">
         <div><h2>Build</h2><span>{build.products.length} installed items</span></div>
         <button className="text-button" onClick={onClear} disabled={build.lines.length === 0}>Clear build</button>

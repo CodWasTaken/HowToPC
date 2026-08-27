@@ -3,6 +3,7 @@ import type { CatalogApplyState } from "@/lib/catalog-compatibility";
 import { PartResultRow } from "./part-result-row";
 
 interface PartsBrowserProps {
+  className?: string;
   products: readonly ReferenceProduct[];
   categories: readonly string[];
   category: string;
@@ -21,7 +22,7 @@ interface PartsBrowserProps {
 export function PartsBrowser(props: PartsBrowserProps) {
   const { products, categories, category, query } = props;
   return (
-    <aside className="panel catalog-panel">
+    <aside className={`panel catalog-panel ${props.className ?? ""}`}>
       <div className="parts-browser-head">
         <div><h2>Parts</h2><span>{products.length} shown</span></div>
         <input aria-label="Search parts" placeholder="Search hardware" value={query} onChange={(event) => props.onQueryChange(event.target.value)} />
