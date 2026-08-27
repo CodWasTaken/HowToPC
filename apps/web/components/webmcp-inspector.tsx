@@ -59,5 +59,20 @@ export function WebMcpInspector({ lines, setLines }: { lines: BuildLine[]; setLi
     }).catch(() => active && setStatus("error"));
     return () => { active = false; controller?.abort(); };
   }, [lines, setLines]);
-  return <section className="mcp-inspector"><div className="mcp-head"><h3>WebMCP</h3><span className={`mcp-state ${status}`}>{status}</span></div><p>{TOOL_NAMES.length} task tools · same build engine as UI</p><code>{TOOL_NAMES.join(" · ")}</code></section>;
+  return (
+    <section className="agent-tools" aria-label="Agent tools">
+      <div className="agent-tools-summary">
+        <span className={`agent-tools-dot ${status}`} aria-hidden="true" />
+        <div>
+          <b>Agent tools</b>
+          <small>{TOOL_NAMES.length} tools · same build engine</small>
+        </div>
+        <span className={`agent-tools-state ${status}`}>{status}</span>
+      </div>
+      <details className="agent-tools-details">
+        <summary>Advanced diagnostics</summary>
+        <code>{TOOL_NAMES.join(" · ")}</code>
+      </details>
+    </section>
+  );
 }
