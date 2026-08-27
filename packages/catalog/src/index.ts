@@ -8,7 +8,7 @@ export * from "./categories/cooler";
 export * from "./categories/fan";
 export * from "./categories/storage";
 export * from "./categories/network";
-export * from "./reference";
+export { referenceCatalog, type ProductSource, type ReferenceProduct } from "./combined-reference";
 export * from "./search";
 export * from "./offers";
 export * from "./reference-offers";
