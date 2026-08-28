@@ -148,30 +148,68 @@ export function removeOne(
   };
 }
 
-function canProveAnotherRepeatable(
+function repeatableCapacityBound(
   lines:readonly BuildLine[],
   product:ReferenceProduct,
   resolver:CatalogResolver,
-):boolean {
+):number|null {
   const products=expandBuildLines(lines,resolver);
   const board=products.find((item)=>item.category==="MOTHERBOARD");
   const pcCase=products.find((item)=>item.category==="CASE");
   const boardSpecs=board?.specs as Record<string,unknown>|undefined;
   const caseSpecs=pcCase?.specs as Record<string,unknown>|undefined;
   const productSpecs=product.specs as Record<string,unknown>;
-  const known=(value:unknown)=>typeof value==="number"&&Number.isFinite(value);
-  if(product.category==="MEMORY")return Boolean(board)&&known(boardSpecs?.dimmSlots)&&known(boardSpecs?.maxMemoryBytes);
-  if(product.category==="GPU")return Boolean(board)&&known(boardSpecs?.gpuPcieSlots);
-  if(product.category==="STORAGE") {
-    if(productSpecs.interface==="NVME")return Boolean(board)&&known(boardSpecs?.m2Slots);
-    if(productSpecs.interface==="SATA") {
-      const bayKey=String(productSpecs.formFactor).includes("2.5")?"internal25Bays":"internal35Bays";
-      return Boolean(board)&&Boolean(pcCase)&&known(boardSpecs?.sataPorts)&&known(caseSpecs?.[bayKey]);
-    }
-    return false;
+  const capacity=(value:unknown)=>
+    typeof value==="number"&&Number.isFinite(value)&&value>=0?Math.floor(value):null;
+
+  if(product.category==="MEMORY") {
+    const slots=capacity(boardSpecs?.dimmSlots);
+    const bytes=capacity(boardSpecs?.maxMemoryBytes);
+    const modules=capacity(productSpecs.modules);
+    const moduleBytes=capacity(productSpecs.moduleCapacityBytes);
+    if(!board||slots===null||bytes===null||modules===null||modules<=0||moduleBytes===null||moduleBytes<=0)return null;
+    return Math.min(Math.floor(slots/modules),Math.floor(bytes/(modules*moduleBytes)));
   }
-  if(product.category==="NETWORK"||product.category==="HBA")return Boolean(board)&&known(boardSpecs?.pcieSlots);
-  return false;
+  if(product.category==="GPU") {
+    const gpuSlots=capacity(boardSpecs?.gpuPcieSlots);
+    const pcieSlots=capacity(boardSpecs?.pcieSlots);
+    return board&&gpuSlots!==null&&pcieSlots!==null?Math.min(gpuSlots,pcieSlots):null;
+  }
+  if(product.category==="STORAGE") {
+    if(productSpecs.interface==="NVME") {
+      const m2=capacity(boardSpecs?.m2Slots);
+      return board&&m2!==null?m2:null;
+    }
+    if(productSpecs.interface==="SATA") {
+      const sata=capacity(boardSpecs?.sataPorts);
+      const bayKey=String(productSpecs.formFactor).includes("2.5")?"internal25Bays":"internal35Bays";
+      const bays=capacity(caseSpecs?.[bayKey]);
+      return board&&pcCase&&sata!==null&&bays!==null?Math.min(sata,bays):null;
+    }
+    return null;
+  }
+  if(product.category==="NETWORK") {
+    if(productSpecs.interface!=="PCIE")return null;
+    const slots=capacity(boardSpecs?.pcieSlots);
+    return board&&slots!==null?slots:null;
+  }
+  if(product.category==="HBA") {
+    if(productSpecs.interface!==undefined&&productSpecs.interface!=="PCIE")return null;
+    const slots=capacity(boardSpecs?.pcieSlots);
+    return board&&slots!==null?slots:null;
+  }
+  return null;
+}
+
+function canProveAnotherRepeatable(
+  lines:readonly BuildLine[],
+  product:ReferenceProduct,
+  resolver:CatalogResolver,
+):boolean {
+  const bound=repeatableCapacityBound(lines,product,resolver);
+  if(bound===null)return false;
+  const current=lines.find((line)=>line.productId===product.id)?.quantity??0;
+  return current<bound;
 }
 
 export function maxSafeQuantity(
@@ -187,13 +225,14 @@ export function maxSafeQuantity(
 
   let working=cloneLines(lines);
   let quantity=working.find((line)=>line.productId===productId)?.quantity??0;
-  for(let attempt=0;attempt<64;attempt+=1){
+  const sourcedBound=repeatableCapacityBound(working,context.product,context.resolver);
+  const target=sourcedBound??1;
+  while(quantity<target){
     if(quantity>=1&&!canProveAnotherRepeatable(working,context.product,context.resolver))break;
     const preview=previewAdd(working,productId,context.resolver);
     if(!preview.committed)break;
     working=cloneLines(preview.candidateLines);
     quantity=working.find((line)=>line.productId===productId)?.quantity??quantity;
-    if(quantity>=64)break;
   }
   return quantity;
 }

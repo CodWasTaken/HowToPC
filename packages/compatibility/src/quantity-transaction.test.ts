@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import type { ReferenceProduct } from "@howtopc/catalog";
 import {
   addOne,
+  createCatalogResolver,
   maxSafeQuantity,
   removeOne,
   replaceSingleton,
@@ -85,6 +86,36 @@ describe("quantity-safe build mutations", () => {
     const second=addOne(first.lines,fan);
     expect(second.committed).toBe(false);
     expect(second.decision.state).toBe("BLOCKED_UNKNOWN");
+  });
+
+  test.each([
+    { id:"memory-no-capacity", category:"MEMORY", specs:{schemaVersion:1,type:"DDR5",modules:1,moduleCapacityBytes:8*1024**3} },
+    { id:"gpu-no-capacity", category:"GPU", specs:{schemaVersion:1,lengthMm:250,slotWidth:2} },
+    { id:"storage-no-capacity", category:"STORAGE", specs:{schemaVersion:1,interface:"NVME",formFactor:"M.2 2280",capacityBytes:1024**4} },
+    { id:"fan-no-capacity", category:"FAN", specs:{schemaVersion:1,sizeMm:120} },
+    { id:"network-no-capacity", category:"NETWORK", specs:{schemaVersion:1,interface:"PCIE",speedMbps:1000,ports:1} },
+    { id:"hba-no-capacity", category:"HBA", specs:{schemaVersion:1,interface:"PCIE",ports:4} },
+  ])("blocks a second $category when its mount capacity is not sourced", ({id,category,specs}) => {
+    const product:ReferenceProduct={id,revisionId:`${id}-r1`,manufacturer:"Test",displayName:id,category,specs};
+    const first=addOne([],product);
+    expect(first.committed).toBe(true);
+    expect(maxSafeQuantity([],product)).toBe(1);
+    const second=addOne(first.lines,product);
+    expect(second.committed).toBe(false);
+    expect(second.decision.state).toBe("BLOCKED_UNKNOWN");
+  });
+
+  test("derives repeatable search bounds from sourced capacity instead of a magic ceiling", () => {
+    const board:ReferenceProduct={
+      id:"board-many-pcie",revisionId:"board-many-pcie-r1",manufacturer:"Test",displayName:"65-slot test board",category:"MOTHERBOARD",
+      specs:{schemaVersion:1,socket:"TEST",formFactor:"ATX",memoryType:"DDR5",dimmSlots:2,maxMemoryBytes:64*1024**3,pcieSlots:65,gpuPcieSlots:1,m2Slots:1,sataPorts:1},
+    };
+    const hba:ReferenceProduct={
+      id:"hba-many-pcie",revisionId:"hba-many-pcie-r1",manufacturer:"Test",displayName:"Test HBA",category:"HBA",
+      specs:{schemaVersion:1,interface:"PCIE",ports:4},
+    };
+    const resolver=createCatalogResolver([board,hba]);
+    expect(maxSafeQuantity([{productId:board.id,quantity:1}],hba,resolver)).toBe(65);
   });
 
   test("finds the maximum safe quantity for a repeatable part", () => {
