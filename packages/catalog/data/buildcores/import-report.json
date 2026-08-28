@@ -1,0 +1,568 @@
+{
+  "sourceCommit": "7f759ec353714e9dca2adab9e62bd80311fc373e",
+  "totals": {
+    "total": 29632,
+    "accepted": 26360,
+    "rejected": 3272
+  },
+  "rejectionReasons": {
+    "MISSING_IDENTITY": 14,
+    "MISSING_REQUIRED_FIELD": 2990,
+    "AMBIGUOUS_VALUE": 268
+  },
+  "sourceCategories": {
+    "CPU": {
+      "total": 789,
+      "accepted": 788,
+      "rejected": 1,
+      "rejectionReasons": {
+        "MISSING_IDENTITY": 1
+      }
+    },
+    "Motherboard": {
+      "total": 3699,
+      "accepted": 3515,
+      "rejected": 184,
+      "rejectionReasons": {
+        "MISSING_REQUIRED_FIELD": 149,
+        "AMBIGUOUS_VALUE": 35
+      }
+    },
+    "RAM": {
+      "total": 4828,
+      "accepted": 4807,
+      "rejected": 21,
+      "rejectionReasons": {
+        "MISSING_IDENTITY": 2,
+        "MISSING_REQUIRED_FIELD": 19
+      }
+    },
+    "GPU": {
+      "total": 3835,
+      "accepted": 3774,
+      "rejected": 61,
+      "rejectionReasons": {
+        "MISSING_IDENTITY": 1,
+        "MISSING_REQUIRED_FIELD": 60
+      }
+    },
+    "Storage": {
+      "total": 3495,
+      "accepted": 3311,
+      "rejected": 184,
+      "rejectionReasons": {
+        "MISSING_REQUIRED_FIELD": 2,
+        "AMBIGUOUS_VALUE": 182
+      }
+    },
+    "PSU": {
+      "total": 3295,
+      "accepted": 3239,
+      "rejected": 56,
+      "rejectionReasons": {
+        "MISSING_REQUIRED_FIELD": 5,
+        "AMBIGUOUS_VALUE": 51
+      }
+    },
+    "PCCase": {
+      "total": 3749,
+      "accepted": 1195,
+      "rejected": 2554,
+      "rejectionReasons": {
+        "MISSING_REQUIRED_FIELD": 2554
+      }
+    },
+    "CPUCooler": {
+      "total": 2398,
+      "accepted": 2386,
+      "rejected": 12,
+      "rejectionReasons": {
+        "MISSING_IDENTITY": 1,
+        "MISSING_REQUIRED_FIELD": 11
+      }
+    },
+    "CaseFan": {
+      "total": 3366,
+      "accepted": 3345,
+      "rejected": 21,
+      "rejectionReasons": {
+        "MISSING_IDENTITY": 9,
+        "MISSING_REQUIRED_FIELD": 12
+      }
+    },
+    "NetworkCard": {
+      "total": 178,
+      "accepted": 0,
+      "rejected": 178,
+      "rejectionReasons": {
+        "MISSING_REQUIRED_FIELD": 178
+      }
+    }
+  },
+  "acceptedByCanonicalCategory": {
+    "CPU": 788,
+    "MOTHERBOARD": 3515,
+    "MEMORY": 4807,
+    "GPU": 3774,
+    "STORAGE": 3311,
+    "PSU": 3239,
+    "CASE": 1195,
+    "COOLER": 2386,
+    "FAN": 3345,
+    "NETWORK": 0
+  },
+  "facetCoverage": {
+    "CPU": {
+      "manufacturer": {
+        "known": 788,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 696,
+        "missing": 92
+      },
+      "specs.socket": {
+        "known": 788,
+        "missing": 0
+      },
+      "specs.family": {
+        "known": 788,
+        "missing": 0
+      },
+      "specs.cores": {
+        "known": 788,
+        "missing": 0
+      },
+      "specs.threads": {
+        "known": 788,
+        "missing": 0
+      },
+      "specs.integratedGraphics": {
+        "known": 788,
+        "missing": 0
+      },
+      "specs.tdpWatts": {
+        "known": 788,
+        "missing": 0
+      },
+      "specs.unlocked": {
+        "known": 0,
+        "missing": 788
+      }
+    },
+    "MOTHERBOARD": {
+      "manufacturer": {
+        "known": 3515,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 582,
+        "missing": 2933
+      },
+      "specs.socket": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.chipset": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.formFactor": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.memoryType": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.dimmSlots": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.maxMemoryBytes": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.pcieSlots": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.m2Slots": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.sataPorts": {
+        "known": 3515,
+        "missing": 0
+      },
+      "specs.wireless": {
+        "known": 405,
+        "missing": 3110
+      },
+      "specs.ethernetSpeedMbps": {
+        "known": 3493,
+        "missing": 22
+      },
+      "specs.eccSupport": {
+        "known": 3515,
+        "missing": 0
+      }
+    },
+    "MEMORY": {
+      "manufacturer": {
+        "known": 4807,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 497,
+        "missing": 4310
+      },
+      "specs.type": {
+        "known": 4807,
+        "missing": 0
+      },
+      "specs.modules": {
+        "known": 4807,
+        "missing": 0
+      },
+      "specs.moduleCapacityBytes": {
+        "known": 4807,
+        "missing": 0
+      },
+      "specs.speedMt": {
+        "known": 4807,
+        "missing": 0
+      },
+      "specs.ecc": {
+        "known": 4807,
+        "missing": 0
+      },
+      "specs.formFactor": {
+        "known": 4806,
+        "missing": 1
+      },
+      "specs.casLatency": {
+        "known": 4805,
+        "missing": 2
+      },
+      "specs.timings": {
+        "known": 3152,
+        "missing": 1655
+      }
+    },
+    "GPU": {
+      "manufacturer": {
+        "known": 3774,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 1063,
+        "missing": 2711
+      },
+      "specs.chipsetManufacturer": {
+        "known": 3774,
+        "missing": 0
+      },
+      "specs.chipset": {
+        "known": 3774,
+        "missing": 0
+      },
+      "specs.vramBytes": {
+        "known": 3764,
+        "missing": 10
+      },
+      "specs.memoryType": {
+        "known": 3774,
+        "missing": 0
+      },
+      "specs.lengthMm": {
+        "known": 3774,
+        "missing": 0
+      },
+      "specs.slotWidth": {
+        "known": 3774,
+        "missing": 0
+      },
+      "specs.tdpWatts": {
+        "known": 3774,
+        "missing": 0
+      },
+      "specs.interface": {
+        "known": 3768,
+        "missing": 6
+      },
+      "specs.powerConnectors": {
+        "known": 2759,
+        "missing": 1015
+      },
+      "specs.videoOutputs": {
+        "known": 3685,
+        "missing": 89
+      }
+    },
+    "STORAGE": {
+      "manufacturer": {
+        "known": 3311,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 73,
+        "missing": 3238
+      },
+      "specs.storageType": {
+        "known": 3311,
+        "missing": 0
+      },
+      "specs.interface": {
+        "known": 3311,
+        "missing": 0
+      },
+      "specs.formFactor": {
+        "known": 3311,
+        "missing": 0
+      },
+      "specs.capacityBytes": {
+        "known": 3311,
+        "missing": 0
+      },
+      "specs.pcieGeneration": {
+        "known": 1492,
+        "missing": 1819
+      },
+      "specs.sequentialReadMbps": {
+        "known": 0,
+        "missing": 3311
+      },
+      "specs.sequentialWriteMbps": {
+        "known": 0,
+        "missing": 3311
+      },
+      "specs.enduranceTbw": {
+        "known": 0,
+        "missing": 3311
+      },
+      "specs.rpm": {
+        "known": 0,
+        "missing": 3311
+      },
+      "specs.cacheBytes": {
+        "known": 64,
+        "missing": 3247
+      }
+    },
+    "PSU": {
+      "manufacturer": {
+        "known": 3239,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 121,
+        "missing": 3118
+      },
+      "specs.wattage": {
+        "known": 3239,
+        "missing": 0
+      },
+      "specs.formFactor": {
+        "known": 3239,
+        "missing": 0
+      },
+      "specs.efficiencyRating": {
+        "known": 2978,
+        "missing": 261
+      },
+      "specs.modularity": {
+        "known": 3239,
+        "missing": 0
+      },
+      "specs.connectors": {
+        "known": 3238,
+        "missing": 1
+      },
+      "specs.lengthMm": {
+        "known": 3131,
+        "missing": 108
+      },
+      "specs.fanless": {
+        "known": 3223,
+        "missing": 16
+      }
+    },
+    "CASE": {
+      "manufacturer": {
+        "known": 1195,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 210,
+        "missing": 985
+      },
+      "specs.supportedMotherboardFormFactors": {
+        "known": 1195,
+        "missing": 0
+      },
+      "specs.maxGpuLengthMm": {
+        "known": 1195,
+        "missing": 0
+      },
+      "specs.maxCpuCoolerHeightMm": {
+        "known": 1195,
+        "missing": 0
+      },
+      "specs.psuFormFactors": {
+        "known": 159,
+        "missing": 1036
+      },
+      "specs.internal25Bays": {
+        "known": 1190,
+        "missing": 5
+      },
+      "specs.internal35Bays": {
+        "known": 1189,
+        "missing": 6
+      },
+      "specs.expansionSlots": {
+        "known": 1189,
+        "missing": 6
+      },
+      "specs.sidePanel": {
+        "known": 1195,
+        "missing": 0
+      }
+    },
+    "COOLER": {
+      "manufacturer": {
+        "known": 2386,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 213,
+        "missing": 2173
+      },
+      "specs.type": {
+        "known": 2386,
+        "missing": 0
+      },
+      "specs.supportedSockets": {
+        "known": 2386,
+        "missing": 0
+      },
+      "specs.heightMm": {
+        "known": 1598,
+        "missing": 788
+      },
+      "specs.radiatorSizeMm": {
+        "known": 1260,
+        "missing": 1126
+      },
+      "specs.fanSizeMm": {
+        "known": 343,
+        "missing": 2043
+      },
+      "specs.fanQuantity": {
+        "known": 311,
+        "missing": 2075
+      },
+      "specs.minRpm": {
+        "known": 2280,
+        "missing": 106
+      },
+      "specs.maxRpm": {
+        "known": 1837,
+        "missing": 549
+      },
+      "specs.minNoiseDb": {
+        "known": 2147,
+        "missing": 239
+      },
+      "specs.maxNoiseDb": {
+        "known": 946,
+        "missing": 1440
+      },
+      "specs.fanless": {
+        "known": 2323,
+        "missing": 63
+      }
+    },
+    "FAN": {
+      "manufacturer": {
+        "known": 3345,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 542,
+        "missing": 2803
+      },
+      "specs.sizeMm": {
+        "known": 3345,
+        "missing": 0
+      },
+      "specs.connector": {
+        "known": 3027,
+        "missing": 318
+      },
+      "specs.quantity": {
+        "known": 3341,
+        "missing": 4
+      },
+      "specs.minAirflowCfm": {
+        "known": 3040,
+        "missing": 305
+      },
+      "specs.maxAirflowCfm": {
+        "known": 703,
+        "missing": 2642
+      },
+      "specs.minNoiseDb": {
+        "known": 2937,
+        "missing": 408
+      },
+      "specs.maxNoiseDb": {
+        "known": 946,
+        "missing": 2399
+      },
+      "specs.staticPressureMmH2o": {
+        "known": 2110,
+        "missing": 1235
+      },
+      "specs.pwm": {
+        "known": 3279,
+        "missing": 66
+      },
+      "specs.flowDirection": {
+        "known": 3224,
+        "missing": 121
+      }
+    },
+    "NETWORK": {
+      "manufacturer": {
+        "known": 0,
+        "missing": 0
+      },
+      "releaseYear": {
+        "known": 0,
+        "missing": 0
+      },
+      "specs.interface": {
+        "known": 0,
+        "missing": 0
+      },
+      "specs.speedMbps": {
+        "known": 0,
+        "missing": 0
+      },
+      "specs.ports": {
+        "known": 0,
+        "missing": 0
+      },
+      "specs.wireless": {
+        "known": 0,
+        "missing": 0
+      },
+      "specs.standard": {
+        "known": 0,
+        "missing": 0
+      }
+    }
+  }
+}

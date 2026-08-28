@@ -3,13 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "pnpm --dir ../.. exec vitest run --project ingestion --passWithNoTests"
+    "test": "pnpm --dir ../.. exec vitest run --project ingestion --passWithNoTests",
+    "generate:buildcores": "tsx scripts/generate-buildcores-catalog.ts"
   },
   "dependencies": {
     "@howtopc/catalog": "workspace:*",
     "@howtopc/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "4.23.12"
   }
 }
