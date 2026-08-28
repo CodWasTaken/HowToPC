@@ -6,6 +6,19 @@ const first = (products: BuildProducts, category: string) => products.find((prod
 const specs = (product: ReferenceProduct) => product.specs as Record<string, any>;
 const involved = (products: readonly ReferenceProduct[]) => products.map((product) => product.id);
 
+function gpuPowerConnectorFamily(kind: string): string {
+  return kind === "12V_2X6" || kind === "12VHPWR" ? "GPU_16_PIN" : kind;
+}
+
+function connectorCountsByFamily(connectors: Record<string, number>): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const [kind, count] of Object.entries(connectors)) {
+    const family = gpuPowerConnectorFamily(kind);
+    counts[family] = (counts[family] ?? 0) + count;
+  }
+  return counts;
+}
+
 function ruleResult(
   ruleId: string,
   status: CompatibilityRuleResult["status"],
@@ -162,8 +175,9 @@ export function evaluateMvpRules(products: BuildProducts): CompatibilityRuleResu
         required[kind] = (required[kind] ?? 0) + count;
       }
     }
-    const available = (specs(psu).connectors as Record<string, number> | undefined) ?? {};
-    const fits = Object.entries(required).every(([kind, count]) => (available[kind] ?? 0) >= count);
+    const requiredFamilies = connectorCountsByFamily(required);
+    const available = connectorCountsByFamily((specs(psu).connectors as Record<string, number> | undefined) ?? {});
+    const fits = Object.entries(requiredFamilies).every(([kind, count]) => (available[kind] ?? 0) >= count);
     results.push(ruleResult("gpu-psu-connectors", fits ? "COMPATIBLE" : "INCOMPATIBLE", fits ? "PSU has the native GPU power connectors required." : "PSU lacks enough native GPU power connectors for all installed GPUs.", [psu.id, ...involved(gpus)]));
   }
 

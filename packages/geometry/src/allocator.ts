@@ -59,7 +59,15 @@ export function allocateMounts(instances: readonly PhysicalInstance[], topology:
     if (instance.category === "COOLER") {
       const cpu = byKind("CPU")[0];
       if (!cpu) noMount(instance, "CPU cooler");
-      else assign(instance, cpu, [cpu.position[0] + 2.5 + instance.size[0] / 2, cpu.position[1], cpu.position[2]], `${cpu.id}:cooler`);
+      else {
+        assign(instance, cpu, [cpu.position[0] + 2.5 + instance.size[0] / 2, cpu.position[1], cpu.position[2]], `${cpu.id}:cooler`);
+        if (specs(instance).type === "AIO") {
+          issues.push({
+            instanceId: instance.id, code: "TOPOLOGY_UNKNOWN",
+            message: "AIO radiator mount geometry is not sourced; only the CPU pump/block is shown.",
+          });
+        }
+      }
       continue;
     }
     if (instance.category === "MEMORY") {
@@ -79,7 +87,11 @@ export function allocateMounts(instances: readonly PhysicalInstance[], topology:
       } else {
         const kind = String(specs(instance).formFactor).includes("2.5") ? "SATA_25" : "SATA_35";
         const slot = free(byKind(kind));
-        slot ? assign(instance, slot) : noMount(instance, kind === "SATA_25" ? "2.5-inch drive" : "3.5-inch drive");
+        if (!slot) noMount(instance, kind === "SATA_25" ? "2.5-inch drive" : "3.5-inch drive");
+        else {
+          const [caseWidth] = topology.caseSize;
+          assign(instance, slot, [caseWidth / 2 - instance.size[0] / 2, slot.position[1], slot.position[2]]);
+        }
       }
       continue;
     }

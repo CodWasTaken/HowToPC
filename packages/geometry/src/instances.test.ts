@@ -15,6 +15,20 @@ describe("physical geometry instances", () => {
     expect(sizeForProduct(product("ssd-nvme-2tb"))).toEqual([4, 22, 80]);
   });
 
+  test("represents an AIO at the CPU socket as its pump block, not its radiator length", () => {
+    const source = product("cooler-air-158");
+    const aio = {
+      ...source, id: "aio-360-test", revisionId: "aio-360-test-r1", displayName: "360mm AIO",
+      specs: { schemaVersion: 1 as const, type: "AIO" as const, supportedSockets: ["AM5"], heightMm: 55, radiatorSizeMm: 360, fanSizeMm: 120 },
+    };
+    expect(sizeForProduct(aio)).toEqual([55, 70, 70]);
+    expect(sizeForProduct(aio)).not.toContain(360);
+  });
+
+  test("orients SATA drive envelopes with thickness across the case width", () => {
+    expect(sizeForProduct(product("hdd-sata-8tb"))).toEqual([26, 102, 147]);
+  });
+
   test("expands kits and duplicate products into unique physical instances", () => {
     const ram = product("ram-ddr5-32");
     const gpu = product("gpu-value-270");

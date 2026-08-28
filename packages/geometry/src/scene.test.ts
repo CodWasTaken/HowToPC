@@ -117,6 +117,33 @@ describe("mount-aware scene integration", () => {
     expect(scene.collisions).toEqual([]);
     expect(new Set(scene.components.map((part) => part.id)).size).toBe(scene.components.length);
   });
+  test("keeps a sourced-length GPU out of the parametric SATA drive-bay zone", () => {
+    const sourceCase = product("case-atx-340");
+    const roomyCase = {
+      ...sourceCase, id: "case-gpu-drive-clearance", revisionId: "case-gpu-drive-clearance-r1",
+      specs: { ...(sourceCase.specs as Record<string, unknown>), maxGpuLengthMm: 365 },
+    };
+    const gpu = product("gpu-long-345");
+    const drive = product("hdd-sata-8tb");
+    const scene = buildParametricScene([product("mb-b650-atx"), roomyCase, gpu, drive]);
+    expect(scene.collisions.some((collision) =>
+      [collision.aId, collision.bId].some((id) => id.startsWith(gpu.id)) &&
+      [collision.aId, collision.bId].some((id) => id.startsWith(drive.id)),
+    )).toBe(false);
+  });
+
+  test("flags AIO radiator placement as unknown instead of pretending it is CPU-mounted", () => {
+    const source = product("cooler-air-158");
+    const aio = {
+      ...source, id: "aio-placement-test", revisionId: "aio-placement-test-r1",
+      specs: { schemaVersion: 1 as const, type: "AIO" as const, supportedSockets: ["AM5"], heightMm: 55, radiatorSizeMm: 360 },
+    };
+    const scene = buildParametricScene([product("mb-b650-atx"), product("case-atx-340"), aio]);
+    expect(scene.placementIssues).toContainEqual(expect.objectContaining({
+      instanceId: aio.id, code: "TOPOLOGY_UNKNOWN",
+    }));
+  });
+
   test("uses sourced case drive-bay capacity instead of synthesizing one bay per drive", () => {
     const sourceCase=product("case-atx-340");
     const pcCase={...sourceCase,id:"case-one-35-bay",revisionId:"case-one-35-bay-r1",specs:{

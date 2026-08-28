@@ -94,7 +94,9 @@ export function deriveMountTopology(products: readonly ReferenceProduct[]): Moun
       continue;
     }
     for(let index=0;index<Math.floor(rawCount);index+=1){
-      slots.push({id:`drive-${kind.toLowerCase()}-${index+1}`,kind,position:[0,floor+55+bayIndex*38,-caseSize[2]/2+85],capacityUnits:1});
+      const row=Math.floor(bayIndex/2),column=bayIndex%2;
+      const z=column===0 ? -caseSize[2]/2+85 : caseSize[2]/2-85;
+      slots.push({id:`drive-${kind.toLowerCase()}-${index+1}`,kind,position:[0,floor+60+row*110,z],capacityUnits:1});
       bayIndex+=1;
     }
   }

@@ -89,6 +89,22 @@ describe("MVP compatibility rules", () => {
     expect(connectors?.status).toBe("INCOMPATIBLE");
   });
 
+  test("treats 12V-2x6 GPU demand as compatible with a sourced 12VHPWR PSU cable", () => {
+    const sourceGpu = pick("gpu-mid-300");
+    const sourcePsu = pick("psu-atx-750");
+    const gpu: ReferenceProduct = {
+      ...sourceGpu, id: "gpu-12v-2x6-test", revisionId: "gpu-12v-2x6-test-r1",
+      specs: { ...(sourceGpu.specs as Record<string, unknown>), powerConnectors: { "12V_2X6": 1 } },
+    };
+    const psu: ReferenceProduct = {
+      ...sourcePsu, id: "psu-12vhpwr-test", revisionId: "psu-12vhpwr-test-r1",
+      specs: { ...(sourcePsu.specs as Record<string, unknown>), connectors: { "12VHPWR": 1, EPS_8: 2 } },
+    };
+    const base = build(["cpu-am5-7600", "mb-b650-atx", "ram-ddr5-32", "case-atx-340", "cooler-air-158"]);
+    const report = evaluateBuild([...base, gpu, psu]);
+    expect(report.results.find((result) => result.ruleId === "gpu-psu-connectors")?.status).toBe("COMPATIBLE");
+  });
+
   test("returns UNKNOWN for multi-GPU builds when GPU slot topology is unknown", () => {
     const report = evaluateBuild(build([
       "cpu-intel-i5-3470", "buildcores-a750515d-6abd-4126-9830-e2700b884aed",

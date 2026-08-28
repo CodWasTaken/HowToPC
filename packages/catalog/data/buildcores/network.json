@@ -1,1 +1,1567 @@
-[]
+[
+  {
+    "id": "buildcores-3dc58722-916e-4cfb-b3cc-4a75213ff24c",
+    "revisionId": "buildcores-3dc58722-916e-4cfb-b3cc-4a75213ff24c-r1",
+    "manufacturer": "AddOn",
+    "displayName": "D-Link DXE-820T 2 x 10 Gb/s Ethernet PCIe x8",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "3dc58722-916e-4cfb-b3cc-4a75213ff24c",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "DXE-820T",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "DXE-820T-AO",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/3dc58722-916e-4cfb-b3cc-4a75213ff24c.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-a20e5dd5-5e7f-45e2-83e8-5b398f61219b",
+    "revisionId": "buildcores-a20e5dd5-5e7f-45e2-83e8-5b398f61219b-r1",
+    "manufacturer": "AddOn",
+    "displayName": "Supermicro AOC-STG-i2T 2 x 10 Gb/s Ethernet PCIe x8",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "a20e5dd5-5e7f-45e2-83e8-5b398f61219b",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "AOC-STG-i2T",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "AOC-STG-I2T-AO",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/a20e5dd5-5e7f-45e2-83e8-5b398f61219b.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-ea4e3d41-316d-4150-8a28-ece081216d51",
+    "revisionId": "buildcores-ea4e3d41-316d-4150-8a28-ece081216d51-r1",
+    "manufacturer": "Axiom",
+    "displayName": "Cisco N2XX-ABPCI03-M3= 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "ea4e3d41-316d-4150-8a28-ece081216d51",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "N2XX-ABPCI03-M3=",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "N2XX-ABPCI03-M3-AX",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/ea4e3d41-316d-4150-8a28-ece081216d51.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-35c32180-d19e-4a30-8eb8-e57b9d61926d",
+    "revisionId": "buildcores-35c32180-d19e-4a30-8eb8-e57b9d61926d-r1",
+    "manufacturer": "Crucial",
+    "displayName": "QLogic QLE3242-CU-CK 2 x 10 Gb/s Ethernet PCIe x8",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "35c32180-d19e-4a30-8eb8-e57b9d61926d",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "QLE3242-CU-CK",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "QLE8442-CU-CK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/35c32180-d19e-4a30-8eb8-e57b9d61926d.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-f38ad8fa-d873-4928-b74b-bafdb9ae6266",
+    "revisionId": "buildcores-f38ad8fa-d873-4928-b74b-bafdb9ae6266-r1",
+    "manufacturer": "IO Crest",
+    "displayName": "Syba SD-PEX24066 2 x 2.5 Gb/s Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 2500,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "f38ad8fa-d873-4928-b74b-bafdb9ae6266",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "SD-PEX24066",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/f38ad8fa-d873-4928-b74b-bafdb9ae6266.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-73c61fc6-a0bf-476b-ba91-03e7ee2696e4",
+    "revisionId": "buildcores-73c61fc6-a0bf-476b-ba91-03e7ee2696e4-r1",
+    "manufacturer": "IO Crest",
+    "displayName": "Syba SY-PEX24028 2 x Gigabit Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "73c61fc6-a0bf-476b-ba91-03e7ee2696e4",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "SY-PEX24028",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/73c61fc6-a0bf-476b-ba91-03e7ee2696e4.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-631f50bd-b4e8-46c0-b502-8a842b966b68",
+    "revisionId": "buildcores-631f50bd-b4e8-46c0-b502-8a842b966b68-r1",
+    "manufacturer": "IO Crest",
+    "displayName": "Syba SY-PEX24045 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "631f50bd-b4e8-46c0-b502-8a842b966b68",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "SY-PEX24045",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/631f50bd-b4e8-46c0-b502-8a842b966b68.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-1fbdf54d-5fcf-4564-affc-4a91d3fdaf84",
+    "revisionId": "buildcores-1fbdf54d-5fcf-4564-affc-4a91d3fdaf84-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E10G42BT 2 x 10 Gb/s Ethernet PCIe x8",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "1fbdf54d-5fcf-4564-affc-4a91d3fdaf84",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E10G42BT",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E10G42BTDABLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/1fbdf54d-5fcf-4564-affc-4a91d3fdaf84.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-4ac50f58-ad8c-4f34-bc93-7159ff9fc373",
+    "revisionId": "buildcores-4ac50f58-ad8c-4f34-bc93-7159ff9fc373-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G42ET 2 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "4ac50f58-ad8c-4f34-bc93-7159ff9fc373",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G42ET",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/4ac50f58-ad8c-4f34-bc93-7159ff9fc373.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-bf0767b6-684e-4358-a038-d04997270824",
+    "revisionId": "buildcores-bf0767b6-684e-4358-a038-d04997270824-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G42ETBLK 2 x Gigabit Ethernet PCIe x4 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "bf0767b6-684e-4358-a038-d04997270824",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G42ETBLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/bf0767b6-684e-4358-a038-d04997270824.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-cbea75d5-f758-4160-89ea-594ce799c904",
+    "revisionId": "buildcores-cbea75d5-f758-4160-89ea-594ce799c904-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G42ETBLK 2 x Gigabit Ethernet PCIe x4 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "cbea75d5-f758-4160-89ea-594ce799c904",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G42ETBLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/cbea75d5-f758-4160-89ea-594ce799c904.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-277bfccc-7643-44c1-9b9a-fa236141a755",
+    "revisionId": "buildcores-277bfccc-7643-44c1-9b9a-fa236141a755-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G44ET2 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "277bfccc-7643-44c1-9b9a-fa236141a755",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G44ET2",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/277bfccc-7643-44c1-9b9a-fa236141a755.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-0d9ade16-c7bf-46dd-9211-86330c718870",
+    "revisionId": "buildcores-0d9ade16-c7bf-46dd-9211-86330c718870-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G44ET2BLK 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "0d9ade16-c7bf-46dd-9211-86330c718870",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G44ET2BLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/0d9ade16-c7bf-46dd-9211-86330c718870.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-fb2e2f32-9e3c-46ec-a26e-14fbb20d1da9",
+    "revisionId": "buildcores-fb2e2f32-9e3c-46ec-a26e-14fbb20d1da9-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G44HT 4 x Gigabit Ethernet with Intel 82580 Processor PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "fb2e2f32-9e3c-46ec-a26e-14fbb20d1da9",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G44HT",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G44HTBLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/fb2e2f32-9e3c-46ec-a26e-14fbb20d1da9.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-58cfef2f-424a-43ba-9ee0-730802d1e287",
+    "revisionId": "buildcores-58cfef2f-424a-43ba-9ee0-730802d1e287-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G44HTBLK 4 x Gigabit Ethernet PCIe x4 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "58cfef2f-424a-43ba-9ee0-730802d1e287",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "E1G44HTBLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/58cfef2f-424a-43ba-9ee0-730802d1e287.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-7d07419a-4400-4736-ac76-a94c4c32f2e9",
+    "revisionId": "buildcores-7d07419a-4400-4736-ac76-a94c4c32f2e9-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel E1G44HTBLK 4 x Gigabit Ethernet PCIe x4 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "7d07419a-4400-4736-ac76-a94c4c32f2e9",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "23326069",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/7d07419a-4400-4736-ac76-a94c4c32f2e9.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-dc7c350a-2942-4603-8b0a-300117b15eb0",
+    "revisionId": "buildcores-dc7c350a-2942-4603-8b0a-300117b15eb0-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel EXPI9402PT 2x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "dc7c350a-2942-4603-8b0a-300117b15eb0",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9402PT",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9402PTBLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/dc7c350a-2942-4603-8b0a-300117b15eb0.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-9b0aa25e-7e59-49d7-9b50-0346e9340e31",
+    "revisionId": "buildcores-9b0aa25e-7e59-49d7-9b50-0346e9340e31-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel EXPI9402PTBLK-1PK 2 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "9b0aa25e-7e59-49d7-9b50-0346e9340e31",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9402PTBLK-1PK",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9402PTBLK",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "Intel-EXPI9402PTBLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/9b0aa25e-7e59-49d7-9b50-0346e9340e31.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-6089a850-a06e-45f4-b6f6-0b9d91921d44",
+    "revisionId": "buildcores-6089a850-a06e-45f4-b6f6-0b9d91921d44-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel EXPI9402PTG2P20 2 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "6089a850-a06e-45f4-b6f6-0b9d91921d44",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9402PTG2P20",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9402PT",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/6089a850-a06e-45f4-b6f6-0b9d91921d44.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-a4a39644-2dab-44bd-9a7f-f48142a745b0",
+    "revisionId": "buildcores-a4a39644-2dab-44bd-9a7f-f48142a745b0-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel EXPI9404PTL 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "a4a39644-2dab-44bd-9a7f-f48142a745b0",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9404PTL",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/a4a39644-2dab-44bd-9a7f-f48142a745b0.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-68187bdf-fb74-4602-8959-22d67a35cf59",
+    "revisionId": "buildcores-68187bdf-fb74-4602-8959-22d67a35cf59-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel EXPI9404PTLBLK 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "68187bdf-fb74-4602-8959-22d67a35cf59",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9404PTLBLK",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9404PTL",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/68187bdf-fb74-4602-8959-22d67a35cf59.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-f6d10baf-b9af-4af5-bb18-eaca8649ad79",
+    "revisionId": "buildcores-f6d10baf-b9af-4af5-bb18-eaca8649ad79-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel EXPI9404PTLBLK-1PK 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "f6d10baf-b9af-4af5-bb18-eaca8649ad79",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9404PTLBLK-1PK",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9404PTLBLK-1PKLD",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "EXPI9404PTLBLK1PK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/f6d10baf-b9af-4af5-bb18-eaca8649ad79.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-284a01c8-17b2-48ef-b624-d4fcddf2f448",
+    "revisionId": "buildcores-284a01c8-17b2-48ef-b624-d4fcddf2f448-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel X540-T2 2 x 10 Gb/s 10Gigabit Ethernet PCIe x8",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "284a01c8-17b2-48ef-b624-d4fcddf2f448",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "X540T2",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "AXX10GBTWLIOM3",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/284a01c8-17b2-48ef-b624-d4fcddf2f448.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-fc1ccbef-d687-4e9d-9291-2c019f61efeb",
+    "revisionId": "buildcores-fc1ccbef-d687-4e9d-9291-2c019f61efeb-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel X550-T2 2 x 10 Gb/s Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "fc1ccbef-d687-4e9d-9291-2c019f61efeb",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "X550-T2",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "X550T2",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/fc1ccbef-d687-4e9d-9291-2c019f61efeb.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-58c46c9d-cb17-4335-b259-3b4ca63b1a7c",
+    "revisionId": "buildcores-58c46c9d-cb17-4335-b259-3b4ca63b1a7c-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel X710-T2L 2 x 10 Gb/s Ethernet PCIe x8 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "58c46c9d-cb17-4335-b259-3b4ca63b1a7c",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "X710T2L",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/58c46c9d-cb17-4335-b259-3b4ca63b1a7c.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-c7feb910-642b-45f1-85d8-6bed92622c94",
+    "revisionId": "buildcores-c7feb910-642b-45f1-85d8-6bed92622c94-r1",
+    "manufacturer": "Intel",
+    "displayName": "Intel X710-T2L 2 x 10 Gb/s Ethernet PCIe x8 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "c7feb910-642b-45f1-85d8-6bed92622c94",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "X710T2LBLK",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/c7feb910-642b-45f1-85d8-6bed92622c94.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-ec19def3-56f9-499d-872b-398f3ec4cb11",
+    "revisionId": "buildcores-ec19def3-56f9-499d-872b-398f3ec4cb11-r1",
+    "manufacturer": "Lenovo",
+    "displayName": "Lenovo 7ZT7A00482 2 x Gigabit Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "ec19def3-56f9-499d-872b-398f3ec4cb11",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "7ZT7A00482",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/ec19def3-56f9-499d-872b-398f3ec4cb11.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-ed5e03d3-5327-410c-9198-cbf8c38cd2e0",
+    "revisionId": "buildcores-ed5e03d3-5327-410c-9198-cbf8c38cd2e0-r1",
+    "manufacturer": "Rosewill",
+    "displayName": "Rosewill RC-NIC416Dual 2 x 10 Gb/s Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "ed5e03d3-5327-410c-9198-cbf8c38cd2e0",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "RC-NIC416Dual",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/ed5e03d3-5327-410c-9198-cbf8c38cd2e0.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-de0247e5-c92f-4bc6-a304-e433fde74980",
+    "revisionId": "buildcores-de0247e5-c92f-4bc6-a304-e433fde74980-r1",
+    "manufacturer": "Rosewill",
+    "displayName": "Rosewill RNG-407-Dual 2 x Gigabit Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "de0247e5-c92f-4bc6-a304-e433fde74980",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "RNG-407-Dual",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/de0247e5-c92f-4bc6-a304-e433fde74980.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-3728eec3-9ebd-4c4b-b958-96f399116872",
+    "revisionId": "buildcores-3728eec3-9ebd-4c4b-b958-96f399116872-r1",
+    "manufacturer": "SIIG",
+    "displayName": "SIIG CN-GP2011-S1 2 x Gigabit Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "3728eec3-9ebd-4c4b-b958-96f399116872",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "CN-GP2011-S1",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/3728eec3-9ebd-4c4b-b958-96f399116872.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-6e63ee93-5bc0-43e4-9a66-3ef0b082918b",
+    "revisionId": "buildcores-6e63ee93-5bc0-43e4-9a66-3ef0b082918b-r1",
+    "manufacturer": "SIIG",
+    "displayName": "SIIG CN-GP4011-S1 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "6e63ee93-5bc0-43e4-9a66-3ef0b082918b",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "CN-GP4011-S1",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/6e63ee93-5bc0-43e4-9a66-3ef0b082918b.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-1377e0c8-b681-4ea8-87f6-2e69efc49435",
+    "revisionId": "buildcores-1377e0c8-b681-4ea8-87f6-2e69efc49435-r1",
+    "manufacturer": "SIIG",
+    "displayName": "SIIG CN-GP4111-S1 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "1377e0c8-b681-4ea8-87f6-2e69efc49435",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "CN-GP4111-S1",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "LB-GE0114-S1",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/1377e0c8-b681-4ea8-87f6-2e69efc49435.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-47625428-35bf-4fb9-ae67-a4f1d62b7851",
+    "revisionId": "buildcores-47625428-35bf-4fb9-ae67-a4f1d62b7851-r1",
+    "manufacturer": "SIIG",
+    "displayName": "SIIG LB-GE0014-S1 2 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "47625428-35bf-4fb9-ae67-a4f1d62b7851",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "LB-GE0014-S1",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "I350-T2",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/47625428-35bf-4fb9-ae67-a4f1d62b7851.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-66731625-ff26-4ce8-9d5a-6a203b4c81b3",
+    "revisionId": "buildcores-66731625-ff26-4ce8-9d5a-6a203b4c81b3-r1",
+    "manufacturer": "SUPERMICRO",
+    "displayName": "Supermicro AOC-SG-i2 2 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "66731625-ff26-4ce8-9d5a-6a203b4c81b3",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "AOC-SG-i2",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "AOC-SGP-I2",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "AOC-SGP-i2",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/66731625-ff26-4ce8-9d5a-6a203b4c81b3.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-ba2ace28-4a50-44d2-8579-4c33d0afb66e",
+    "revisionId": "buildcores-ba2ace28-4a50-44d2-8579-4c33d0afb66e-r1",
+    "manufacturer": "SUPERMICRO",
+    "displayName": "Supermicro SGP-i4 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "ba2ace28-4a50-44d2-8579-4c33d0afb66e",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "SGP-i4",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "AOC-SGP-I4",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/ba2ace28-4a50-44d2-8579-4c33d0afb66e.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-c809748a-303c-4f98-af9a-76bf890a4d99",
+    "revisionId": "buildcores-c809748a-303c-4f98-af9a-76bf890a4d99-r1",
+    "manufacturer": "Siig",
+    "displayName": "SIIG CN-GP1111-S1 2 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "c809748a-303c-4f98-af9a-76bf890a4d99",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "CN-GP1111-S1",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "LB-GE0811-S1",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/c809748a-303c-4f98-af9a-76bf890a4d99.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-e435c85b-4360-41f1-b2c0-8cf3d817b317",
+    "revisionId": "buildcores-e435c85b-4360-41f1-b2c0-8cf3d817b317-r1",
+    "manufacturer": "Siig",
+    "displayName": "SIIG LB-GE0311-S1 2 x 10 Gb/s Ethernet PCIe x8",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "e435c85b-4360-41f1-b2c0-8cf3d817b317",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "LB-GE0311-S1",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/e435c85b-4360-41f1-b2c0-8cf3d817b317.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-8df5a372-4a0c-4525-ad89-5b12b60ebe61",
+    "revisionId": "buildcores-8df5a372-4a0c-4525-ad89-5b12b60ebe61-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST1000SPEX4 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "8df5a372-4a0c-4525-ad89-5b12b60ebe61",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST1000SPEX4",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "C734A2YG",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST1000SPEX43",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/8df5a372-4a0c-4525-ad89-5b12b60ebe61.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-8bffa575-7cf8-4b12-8f59-276b82249d6f",
+    "revisionId": "buildcores-8bffa575-7cf8-4b12-8f59-276b82249d6f-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST1000SPEX42 4 x Gigabit Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "8bffa575-7cf8-4b12-8f59-276b82249d6f",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST1000SPEX42",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/8bffa575-7cf8-4b12-8f59-276b82249d6f.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-310fe746-0382-4ace-9ef6-fab6cb0a26e9",
+    "revisionId": "buildcores-310fe746-0382-4ace-9ef6-fab6cb0a26e9-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST1000SPEXD2 2 x Gigabit Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "310fe746-0382-4ace-9ef6-fab6cb0a26e9",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST1000SPEXD2",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/310fe746-0382-4ace-9ef6-fab6cb0a26e9.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-2d9ca0e3-0886-4e19-941b-c92a18b38718",
+    "revisionId": "buildcores-2d9ca0e3-0886-4e19-941b-c92a18b38718-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST1000SPEXD2 2 x Gigabit Ethernet PCIe x1 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "2d9ca0e3-0886-4e19-941b-c92a18b38718",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "MDP2DPMM3MW",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ET1000S40LC2",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/2d9ca0e3-0886-4e19-941b-c92a18b38718.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-567a1d9d-70ed-49d2-b5c6-e17d374dc3f4",
+    "revisionId": "buildcores-567a1d9d-70ed-49d2-b5c6-e17d374dc3f4-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST1000SPEXD3 2 x Gigabit Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "567a1d9d-70ed-49d2-b5c6-e17d374dc3f4",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST1000SPEXD3",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/567a1d9d-70ed-49d2-b5c6-e17d374dc3f4.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-f6450472-3641-4e7a-80c3-482b12d2a64f",
+    "revisionId": "buildcores-f6450472-3641-4e7a-80c3-482b12d2a64f-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST10GPEXNDPI 2 x 10 Gb/s Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "f6450472-3641-4e7a-80c3-482b12d2a64f",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST10GPEXNDPI",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "DKT3CH3APDB",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/f6450472-3641-4e7a-80c3-482b12d2a64f.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-4d54b27d-1470-4907-b5d5-684bb6fc9591",
+    "revisionId": "buildcores-4d54b27d-1470-4907-b5d5-684bb6fc9591-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST10GSPEXNDP 2 x 10 Gb/s Ethernet PCIe x8",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "4d54b27d-1470-4907-b5d5-684bb6fc9591",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST10GSPEXNDP",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/4d54b27d-1470-4907-b5d5-684bb6fc9591.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-fc793879-23ad-46d8-a112-1c96460a770d",
+    "revisionId": "buildcores-fc793879-23ad-46d8-a112-1c96460a770d-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST10GSPEXNDP2 2 x 10 Gb/s Ethernet PCIe x4",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 10000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "fc793879-23ad-46d8-a112-1c96460a770d",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST10GSPEXNDP2",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/fc793879-23ad-46d8-a112-1c96460a770d.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-8f8560f9-9fed-4cdc-a2ec-6aca9784b80f",
+    "revisionId": "buildcores-8f8560f9-9fed-4cdc-a2ec-6aca9784b80f-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST2000PEXPSE 2 x Gigabit Ethernet PCIe x1 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "8f8560f9-9fed-4cdc-a2ec-6aca9784b80f",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST2000PEXPSE",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/8f8560f9-9fed-4cdc-a2ec-6aca9784b80f.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-cc24af6a-7c20-47d8-bbc5-a28b39c3cadc",
+    "revisionId": "buildcores-cc24af6a-7c20-47d8-bbc5-a28b39c3cadc-r1",
+    "manufacturer": "StarTech",
+    "displayName": "StarTech ST2000PEXPSE 2 x Gigabit Ethernet PCIe x1 Network Adapter",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 2
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "cc24af6a-7c20-47d8-bbc5-a28b39c3cadc",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "ST2000PEXPSE",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/cc24af6a-7c20-47d8-bbc5-a28b39c3cadc.json",
+      "evidence": "OPEN_DATA"
+    }
+  },
+  {
+    "id": "buildcores-c6a83c7a-3658-449c-b55f-933192d15e50",
+    "revisionId": "buildcores-c6a83c7a-3658-449c-b55f-933192d15e50-r1",
+    "manufacturer": "Syba",
+    "displayName": "Syba SI-PEX24042 4 x Gigabit Ethernet PCIe x1",
+    "category": "NETWORK",
+    "specs": {
+      "schemaVersion": 1,
+      "interface": "PCIE",
+      "speedMbps": 1000,
+      "ports": 4
+    },
+    "identifiers": [
+      {
+        "type": "SOURCE_ID",
+        "value": "c6a83c7a-3658-449c-b55f-933192d15e50",
+        "sourceId": "buildcores-opendb"
+      },
+      {
+        "type": "MPN",
+        "value": "SI-PEX24042",
+        "sourceId": "buildcores-opendb"
+      }
+    ],
+    "source": {
+      "label": "BuildCores OpenDB",
+      "url": "https://github.com/buildcores/buildcores-open-db/blob/main/open-db/NetworkCard/c6a83c7a-3658-449c-b55f-933192d15e50.json",
+      "evidence": "OPEN_DATA"
+    }
+  }
+]

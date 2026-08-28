@@ -2,12 +2,12 @@
   "sourceCommit": "7f759ec353714e9dca2adab9e62bd80311fc373e",
   "totals": {
     "total": 29632,
-    "accepted": 26360,
-    "rejected": 3272
+    "accepted": 26408,
+    "rejected": 3224
   },
   "rejectionReasons": {
     "MISSING_IDENTITY": 14,
-    "MISSING_REQUIRED_FIELD": 2990,
+    "MISSING_REQUIRED_FIELD": 2942,
     "AMBIGUOUS_VALUE": 268
   },
   "sourceCategories": {
@@ -92,10 +92,10 @@
     },
     "NetworkCard": {
       "total": 178,
-      "accepted": 0,
-      "rejected": 178,
+      "accepted": 48,
+      "rejected": 130,
       "rejectionReasons": {
-        "MISSING_REQUIRED_FIELD": 178
+        "MISSING_REQUIRED_FIELD": 130
       }
     }
   },
@@ -109,7 +109,7 @@
     "CASE": 1195,
     "COOLER": 2386,
     "FAN": 3345,
-    "NETWORK": 0
+    "NETWORK": 48
   },
   "facetCoverage": {
     "CPU": {
@@ -536,32 +536,32 @@
     },
     "NETWORK": {
       "manufacturer": {
-        "known": 0,
+        "known": 48,
         "missing": 0
       },
       "releaseYear": {
         "known": 0,
-        "missing": 0
+        "missing": 48
       },
       "specs.interface": {
-        "known": 0,
+        "known": 48,
         "missing": 0
       },
       "specs.speedMbps": {
-        "known": 0,
+        "known": 48,
         "missing": 0
       },
       "specs.ports": {
-        "known": 0,
+        "known": 48,
         "missing": 0
       },
       "specs.wireless": {
         "known": 0,
-        "missing": 0
+        "missing": 48
       },
       "specs.standard": {
         "known": 0,
-        "missing": 0
+        "missing": 48
       }
     }
   }

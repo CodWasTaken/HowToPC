@@ -47,6 +47,15 @@ describe("broad BuildCores normalization",()=>{
     expect(mapBuildCoresProductDetailed("Motherboard",{opendb_id:"mb-1",metadata:metadata("Board","ASUS"),socket:"LGA 1700",form_factor:"Micro ATX",memory:{max:64,ram_type:"DDR4",slots:2},storage_devices:{sata_6_gb_s:4,sata_3_gb_s:0},pcie_slots:[{quantity:1}],m2_slots:[{key:"M"},{key:"E"}],wireless_networking:"None",onboard_ethernet:[{speed:"1 Gb/s"},{speed:"2.5 Gb/s"}]})).toMatchObject({ok:true,observation:{specs:{wireless:false,ethernetSpeedMbps:2500,m2Slots:1}}});
   });
 
+  test("maps only explicit NetworkCard facts encoded in the sourced product title",()=>{
+    expect(mapBuildCoresProductDetailed("NetworkCard",{
+      opendb_id:"net-title",metadata:metadata("Intel E10G42BT 2 x 10 Gb/s Ethernet PCIe x8","Intel"),
+    })).toMatchObject({ok:true,observation:{category:"NETWORK",specs:{interface:"PCIE",speedMbps:10000,ports:2}}});
+    expect(mapBuildCoresProductDetailed("NetworkCard",{
+      opendb_id:"net-ambiguous",metadata:metadata("TP-Link TG-3468 Gigabit Ethernet PCIe x1 Network Adapter","TP-Link"),
+    })).toMatchObject({ok:false,reason:"MISSING_REQUIRED_FIELD"});
+  });
+
   test("reports deterministic rejection reasons",()=>{
     expect(mapBuildCoresProductDetailed("NetworkCard",{opendb_id:"n-1",metadata:metadata("NIC","StarTech")})).toMatchObject({ok:false,reason:"MISSING_REQUIRED_FIELD"});
     expect(mapBuildCoresProductDetailed("RAM",{opendb_id:"ram-bad",metadata:metadata("RAM","X"),ram_type:"DDR4",modules:{quantity:1,capacity_gb:8},ecc:"Unknown"})).toMatchObject({ok:false,reason:"AMBIGUOUS_VALUE"});

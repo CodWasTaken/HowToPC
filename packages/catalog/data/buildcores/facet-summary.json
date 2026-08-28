@@ -2336,8 +2336,21 @@
   "NETWORK": {
     "manufacturer": {
       "kind": "ENUM",
-      "known": 0,
-      "values": []
+      "known": 48,
+      "values": [
+        "AddOn",
+        "Axiom",
+        "Crucial",
+        "IO Crest",
+        "Intel",
+        "Lenovo",
+        "Rosewill",
+        "SIIG",
+        "SUPERMICRO",
+        "Siig",
+        "StarTech",
+        "Syba"
+      ]
     },
     "releaseYear": {
       "kind": "NUMBER",
@@ -2347,20 +2360,22 @@
     },
     "specs.interface": {
       "kind": "ENUM",
-      "known": 0,
-      "values": []
+      "known": 48,
+      "values": [
+        "PCIE"
+      ]
     },
     "specs.speedMbps": {
       "kind": "NUMBER",
-      "known": 0,
-      "min": null,
-      "max": null
+      "known": 48,
+      "min": 1000,
+      "max": 10000
     },
     "specs.ports": {
       "kind": "NUMBER",
-      "known": 0,
-      "min": null,
-      "max": null
+      "known": 48,
+      "min": 2,
+      "max": 4
     },
     "specs.wireless": {
       "kind": "ENUM",

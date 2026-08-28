@@ -19,7 +19,7 @@ import { WorkspaceNavigation, type MobileWorkspaceView } from "./workspace-navig
 import { presentBuildStatus } from "@/lib/presentation";
 
 const categories:readonly ProductCategory[]=[
-  "CPU","MOTHERBOARD","MEMORY","GPU","CASE","PSU","COOLER","STORAGE","NETWORK","FAN","HBA",
+  "CPU","MOTHERBOARD","MEMORY","GPU","CASE","PSU","COOLER","STORAGE","NETWORK","FAN",
 ];
 
 function rejectedMessage(result:ReturnType<typeof addProductToSession>):string|null {
