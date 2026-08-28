@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import type { CatalogSearchRequest } from "./catalog-search-contract";
-import { CatalogHttpError, fetchCatalogPage } from "./catalog-client";
+import { CatalogHttpError, fetchCatalogPage, fetchCatalogProduct } from "./catalog-client";
 
 const request:CatalogSearchRequest={
   query:"ryzen",category:"CPU",
@@ -43,4 +43,16 @@ describe("catalog client",()=>{
       expect((error as Error).message).toContain(`catalog failed ${status}`);
     }
   });
+});
+
+
+test("fetches canonical public products and preserves 404 errors",async()=>{
+  const product={id:"public/id",revisionId:"r1",manufacturer:"Test",displayName:"Public",category:"CPU",specs:{}};
+  const fetchMock=vi.fn(async()=>new Response(JSON.stringify(product),{status:200,headers:{"content-type":"application/json"}}));
+  vi.stubGlobal("fetch",fetchMock);
+  await expect(fetchCatalogProduct(product.id)).resolves.toEqual(product);
+  const [productUrl]=fetchMock.mock.calls[0] as unknown as [string,RequestInit?];
+  expect(productUrl).toBe("/api/catalog/product/public%2Fid");
+  vi.stubGlobal("fetch",vi.fn(async()=>new Response(JSON.stringify({error:"Catalog product not found."}),{status:404,headers:{"content-type":"application/json"}})));
+  await expect(fetchCatalogProduct("missing")).rejects.toMatchObject({status:404,message:"Catalog product not found."});
 });

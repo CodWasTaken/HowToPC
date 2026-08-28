@@ -1,3 +1,4 @@
+import type { ReferenceProduct } from "@howtopc/catalog";
 import type {
   CatalogSearchRequest,
   CatalogSearchResponse,
@@ -40,4 +41,15 @@ export async function fetchCatalogPage(
     );
   }
   return await response.json() as CatalogSearchResponse;
+}
+
+export async function fetchCatalogProduct(
+  id:string,
+  signal?:AbortSignal,
+):Promise<ReferenceProduct> {
+  const response=await fetch(`/api/catalog/product/${encodeURIComponent(id)}`,{signal});
+  if(!response.ok){
+    throw new CatalogHttpError(response.status,await responseErrorMessage(response));
+  }
+  return await response.json() as ReferenceProduct;
 }

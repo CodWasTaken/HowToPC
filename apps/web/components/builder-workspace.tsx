@@ -14,6 +14,7 @@ import { DigitalTwin } from "./digital-twin";
 import { ThemeToggle } from "./theme-toggle";
 import { PartsBrowser } from "./parts-browser";
 import { BuildSidebar } from "./build-sidebar";
+import { WebMcpInspector } from "./webmcp-inspector";
 import { WorkspaceNavigation, type MobileWorkspaceView } from "./workspace-navigation";
 import { presentBuildStatus } from "@/lib/presentation";
 
@@ -102,7 +103,9 @@ export function BuilderWorkspace() {
         className={`${rightDrawerOpen?"drawer-open":""} ${mobileView==="BUILD"?"mobile-active":""}`}
         build={current} onIncrement={increment} onDecrement={decrement}
         onClear={()=>{setSession(createBuilderSession([],session.knownProducts));setPreviewMessage(null);}}
-      />
+      >
+        <WebMcpInspector session={session} setSession={setSession} />
+      </BuildSidebar>
       <button className={`workspace-backdrop ${leftDrawerOpen||rightDrawerOpen?"visible":""}`}
         onClick={()=>{setLeftDrawerOpen(false);setRightDrawerOpen(false);}}
         aria-label="Close side panel" />

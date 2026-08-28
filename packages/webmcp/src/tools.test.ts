@@ -19,3 +19,16 @@ describe("WebMCP tools", () => {
     expect(schema.properties.quantity).toMatchObject({ type: "integer", minimum: 1, maximum: 64 });
   });
 });
+
+
+test("search components exposes public facet and paging inputs read-only",()=>{
+  const tool=createTools(bridge).find((item)=>item.name==="search_components")!;
+  const schema=tool.inputSchema as any;
+  expect(Object.keys(schema.properties)).toEqual(expect.arrayContaining([
+    "query","category","filters","compatibleOnly","sort","limit","offset",
+  ]));
+  expect(schema.properties.filters).toMatchObject({type:"array"});
+  expect(schema.properties.limit).toMatchObject({type:"integer",minimum:1,maximum:100});
+  expect(schema.properties.offset).toMatchObject({type:"integer",minimum:0});
+  expect(tool.annotations.readOnlyHint).toBe(true);
+});
