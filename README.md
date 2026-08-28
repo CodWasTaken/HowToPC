@@ -12,6 +12,7 @@
 [![Tests](https://img.shields.io/badge/Tests-165%20Passing-2E7D32?style=for-the-badge)](#engineering-confidence)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-F4C430?style=for-the-badge)](LICENSE)
 
 [**Try the live demo →**](https://continues-jeffrey-std-losses.trycloudflare.com) · [**Jump to the 30-second judge test →**](#try-it-in-30-seconds) · [**See the WebMCP tools →**](#10-structured-webmcp-tools)
 
@@ -293,6 +294,14 @@ Hardware records are normalized from **BuildCores OpenDB** at the pinned source 
 HowToPC keeps provenance separate from compatibility conclusions: a source can tell us a dimension, connector, socket, or capacity, while deterministic application rules decide what those facts mean for the current build.
 
 No unknown specification is silently filled with a plausible value just to increase catalog coverage.
+
+---
+
+## License
+
+HowToPC source code is released under the [MIT License](LICENSE).
+
+Third-party datasets keep their own licensing terms. In particular, BuildCores-derived hardware data remains subject to **ODC-By 1.0** and its required attribution; the MIT license does not relicense that source data.
 
 ---
 
