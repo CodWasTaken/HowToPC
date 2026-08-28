@@ -7,6 +7,11 @@ export function getModelContext():ModelContext|null {
 export async function registerHowToPcTools(bridge:ToolBridge){
  const context=getModelContext(); if(!context)return null;
  const controller=new AbortController();
- await Promise.all(createTools(bridge).map(tool=>context.registerTool(tool,{signal:controller.signal})));
- return controller;
+ try {
+  await Promise.all(createTools(bridge).map(tool=>context.registerTool(tool,{signal:controller.signal})));
+  return controller;
+ } catch(error) {
+  controller.abort();
+  throw error;
+ }
 }
