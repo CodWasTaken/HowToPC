@@ -23,9 +23,12 @@ describe("parametric mount topology", () => {
     expect(count(topology, "PCIE")).toBe(1);
   });
 
-  test("adds parametric drive mounts only for installed SATA drives", () => {
-    const topology = deriveMountTopology(pick("mb-b650-atx", "case-atx-340", "hdd-sata-8tb", "hdd-wd5000aakx"));
-    expect(count(topology, "SATA_25") + count(topology, "SATA_35")).toBe(2);
-    expect(topology.notes.some((note) => note.includes("drive bay"))).toBe(true);
+  test("derives SATA mounts from known case bay capacity, not installed drive count", () => {
+    const empty = deriveMountTopology(pick("mb-b650-atx", "case-atx-340"));
+    const populated = deriveMountTopology(pick("mb-b650-atx", "case-atx-340", "hdd-sata-8tb", "hdd-wd5000aakx"));
+    for (const topology of [empty, populated]) {
+      expect(count(topology, "SATA_25")).toBe(2);
+      expect(count(topology, "SATA_35")).toBe(4);
+    }
   });
 });

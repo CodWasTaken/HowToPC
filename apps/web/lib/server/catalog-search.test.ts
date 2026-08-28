@@ -99,6 +99,19 @@ describe("catalog search service",()=>{
     expect(result.total).toBe(1);
   });
 
+  test("All search survives candidates with unknown optional compatibility facts",async()=>{
+    const source:ReferenceProduct={
+      id:"case-unknown-psu",revisionId:"case-unknown-psu-r1",manufacturer:"Test",displayName:"Case with unknown PSU support",category:"CASE",
+      specs:{schemaVersion:1,supportedMotherboardFormFactors:["ATX"],maxGpuLengthMm:350,maxCpuCoolerHeightMm:170},
+    };
+    const service=createCatalogSearchService(fakeRepository([source]));
+    const result=await service.search(request({
+      category:undefined,limit:10,buildLines:[{productId:"psu-atx-750",quantity:1}],
+    }));
+    expect(result.total).toBe(1);
+    expect(result.items[0]).toMatchObject({product:{id:"case-unknown-psu"},applyState:"BLOCKED_UNKNOWN"});
+  });
+
   test("uses an order-independent build signature for annotation caching",()=>{
     const first=catalogBuildSignature([
       {productId:"b",quantity:2},{productId:"a",quantity:1},

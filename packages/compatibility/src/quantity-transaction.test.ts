@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import type { ReferenceProduct } from "@howtopc/catalog";
 import {
   addOne,
   maxSafeQuantity,
@@ -57,6 +58,33 @@ describe("quantity-safe build mutations", () => {
     const result = replaceSingleton(base, "mb-asus-p8h61-m-lx3-r2");
     expect(result.committed).toBe(false);
     expect(result.lines).toEqual(base);
+  });
+
+  test("blocks a second NVMe drive when motherboard M.2 capacity is unknown", () => {
+    const storage:ReferenceProduct={
+      id:"storage-capacity-unknown",revisionId:"storage-capacity-unknown-r1",manufacturer:"Test",
+      displayName:"Unknown-capacity NVMe",category:"STORAGE",
+      specs:{schemaVersion:1,interface:"NVME",formFactor:"M.2 2280",capacityBytes:1024**4},
+    };
+    const first=addOne([],storage);
+    expect(first.committed).toBe(true);
+    const second=addOne(first.lines,storage);
+    expect(second.committed).toBe(false);
+    expect(second.decision.state).toBe("BLOCKED_UNKNOWN");
+    expect(maxSafeQuantity([],storage)).toBe(1);
+  });
+
+  test("does not invent repeatable capacity when no mount resource is known", () => {
+    const fan:ReferenceProduct={
+      id:"fan-capacity-unknown",revisionId:"fan-capacity-unknown-r1",manufacturer:"Test",
+      displayName:"120mm test fan",category:"FAN",specs:{schemaVersion:1,sizeMm:120},
+    };
+    expect(maxSafeQuantity([],fan)).toBe(1);
+    const first=addOne([],fan);
+    expect(first.committed).toBe(true);
+    const second=addOne(first.lines,fan);
+    expect(second.committed).toBe(false);
+    expect(second.decision.state).toBe("BLOCKED_UNKNOWN");
   });
 
   test("finds the maximum safe quantity for a repeatable part", () => {

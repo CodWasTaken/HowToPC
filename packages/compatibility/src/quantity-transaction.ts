@@ -84,9 +84,23 @@ export function previewAdd(
   resolver:CatalogResolver=referenceCatalogResolver,
 ):QuantityMutationResult {
   const context=candidateContext(candidate,resolver);
-  const candidateLines=isRepeatableCategory(context.product.category)
+  const repeatable=isRepeatableCategory(context.product.category);
+  const currentQuantity=lines.find((line)=>line.productId===context.product.id)?.quantity??0;
+  const candidateLines=repeatable
     ? incrementCandidate(lines,context.product.id)
     : singletonCandidate(lines,context.product,context.resolver);
+  if(repeatable&&currentQuantity>=1&&!canProveAnotherRepeatable(lines,context.product,context.resolver)){
+    const base=evaluateBuild(expandBuildLines(candidateLines,context.resolver));
+    const report:CompatibilityReport={
+      status:base.status==="INCOMPATIBLE"?"INCOMPATIBLE":"UNKNOWN",
+      results:[...base.results,{
+        ruleId:"repeatable-capacity-proof",status:"UNKNOWN",
+        message:`Additional ${context.product.category.toLowerCase()} capacity cannot be verified from known build resources.`,
+        reasonKind:"REQUIRED_FACT_UNKNOWN",blocksMutation:true,involvedIds:[context.product.id],
+      }],
+    };
+    return {committed:false,lines:cloneLines(lines),candidateLines,report,decision:decideMutation(report)};
+  }
   return previewCandidate(lines,candidateLines,context.resolver);
 }
 
@@ -134,6 +148,32 @@ export function removeOne(
   };
 }
 
+function canProveAnotherRepeatable(
+  lines:readonly BuildLine[],
+  product:ReferenceProduct,
+  resolver:CatalogResolver,
+):boolean {
+  const products=expandBuildLines(lines,resolver);
+  const board=products.find((item)=>item.category==="MOTHERBOARD");
+  const pcCase=products.find((item)=>item.category==="CASE");
+  const boardSpecs=board?.specs as Record<string,unknown>|undefined;
+  const caseSpecs=pcCase?.specs as Record<string,unknown>|undefined;
+  const productSpecs=product.specs as Record<string,unknown>;
+  const known=(value:unknown)=>typeof value==="number"&&Number.isFinite(value);
+  if(product.category==="MEMORY")return Boolean(board)&&known(boardSpecs?.dimmSlots)&&known(boardSpecs?.maxMemoryBytes);
+  if(product.category==="GPU")return Boolean(board)&&known(boardSpecs?.gpuPcieSlots);
+  if(product.category==="STORAGE") {
+    if(productSpecs.interface==="NVME")return Boolean(board)&&known(boardSpecs?.m2Slots);
+    if(productSpecs.interface==="SATA") {
+      const bayKey=String(productSpecs.formFactor).includes("2.5")?"internal25Bays":"internal35Bays";
+      return Boolean(board)&&Boolean(pcCase)&&known(boardSpecs?.sataPorts)&&known(caseSpecs?.[bayKey]);
+    }
+    return false;
+  }
+  if(product.category==="NETWORK"||product.category==="HBA")return Boolean(board)&&known(boardSpecs?.pcieSlots);
+  return false;
+}
+
 export function maxSafeQuantity(
   lines:readonly BuildLine[],
   candidate:ProductCandidate,
@@ -148,6 +188,7 @@ export function maxSafeQuantity(
   let working=cloneLines(lines);
   let quantity=working.find((line)=>line.productId===productId)?.quantity??0;
   for(let attempt=0;attempt<64;attempt+=1){
+    if(quantity>=1&&!canProveAnotherRepeatable(working,context.product,context.resolver))break;
     const preview=previewAdd(working,productId,context.resolver);
     if(!preview.committed)break;
     working=cloneLines(preview.candidateLines);

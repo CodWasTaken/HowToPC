@@ -117,6 +117,18 @@ describe("mount-aware scene integration", () => {
     expect(scene.collisions).toEqual([]);
     expect(new Set(scene.components.map((part) => part.id)).size).toBe(scene.components.length);
   });
+  test("uses sourced case drive-bay capacity instead of synthesizing one bay per drive", () => {
+    const sourceCase=product("case-atx-340");
+    const pcCase={...sourceCase,id:"case-one-35-bay",revisionId:"case-one-35-bay-r1",specs:{
+      ...(sourceCase.specs as Record<string,unknown>),internal25Bays:0,internal35Bays:1,
+    }};
+    const hdd=product("hdd-sata-8tb");
+    const base=[product("mb-b650-atx"),pcCase];
+    const scene=buildParametricScene([...base,hdd,hdd]);
+    expect(scene.components.filter((part)=>part.category==="STORAGE")).toHaveLength(1);
+    expect(scene.placementIssues.filter((issue)=>issue.code==="NO_MOUNT")).toHaveLength(1);
+  });
+
   test("omits unplaced over-capacity DIMMs instead of stacking meshes", () => {
     const overfilled = [
       product("cpu-am5-7600"), product("mb-b650-atx"),

@@ -15,11 +15,11 @@ const externalStorage:ReferenceProduct={
 
 describe("builder session",()=>{
   test("retains broad products independently of the current search page",()=>{
-    const initial=createBuilderSession();
+    const initial=createBuilderSession([{productId:"mb-b650-atx",quantity:1}]);
     const first=addProductToSession(initial,externalStorage);
     expect(first.mutation.committed).toBe(true);
     expect(first.session.knownProducts[externalStorage.id]).toBe(externalStorage);
-    expect(sessionSnapshot(first.session).products.map((product)=>product.id)).toEqual([externalStorage.id]);
+    expect(sessionSnapshot(first.session).products.map((product)=>product.id)).toContain(externalStorage.id);
 
     const second=addProductToSession(first.session,externalStorage);
     expect(second.session.lines).toContainEqual({productId:externalStorage.id,quantity:2});

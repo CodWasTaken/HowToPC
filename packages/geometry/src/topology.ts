@@ -82,12 +82,22 @@ export function deriveMountTopology(products: readonly ReferenceProduct[]): Moun
   const rear = caseSize[2] / 2;
   slots.push({ id: "psu-1", kind: "PSU", position: [0, floor + 43, rear - 70], capacityUnits: 1 });
 
-  const sata = products.filter((product) => product.category === "STORAGE" && String(specs(product).interface) !== "NVME");
-  if (sata.length) notes.push("Installed SATA drive bay coordinates are parametric; case bay capacity/coordinates are not verified by the current schema.");
-  sata.forEach((drive, index) => {
-    const kind: MountKind = String(specs(drive).formFactor).includes("2.5") ? "SATA_25" : "SATA_35";
-    slots.push({ id: `drive-${index + 1}`, kind, position: [0, floor + 55 + index * 38, -caseSize[2] / 2 + 85], capacityUnits: 1 });
-  });
+  const caseSpecs=pcCase?specs(pcCase):{};
+  const bayCounts:[MountKind,string,unknown][]=[
+    ["SATA_25","2.5-inch",caseSpecs.internal25Bays],
+    ["SATA_35","3.5-inch",caseSpecs.internal35Bays],
+  ];
+  let bayIndex=0;
+  for(const [kind,label,rawCount] of bayCounts){
+    if(typeof rawCount!=="number"||!Number.isFinite(rawCount)||rawCount<0){
+      notes.push(`${label} drive-bay capacity is unknown; the preview will not invent mounts.`);
+      continue;
+    }
+    for(let index=0;index<Math.floor(rawCount);index+=1){
+      slots.push({id:`drive-${kind.toLowerCase()}-${index+1}`,kind,position:[0,floor+55+bayIndex*38,-caseSize[2]/2+85],capacityUnits:1});
+      bayIndex+=1;
+    }
+  }
 
   return { caseSize, slots, notes };
 }

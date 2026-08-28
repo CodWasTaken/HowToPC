@@ -59,9 +59,10 @@ describe("quantity-aware builder state", () => {
     expect(doubled.snapshot.totalPricePln).toBeGreaterThan(initial.totalPricePln);
   });
 
-  test("keeps the compatible used homelab preset", () => {
+  test("keeps the used homelab preset honest when case bay capacity is unknown", () => {
     const budget = createBudgetHomelabBuild();
-    expect(budget.report.status).toBe("COMPATIBLE");
+    expect(budget.report.status).toBe("UNKNOWN");
+    expect(budget.report.results.some((result) => result.ruleId === "case-storage-bay-capacity" && result.status === "UNKNOWN")).toBe(true);
     expect(budget.totalPricePln).toBeCloseTo(451.99);
     expect(budget.lines.some((line) => line.productId === "cpu-intel-i5-3470")).toBe(true);
   });

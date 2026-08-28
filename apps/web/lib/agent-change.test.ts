@@ -35,11 +35,11 @@ test("agent changes retain a broad canonical product in the builder session",()=
     specs:{schemaVersion:1,interface:"NVME",formFactor:"M.2 2280",capacityBytes:1024**4},
     source:{label:"BuildCores OpenDB",evidence:"OPEN_DATA" as const},
   };
-  const empty=createBuilderSession();
-  const added=runAgentChange(empty,{componentId:broad.id,action:"add"},broad);
+  const initial=createBuilderSession([{productId:"mb-b650-atx",quantity:1}]);
+  const added=runAgentChange(initial,{componentId:broad.id,action:"add"},broad);
   expect(added.committed).toBe(true);
   expect(added.session.knownProducts[broad.id]).toEqual(broad);
-  expect(sessionSnapshot(added.session).products[0]?.id).toBe(broad.id);
+  expect(sessionSnapshot(added.session).products.map((product)=>product.id)).toContain(broad.id);
   const incremented=runAgentChange(added.session,{componentId:broad.id,action:"add"});
   expect(incremented.session.lines).toContainEqual({productId:broad.id,quantity:2});
   const decremented=runAgentChange(incremented.session,{componentId:broad.id,action:"decrement"});

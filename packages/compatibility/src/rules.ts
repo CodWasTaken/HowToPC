@@ -39,6 +39,7 @@ export function evaluateMvpRules(products: BuildProducts): CompatibilityRuleResu
   const memories = products.filter((product) => product.category === "MEMORY");
   const gpus = products.filter((product) => product.category === "GPU");
   const storage = products.filter((product) => product.category === "STORAGE");
+  const fans = products.filter((product) => product.category === "FAN");
   const results: CompatibilityRuleResult[] = [];
 
   const required = ["CPU", "MOTHERBOARD", "MEMORY", "CASE", "PSU", "COOLER"];
@@ -48,10 +49,26 @@ export function evaluateMvpRules(products: BuildProducts): CompatibilityRuleResu
   const pairs = [
     compareRule("cpu-motherboard-socket", cpu, board, (c, b) => c.socket === b.socket, "CPU socket matches motherboard.", "CPU socket does not match motherboard."),
     compareRule("motherboard-case-form-factor", board, pcCase, (b, c) => (c.supportedMotherboardFormFactors as string[]).includes(b.formFactor), "Motherboard form factor fits case.", "Motherboard form factor is not supported by case."),
-    compareRule("psu-case-form-factor", psu, pcCase, (p, c) => (c.psuFormFactors as string[]).includes(p.formFactor), "PSU form factor fits case.", "PSU form factor is not supported by case."),
     compareRule("cooler-cpu-socket", cooler, cpu, (c, p) => (c.supportedSockets as string[]).includes(p.socket), "Cooler supports CPU socket.", "Cooler does not support CPU socket."),
   ];
   for (const result of pairs) if (result) results.push(result);
+
+  if (psu && pcCase) {
+    const supported=specs(pcCase).psuFormFactors;
+    if (!Array.isArray(supported)) {
+      results.push(ruleResult(
+        "psu-case-form-factor", "UNKNOWN",
+        "Case PSU form-factor support is not known.", [psu.id, pcCase.id], "REQUIRED_FACT_UNKNOWN",
+      ));
+    } else {
+      const fits=supported.includes(specs(psu).formFactor);
+      results.push(ruleResult(
+        "psu-case-form-factor", fits ? "COMPATIBLE" : "INCOMPATIBLE",
+        fits ? "PSU form factor fits case." : "PSU form factor is not supported by case.",
+        [psu.id, pcCase.id],
+      ));
+    }
+  }
 
   if (board && memories.length) {
     const fits = memories.every((memory) => specs(memory).type === specs(board).memoryType);
@@ -82,9 +99,37 @@ export function evaluateMvpRules(products: BuildProducts): CompatibilityRuleResu
     }
   }
 
-  if (board && storage.length) {
+  const unsupportedStorage=storage.filter((drive)=>!["NVME","SATA"].includes(String(specs(drive).interface)));
+  if (unsupportedStorage.length) {
+    results.push(ruleResult(
+      "storage-interface-capacity", "UNKNOWN",
+      "Storage attachment capacity is not modeled for this interface.", involved(unsupportedStorage), "REQUIRED_FACT_UNKNOWN",
+    ));
+  } else if (board && storage.length) {
     const fits = usage.m2.available !== null && usage.sata.available !== null && usage.m2.used <= usage.m2.available && usage.sata.used <= usage.sata.available;
     results.push(ruleResult("storage-interface-capacity", fits ? "COMPATIBLE" : "INCOMPATIBLE", fits ? "Storage devices fit available motherboard interfaces." : "Storage devices exceed motherboard M.2 or SATA interface capacity.", [board.id, ...involved(storage)]));
+  }
+
+  if (pcCase) {
+    const sata25=storage.filter((drive)=>specs(drive).interface==="SATA"&&String(specs(drive).formFactor).includes("2.5"));
+    const sata35=storage.filter((drive)=>specs(drive).interface==="SATA"&&!String(specs(drive).formFactor).includes("2.5"));
+    for (const [drives,key,label] of [[sata25,"internal25Bays","2.5-inch"],[sata35,"internal35Bays","3.5-inch"]] as const) {
+      if (!drives.length) continue;
+      const available=specs(pcCase)[key];
+      if (typeof available!=="number"||!Number.isFinite(available)) {
+        results.push(ruleResult("case-storage-bay-capacity", "UNKNOWN", `${label} drive-bay capacity is not known for this case.`, [pcCase.id,...involved(drives)], "REQUIRED_FACT_UNKNOWN"));
+      } else {
+        const fits=drives.length<=available;
+        results.push(ruleResult("case-storage-bay-capacity", fits?"COMPATIBLE":"INCOMPATIBLE", fits?`${label} drives fit known case bays.`:`${label} drives exceed known case bay capacity.`, [pcCase.id,...involved(drives)]));
+      }
+    }
+  }
+
+  if (fans.length > 1) {
+    results.push(ruleResult(
+      "case-fan-mount-capacity", "UNKNOWN",
+      "Case fan-mount capacity is not available from the current sourced case schema.", involved(fans), "REQUIRED_FACT_UNKNOWN",
+    ));
   }
 
   if (board && gpus.length > 1) {

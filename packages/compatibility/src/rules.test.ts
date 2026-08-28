@@ -32,6 +32,17 @@ describe("MVP compatibility rules", () => {
       status: "UNKNOWN", reasonKind: "REQUIRED_FACT_UNKNOWN", blocksMutation: true,
     });
   });
+  test("treats missing optional case PSU support as required unknown instead of throwing", () => {
+    const source=pick("case-atx-340");
+    const specs={...(source.specs as Record<string,unknown>)};
+    delete specs.psuFormFactors;
+    const unknownCase:ReferenceProduct={...source,id:"case-psu-support-unknown",revisionId:"case-psu-support-unknown-r1",specs};
+    const report=evaluateBuild([pick("psu-atx-750"),unknownCase]);
+    expect(report.results.find((result)=>result.ruleId==="psu-case-form-factor")).toMatchObject({
+      status:"UNKNOWN",reasonKind:"REQUIRED_FACT_UNKNOWN",blocksMutation:true,
+    });
+  });
+
   test("accepts a coherent AM5 build", () => {
     expect(evaluateBuild(build([...am5Core, "ram-ddr5-32", "gpu-mid-300", "ssd-nvme-2tb"])).status).toBe("COMPATIBLE");
   });
