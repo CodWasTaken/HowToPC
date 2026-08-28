@@ -1,3 +1,4 @@
+export type { ProductCategory } from "@howtopc/domain";
 export * from "./categories/cpu";
 export * from "./categories/gpu";
 export * from "./categories/motherboard";
