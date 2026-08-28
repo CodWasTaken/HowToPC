@@ -1,24 +1,28 @@
-import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-import { curatedRealCatalog, type ProductCategory, type ReferenceProduct } from "@howtopc/catalog";
+import {
+  curatedRealCatalog,
+  type ProductCategory,
+  type ReferenceProduct,
+} from "@howtopc/catalog";
 
-const DATA_ROOT=fileURLToPath(new URL(
-  "../../../../packages/catalog/data/buildcores/",
-  import.meta.url,
-));
-
-const shardNames:Partial<Record<ProductCategory,string>>={
-  CPU:"cpu.json",
-  MOTHERBOARD:"motherboard.json",
-  MEMORY:"memory.json",
-  GPU:"gpu.json",
-  STORAGE:"storage.json",
-  PSU:"psu.json",
-  CASE:"case.json",
-  COOLER:"cooler.json",
-  FAN:"fan.json",
-  NETWORK:"network.json",
+const shardLoaders:Partial<Record<
+  ProductCategory,
+  ()=>Promise<ReferenceProduct[]>
+>>={
+  CPU:async()=>(await import("../../../../packages/catalog/data/buildcores/cpu.json")).default as ReferenceProduct[],
+  MOTHERBOARD:async()=>(await import("../../../../packages/catalog/data/buildcores/motherboard.json")).default as ReferenceProduct[],
+  MEMORY:async()=>(await import("../../../../packages/catalog/data/buildcores/memory.json")).default as ReferenceProduct[],
+  GPU:async()=>(await import("../../../../packages/catalog/data/buildcores/gpu.json")).default as ReferenceProduct[],
+  STORAGE:async()=>(await import("../../../../packages/catalog/data/buildcores/storage.json")).default as ReferenceProduct[],
+  PSU:async()=>(await import("../../../../packages/catalog/data/buildcores/psu.json")).default as ReferenceProduct[],
+  CASE:async()=>(await import("../../../../packages/catalog/data/buildcores/case.json")).default as ReferenceProduct[],
+  COOLER:async()=>(await import("../../../../packages/catalog/data/buildcores/cooler.json")).default as ReferenceProduct[],
+  FAN:async()=>(await import("../../../../packages/catalog/data/buildcores/fan.json")).default as ReferenceProduct[],
+  NETWORK:async()=>(await import("../../../../packages/catalog/data/buildcores/network.json")).default as ReferenceProduct[],
 };
+
+async function loadIdIndex():Promise<Record<string,ProductCategory>> {
+  return (await import("../../../../packages/catalog/data/buildcores/id-index.json")).default as Record<string,ProductCategory>;
+}
 
 export function clampCatalogPageSize(limit:number):number {
   if(!Number.isFinite(limit))return 50;
@@ -55,22 +59,15 @@ export interface CatalogRepository {
   searchIdentity(query:string,category?:ProductCategory):Promise<ReferenceProduct[]>;
 }
 
-async function readJson<T>(path:string):Promise<T> {
-  return JSON.parse(await readFile(path,"utf8")) as T;
-}
-
-export function createCatalogRepository(
-  dataRoot:string=DATA_ROOT,
-):CatalogRepository {
+export function createCatalogRepository():CatalogRepository {
   const shardCache=new Map<ProductCategory,Promise<readonly ReferenceProduct[]>>();
   let idIndexPromise:Promise<Record<string,ProductCategory>>|undefined;
   let allPromise:Promise<readonly ReferenceProduct[]>|undefined;
   const curatedById=new Map(curatedRealCatalog.map((product)=>[product.id,product]));
 
   const loadGenerated=async(category:ProductCategory):Promise<readonly ReferenceProduct[]>=>{
-    const fileName=shardNames[category];
-    if(!fileName)return [];
-    return readJson<ReferenceProduct[]>(`${dataRoot}/${fileName}`);
+    const loader=shardLoaders[category];
+    return loader?loader():[];
   };
 
   const loadCategory=(category:ProductCategory):Promise<readonly ReferenceProduct[]>=>{
@@ -86,7 +83,7 @@ export function createCatalogRepository(
 
   const loadAll=():Promise<readonly ReferenceProduct[]>=>{
     if(allPromise)return allPromise;
-    const categories=Object.keys(shardNames) as ProductCategory[];
+    const categories=Object.keys(shardLoaders) as ProductCategory[];
     allPromise=Promise.all(categories.map(loadCategory)).then((groups)=>{
       const byId=new Map<string,ReferenceProduct>();
       for(const product of curatedRealCatalog)byId.set(product.id,product);
@@ -99,9 +96,7 @@ export function createCatalogRepository(
   };
 
   const idIndex=()=>{
-    idIndexPromise??=readJson<Record<string,ProductCategory>>(
-      `${dataRoot}/id-index.json`,
-    );
+    idIndexPromise??=loadIdIndex();
     return idIndexPromise;
   };
 
@@ -120,7 +115,6 @@ export function createCatalogRepository(
     const products=category?await loadCategory(category):await loadAll();
     return products.filter((product)=>productMatchesCatalogText(product,query));
   };
-
   return {loadCategory,loadAll,getById,searchIdentity};
 }
 

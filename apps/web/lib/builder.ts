@@ -7,9 +7,11 @@ import {
   isRepeatableCategory,
   maxSafeQuantity,
   previewAdd,
+  referenceCatalogResolver,
   removeOne,
   replaceSingleton,
   type BuildLine,
+  type CatalogResolver,
   type CompatibilityReport,
   type QuantityMutationResult,
   type ResourceUsage,
@@ -41,16 +43,30 @@ export interface BuilderSnapshot {
   totalPricePln: number;
 }
 
-export function productsFor(input: BuilderInput): ReferenceProduct[] {
-  return expandBuildLines(normalizeLines(input));
+export function productsForWithResolver(
+  input:BuilderInput,
+  resolver:CatalogResolver,
+):ReferenceProduct[] {
+  return expandBuildLines(normalizeLines(input),resolver);
 }
 
-export function snapshot(input: BuilderInput): BuilderSnapshot {
-  const lines = normalizeLines(input);
-  const products = expandBuildLines(lines);
-  const ids = products.map((product) => product.id);
-  const totalPricePln = lines.reduce((sum, line) => sum + (referencePricePln(line.productId) ?? 0) * line.quantity, 0);
-  return { lines, ids, products, report: evaluateBuild(products), resourceUsage: calculateResourceUsage(lines), totalPricePln };
+export function productsFor(input:BuilderInput):ReferenceProduct[] {
+  return productsForWithResolver(input,referenceCatalogResolver);
+}
+
+export function snapshotWithResolver(
+  input:BuilderInput,
+  resolver:CatalogResolver,
+):BuilderSnapshot {
+  const lines=normalizeLines(input);
+  const products=expandBuildLines(lines,resolver);
+  const ids=products.map((product)=>product.id);
+  const totalPricePln=lines.reduce((sum,line)=>sum+(referencePricePln(line.productId)??0)*line.quantity,0);
+  return {lines,ids,products,report:evaluateBuild(products),resourceUsage:calculateResourceUsage(lines,resolver),totalPricePln};
+}
+
+export function snapshot(input:BuilderInput):BuilderSnapshot {
+  return snapshotWithResolver(input,referenceCatalogResolver);
 }
 export function createInitialBuild(): BuilderSnapshot {
   return snapshot(initialBuildIds);
