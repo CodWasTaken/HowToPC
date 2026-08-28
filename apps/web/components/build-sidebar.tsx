@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { referenceCatalog } from "@howtopc/catalog";
-import { isRepeatableProduct, maxPartQuantity, type BuilderSnapshot } from "@/lib/builder";
+import { createCatalogResolver, isRepeatableCategory, maxSafeQuantity } from "@howtopc/compatibility";
+import type { BuilderSnapshot } from "@/lib/builder";
 import { CompatibilitySummary } from "./compatibility-summary";
 import { ResourceSummary } from "./resource-summary";
 
@@ -14,6 +14,7 @@ interface BuildSidebarProps {
 }
 
 export function BuildSidebar({ build, onIncrement, onDecrement, onClear, children, className }: BuildSidebarProps) {
+  const resolver=createCatalogResolver(build.products);
   return (
     <aside className={`panel build-panel ${className ?? ""}`}>
       <div className="build-panel-head">
@@ -24,10 +25,10 @@ export function BuildSidebar({ build, onIncrement, onDecrement, onClear, childre
         <section className="installed-section">
           {build.lines.length === 0 ? <p className="build-empty">Build is empty. Choose any component to begin.</p> : null}
           {build.lines.map((line) => {
-            const product = referenceCatalog.find((item) => item.id === line.productId);
+            const product = build.products.find((item) => item.id === line.productId);
             if (!product) return null;
-            const repeatable = isRepeatableProduct(product.id);
-            const max = repeatable ? maxPartQuantity(build.lines, product.id) : 1;
+            const repeatable = isRepeatableCategory(product.category);
+            const max = repeatable ? maxSafeQuantity(build.lines, product.id, resolver) : 1;
             return (
               <div className="installed-row redesigned" key={product.id} title={product.displayName}>
                 <span className="installed-copy">

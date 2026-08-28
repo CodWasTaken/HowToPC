@@ -1,124 +1,111 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { referenceCatalog } from "@howtopc/catalog";
+import type { ProductCategory, ReferenceProduct } from "@howtopc/catalog";
 import {
-  addPart,
-  createInitialBuild,
-  isRepeatableProduct,
-  maxPartQuantity,
-  partQuantity,
-  removePart,
-  replacePart,
-  snapshot,
-} from "@/lib/builder";
-import { catalogApplyState, sortCatalogForBuild } from "@/lib/catalog-compatibility";
+  addProductToSession,
+  createBuilderSession,
+  decrementProductInSession,
+  sessionSnapshot,
+  type BuilderSession,
+} from "@/lib/builder-session";
+import { useCatalogBrowser } from "@/hooks/use-catalog-browser";
 import { DigitalTwin } from "./digital-twin";
 import { ThemeToggle } from "./theme-toggle";
-import { WebMcpInspector } from "./webmcp-inspector";
 import { PartsBrowser } from "./parts-browser";
 import { BuildSidebar } from "./build-sidebar";
 import { WorkspaceNavigation, type MobileWorkspaceView } from "./workspace-navigation";
 import { presentBuildStatus } from "@/lib/presentation";
 
-const categories = ["CPU", "MOTHERBOARD", "MEMORY", "GPU", "CASE", "PSU", "COOLER", "STORAGE", "NETWORK", "FAN", "HBA"];
+const categories:readonly ProductCategory[]=[
+  "CPU","MOTHERBOARD","MEMORY","GPU","CASE","PSU","COOLER","STORAGE","NETWORK","FAN","HBA",
+];
+
+function rejectedMessage(result:ReturnType<typeof addProductToSession>):string|null {
+  if(result.mutation.committed)return null;
+  return result.mutation.report.results.find((item)=>item.status!=="COMPATIBLE")?.message
+    ?? "This change cannot be committed safely.";
+}
 export function BuilderWorkspace() {
-  const initial = createInitialBuild();
-  const [lines, setLines] = useState(initial.lines);
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("ALL");
-  const [preview, setPreview] = useState<ReturnType<typeof addPart> | null>(null);
-  const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
-  const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
-  const [mobileView, setMobileView] = useState<MobileWorkspaceView>("TWIN");
-  const current = useMemo(() => snapshot(lines), [lines]);
-  const filtered = referenceCatalog.filter((product) =>
-    (category === "ALL" || product.category === category) &&
-    (!query || `${product.manufacturer} ${product.displayName}`.toLowerCase().includes(query.toLowerCase()))
-  );
-  const visible = sortCatalogForBuild(lines, filtered);
-  const installed = new Set(lines.map((line) => line.productId));
-  const presentedStatus = presentBuildStatus(current.report);
+  const [session,setSession]=useState<BuilderSession>(()=>createBuilderSession());
+  const [previewMessage,setPreviewMessage]=useState<string|null>(null);
+  const [leftDrawerOpen,setLeftDrawerOpen]=useState(false);
+  const [rightDrawerOpen,setRightDrawerOpen]=useState(false);
+  const [mobileView,setMobileView]=useState<MobileWorkspaceView>("TWIN");
+  const browser=useCatalogBrowser(session.lines);
+  const current=useMemo(()=>sessionSnapshot(session),[session]);
+  const installed=useMemo(()=>new Set(session.lines.map((line)=>line.productId)),[session.lines]);
+  const presentedStatus=presentBuildStatus(current.report);
 
-  function selectPart(id: string) {
-    const result = replacePart(lines, id);
-    setPreview(result);
-    if (result.committed) setLines(result.snapshot.lines);
+  function addProduct(product:ReferenceProduct) {
+    const result=addProductToSession(session,product);
+    setPreviewMessage(rejectedMessage(result));
+    if(result.mutation.committed)setSession(result.session);
   }
 
-  function increment(id: string) {
-    const result = addPart(lines, id);
-    setPreview(result);
-    if (result.committed) setLines(result.snapshot.lines);
+  function increment(productId:string) {
+    const product=session.knownProducts[productId]
+      ?? current.products.find((item)=>item.id===productId);
+    if(product)addProduct(product);
   }
 
-  function decrement(id: string) {
-    setLines(removePart(lines, id).lines);
-    setPreview(null);
+  function decrement(productId:string) {
+    const result=decrementProductInSession(session,productId);
+    setSession(result.session);setPreviewMessage(null);
   }
-  return (
-    <main className="app-shell">
-      <header className="topbar">
-        <div><strong>HowToPC</strong><span>engineering configurator</span></div>
-        <div className="top-status">
-          <span className={`status-dot ${presentedStatus.toLowerCase()}`} />
-          {presentedStatus}
-          <ThemeToggle />
-        </div>
-      </header>
-      <WorkspaceNavigation
-        leftDrawerOpen={leftDrawerOpen}
-        rightDrawerOpen={rightDrawerOpen}
-        mobileView={mobileView}
-        onToggleParts={() => { setLeftDrawerOpen((open) => !open); setRightDrawerOpen(false); }}
-        onShowTwin={() => { setLeftDrawerOpen(false); setRightDrawerOpen(false); }}
-        onToggleBuild={() => { setRightDrawerOpen((open) => !open); setLeftDrawerOpen(false); }}
-        onMobileView={setMobileView}
+
+  const quantityFor=(productId:string)=>session.lines.find((line)=>line.productId===productId)?.quantity??0;
+  return <main className="app-shell">
+    <header className="topbar">
+      <div><strong>HowToPC</strong><span>engineering configurator</span></div>
+      <div className="top-status">
+        <span className={`status-dot ${presentedStatus.toLowerCase()}`} />
+        {presentedStatus}
+        <ThemeToggle />
+      </div>
+    </header>
+    <WorkspaceNavigation
+      leftDrawerOpen={leftDrawerOpen} rightDrawerOpen={rightDrawerOpen}
+      mobileView={mobileView}
+      onToggleParts={()=>{setLeftDrawerOpen((open)=>!open);setRightDrawerOpen(false);}}
+      onShowTwin={()=>{setLeftDrawerOpen(false);setRightDrawerOpen(false);}}
+      onToggleBuild={()=>{setRightDrawerOpen((open)=>!open);setLeftDrawerOpen(false);}}
+      onMobileView={setMobileView}
+    />
+    <section className="workspace" data-mobile-view={mobileView}>
+      <PartsBrowser
+        className={`${leftDrawerOpen?"drawer-open":""} ${mobileView==="PARTS"?"mobile-active":""}`}
+        items={browser.state.items} total={browser.state.total}
+        categories={categories} category={browser.state.category}
+        query={browser.queryInput} loading={browser.loading} error={browser.error}
+        filters={browser.state.filters} facets={browser.state.facets}
+        compatibleOnly={browser.state.compatibleOnly} sort={browser.state.sort}
+        installedIds={installed} quantityFor={quantityFor}
+        onQueryChange={browser.setQueryInput}
+        onCategoryChange={browser.setCategory}
+        onAdd={addProduct} onDecrement={decrement} onLoadMore={browser.loadMore}
+        onToggleEnum={browser.toggleEnum} onBoolean={browser.setBoolean}
+        onRange={browser.setRange} onToggleUnknown={browser.toggleUnknown}
+        onRemoveFilter={browser.removeFacet} onClearFilters={browser.clearFilters}
+        onCompatibleOnly={browser.setCompatibleOnly} onSort={browser.setSort}
       />
-      <section className="workspace" data-mobile-view={mobileView}>
-        <PartsBrowser
-          className={`${leftDrawerOpen ? "drawer-open" : ""} ${mobileView === "PARTS" ? "mobile-active" : ""}`}
-          products={visible}
-          categories={categories}
-          category={category}
-          query={query}
-          installedIds={installed}
-          applyStateFor={(id) => catalogApplyState(lines, id)}
-          repeatableFor={isRepeatableProduct}
-          quantityFor={(id) => partQuantity(lines, id)}
-          maxQuantityFor={(id) => isRepeatableProduct(id) ? maxPartQuantity(lines, id) : 1}
-          onQueryChange={setQuery}
-          onCategoryChange={setCategory}
-          onAdd={(id) => isRepeatableProduct(id) ? increment(id) : selectPart(id)}
-          onDecrement={decrement}
-        />
-        <section className={`panel twin-panel ${mobileView === "TWIN" ? "mobile-active" : ""}`}>
-          <div className="panel-title-row">
-            <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
-          </div>
-          <DigitalTwin products={current.products} />
-          {preview && !preview.committed ? (
-            <div className="rejected" role="alert">
-              <b>Change not committed</b>
-              <span>{preview.candidate.report.results.find((result) => result.status === "INCOMPATIBLE" || result.status === "UNKNOWN")?.message}</span>
-            </div>
-          ) : null}
-        </section>
-        <BuildSidebar
-          className={`${rightDrawerOpen ? "drawer-open" : ""} ${mobileView === "BUILD" ? "mobile-active" : ""}`}
-          build={current}
-          onIncrement={increment}
-          onDecrement={decrement}
-          onClear={() => { setLines([]); setPreview(null); }}
-        >
-          <WebMcpInspector lines={lines} setLines={setLines} />
-        </BuildSidebar>
-        <button
-          className={`workspace-backdrop ${leftDrawerOpen || rightDrawerOpen ? "visible" : ""}`}
-          onClick={() => { setLeftDrawerOpen(false); setRightDrawerOpen(false); }}
-          aria-label="Close side panel"
-        />
+      <section className={`panel twin-panel ${mobileView==="TWIN"?"mobile-active":""}`}>
+        <div className="panel-title-row">
+          <div><h2>Digital twin</h2><p>Real-scale parametric geometry; visual fidelity is not verification.</p></div>
+        </div>
+        <DigitalTwin products={current.products} />
+        {previewMessage?<div className="rejected" role="alert">
+          <b>Change not committed</b><span>{previewMessage}</span>
+        </div>:null}
       </section>
-    </main>
-  );
+      <BuildSidebar
+        className={`${rightDrawerOpen?"drawer-open":""} ${mobileView==="BUILD"?"mobile-active":""}`}
+        build={current} onIncrement={increment} onDecrement={decrement}
+        onClear={()=>{setSession(createBuilderSession([],session.knownProducts));setPreviewMessage(null);}}
+      />
+      <button className={`workspace-backdrop ${leftDrawerOpen||rightDrawerOpen?"visible":""}`}
+        onClick={()=>{setLeftDrawerOpen(false);setRightDrawerOpen(false);}}
+        aria-label="Close side panel" />
+    </section>
+  </main>;
 }
