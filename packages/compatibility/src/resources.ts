@@ -1,5 +1,6 @@
 import type { ReferenceProduct } from "@howtopc/catalog";
 import { expandBuildLines, type BuildLine } from "./build-lines";
+import { referenceCatalogResolver, type CatalogResolver } from "./catalog-resolver";
 
 export interface ResourceCounter {
   used: number;
@@ -46,6 +47,9 @@ export function calculateResourceUsageForProducts(products: readonly ReferencePr
   };
 }
 
-export function calculateResourceUsage(lines: readonly BuildLine[]): ResourceUsage {
-  return calculateResourceUsageForProducts(expandBuildLines(lines));
+export function calculateResourceUsage(
+  lines:readonly BuildLine[],
+  resolver:CatalogResolver=referenceCatalogResolver,
+):ResourceUsage {
+  return calculateResourceUsageForProducts(expandBuildLines(lines,resolver));
 }
