@@ -8,15 +8,38 @@
 
 [![WebMCP](https://img.shields.io/badge/WebMCP-Agent--Native-5B5BD6?style=for-the-badge)](https://webmachinelearning.github.io/webmcp/)
 [![OpenAI WebMCP Challenge](https://img.shields.io/badge/OpenAI-WebMCP%20Challenge%202026-111111?style=for-the-badge)](https://webmcp.devpost.com/)
-[![Catalog](https://img.shields.io/badge/Sourced%20Hardware-26%2C408%20Products-0A7B83?style=for-the-badge)](#real-hardware-not-a-demo-catalog)
-[![Tests](https://img.shields.io/badge/Tests-165%20Passing-2E7D32?style=for-the-badge)](#engineering-confidence)
+[![Catalog](https://img.shields.io/badge/Sourced%20Hardware-26%2C415%20Products-0A7B83?style=for-the-badge)](#real-hardware-not-a-demo-catalog)
+[![Tests](https://img.shields.io/badge/Tests-182%20Passing-2E7D32?style=for-the-badge)](#engineering-confidence)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F4C430?style=for-the-badge)](LICENSE)
+[![Live on Vercel](https://img.shields.io/badge/Live-howtopc.vercel.app-000000?style=for-the-badge&logo=vercel)](https://howtopc.vercel.app)
 
-[**Try the live demo →**](https://continues-jeffrey-std-losses.trycloudflare.com) · [**Jump to the 30-second judge test →**](#try-it-in-30-seconds) · [**See the WebMCP tools →**](#10-structured-webmcp-tools)
+[**Launch HowToPC →**](https://howtopc.vercel.app) · [**30-second WebMCP test →**](#try-it-in-30-seconds) · [**See the 10 tools →**](#10-structured-webmcp-tools)
 
 </div>
+
+---
+
+## See the configurator
+
+<p align="center">
+  <a href="https://howtopc.vercel.app">
+    <img src="docs/screenshots/high-end-template.png" alt="HowToPC High-End Gaming PC template with Digital Twin, compatibility, resource accounting, and WebMCP registered" width="100%">
+  </a>
+</p>
+
+<p align="center"><sub><strong>High-End Gaming PC:</strong> Ryzen 9 9950X3D + RTX 5090 Founders Edition. The same screen exposes the sourced catalog, live build, resource usage, compatibility, parametric Digital Twin, and <strong>10 registered WebMCP tools</strong>.</sub></p>
+
+<details>
+<summary><strong>See the RTX 4060 starter build</strong></summary>
+<br>
+<p align="center">
+  <a href="https://howtopc.vercel.app">
+    <img src="docs/screenshots/rtx-4060-template.png" alt="HowToPC RTX 4060 Gaming PC template with a compatible build, Digital Twin, and WebMCP registered" width="100%">
+  </a>
+</p>
+</details>
 
 ---
 
@@ -33,13 +56,13 @@ The browser UI and the AI agent operate the **same canonical builder session**, 
 
 | | |
 |---|---|
-| **26,408 sourced products** | Deterministically normalized from a pinned BuildCores OpenDB snapshot |
+| **26,415 sourced products** | 26,408 normalized from a pinned BuildCores OpenDB snapshot + 7 curated sourced references |
 | **10 WebMCP tools** | Search, inspect, mutate, diagnose, and find compatible hardware |
 | **One shared build state** | Human edits and agent edits immediately see each other |
 | **Deterministic compatibility** | The language model does not decide whether hardware fits |
 | **Server-side full-set search** | Query, facets, and compatibility run before pagination |
 | **Parametric Digital Twin** | Known geometry is placed and checked; missing topology stays unknown |
-| **165 automated tests** | Catalog, compatibility, geometry, WebMCP, API, and session behavior |
+| **182 automated tests** | Catalog, compatibility, geometry, WebMCP, API, onboarding, and session behavior |
 
 > **Design rule: Unknown is not compatible.** Missing evidence never becomes a green checkmark.
 
@@ -69,17 +92,15 @@ WebMCP is **not** connected to a privileged demo database or a second agent-only
 
 ## Try it in 30 seconds
 
-Open the [live demo](https://continues-jeffrey-std-losses.trycloudflare.com) in ChatGPT's in-app browser, which supports WebMCP, then try this sequence:
+Open **[howtopc.vercel.app](https://howtopc.vercel.app)** in a WebMCP-capable client. For Chrome testing, use Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled and restart the browser. Then:
 
-1. **"Search the catalog for an AMD Ryzen 7 7700X and inspect the best match."**
-2. **"Add it to my build, then find compatible AM5 motherboards."**
-3. Pick or replace a component manually in the visible Parts pane.
-4. **"Read my current build and tell me what changed. Show the compatibility report."**
-5. Ask the agent to find a compatible replacement for a conflicting component.
+1. Click **Templates → RTX 4060 Gaming PC** to load a known-good eight-part build.
+2. Ask the agent: **"Read my current build and show the compatibility and geometry reports."**
+3. Ask: **"Find a stronger compatible GPU, inspect a top match, and replace my current GPU if it remains safe."**
+4. Watch the visible **Build**, **Resources**, **Compatibility**, and **Digital Twin** update from the same committed session.
+5. Change a component manually, then ask: **"Read my build again and tell me what changed."**
 
-Watch the same **Parts**, **Build**, and **Digital Twin** state change as human and agent actions alternate.
-
-> The interesting part is the handoff: the person can edit the build manually, and the agent immediately continues from that exact state without scraping the UI or being told what changed.
+> The interesting part is the handoff: the person and agent alternate control without scraping the page or maintaining separate copies of the configuration. The agent reads and mutates the exact builder session the person sees.
 
 ---
 
@@ -212,12 +233,14 @@ That is the core WebMCP experiment: **the website remains excellent for a person
 
 ## Built during the WebMCP Challenge
 
-Challenge-period work on this branch includes the pieces that make the app agent-native rather than simply adding a chat surface:
+Challenge-period work in this submission includes the pieces that make the app agent-native rather than simply adding a chat surface:
 
 - normalized and generated the broad sourced hardware catalog used by both people and agents;
 - introduced full-dataset server search, category facets, sorting, and compatibility-before-pagination;
 - made compatibility resolver-aware so arbitrary catalog products—not only fixtures—can participate in a build;
 - added a retained canonical builder session so installed products survive search/page changes;
+- added first-visit **RTX 4060 Gaming PC** and **High-End Gaming PC** templates that replace the same canonical session used by the UI and WebMCP;
+- added template regression gates requiring deterministic compatibility and zero modeled component collisions;
 - exposed the public catalog and builder as **10 structured WebMCP tools**;
 - routed human and agent edits through the same compatibility-aware mutation behavior;
 - exposed compatibility, resource usage, and geometry diagnostics to the agent;
@@ -237,7 +260,7 @@ The repository uses a workspace-wide verification gate covering TypeScript, unit
 pnpm verify
 ```
 
-Current verified checkpoint: **48 test files / 165 tests passing**, with all workspace typechecks and the production build passing.
+Current verified checkpoint: **53 test files / 182 tests passing**, with all workspace typechecks and the production build passing.
 
 Representative regression coverage includes shared builder sessions, full-set search before pagination, unknown capacity, PSU/GPU connector families, AIO geometry, storage/GPU collision placement, public catalog routes, and WebMCP tool behavior.
 
