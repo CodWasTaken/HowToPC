@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import type { ReferenceProduct } from "@howtopc/catalog";
 import { catalogRepository } from "./server/catalog-repository";
+import { buildParametricScene } from "@howtopc/geometry";
 import { sessionSnapshot } from "./builder-session";
 import {
   BUILDER_TEMPLATES,
@@ -44,5 +45,6 @@ describe("builder templates",()=>{
     expect(snapshot.lines).toHaveLength(template.productIds.length);
     expect(snapshot.products).toHaveLength(template.productIds.length);
     expect(snapshot.report.status).toBe("COMPATIBLE");
+    expect(buildParametricScene(snapshot.products).collisions).toEqual([]);
   },20000);
 });
