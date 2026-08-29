@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ProductCategory, ReferenceProduct } from "@howtopc/catalog";
 import {
   addProductToSession,
@@ -17,6 +17,9 @@ import { BuildSidebar } from "./build-sidebar";
 import { WebMcpInspector } from "./webmcp-inspector";
 import { WorkspaceNavigation, type MobileWorkspaceView } from "./workspace-navigation";
 import { presentBuildStatus } from "@/lib/presentation";
+import { BUILDER_TEMPLATES, loadBuilderTemplate } from "@/lib/builder-templates";
+import { markOnboardingSeen, shouldShowOnboarding } from "@/lib/onboarding";
+import { TemplatePicker } from "./template-picker";
 
 const categories:readonly ProductCategory[]=[
   "CPU","MOTHERBOARD","MEMORY","GPU","CASE","PSU","COOLER","STORAGE","NETWORK","FAN",
@@ -33,10 +36,24 @@ export function BuilderWorkspace() {
   const [leftDrawerOpen,setLeftDrawerOpen]=useState(false);
   const [rightDrawerOpen,setRightDrawerOpen]=useState(false);
   const [mobileView,setMobileView]=useState<MobileWorkspaceView>("TWIN");
+  const [templateOpen,setTemplateOpen]=useState(false);
+  const [templateBusy,setTemplateBusy]=useState(false);
+  const [templateError,setTemplateError]=useState<string|null>(null);
   const browser=useCatalogBrowser(session.lines);
   const current=useMemo(()=>sessionSnapshot(session),[session]);
   const installed=useMemo(()=>new Set(session.lines.map((line)=>line.productId)),[session.lines]);
   const presentedStatus=presentBuildStatus(current.report);
+
+  useEffect(()=>{
+    try{
+      if(shouldShowOnboarding(window.localStorage)){
+        markOnboardingSeen(window.localStorage);
+        setTemplateOpen(true);
+      }
+    }catch{
+      setTemplateOpen(true);
+    }
+  },[]);
 
   function addProduct(product:ReferenceProduct) {
     const result=addProductToSession(session,product);
@@ -55,13 +72,39 @@ export function BuilderWorkspace() {
     setSession(result.session);setPreviewMessage(null);
   }
 
+  async function chooseTemplate(templateId:string|"scratch") {
+    setTemplateError(null);
+    if(templateId==="scratch"){
+      setSession(createBuilderSession());
+      setPreviewMessage(null);
+      setTemplateOpen(false);
+      return;
+    }
+    const template=BUILDER_TEMPLATES.find((item)=>item.id===templateId);
+    if(!template)return;
+    setTemplateBusy(true);
+    try{
+      setSession(await loadBuilderTemplate(template));
+      setPreviewMessage(null);
+      setTemplateOpen(false);
+    }catch(error){
+      setTemplateError(error instanceof Error?error.message:"Template could not be loaded.");
+    }finally{
+      setTemplateBusy(false);
+    }
+  }
+
   const quantityFor=(productId:string)=>session.lines.find((line)=>line.productId===productId)?.quantity??0;
   return <main className="app-shell">
+    <TemplatePicker open={templateOpen} busy={templateBusy} error={templateError}
+      onClose={()=>{if(!templateBusy){setTemplateOpen(false);setTemplateError(null);}}}
+      onChoose={chooseTemplate} />
     <header className="topbar">
       <div><strong>HowToPC</strong><span>engineering configurator</span></div>
       <div className="top-status">
         <span className={`status-dot ${presentedStatus.toLowerCase()}`} />
         {presentedStatus}
+        <button className="topbar-action" onClick={()=>{setTemplateError(null);setTemplateOpen(true);}}>Templates</button>
         <ThemeToggle />
       </div>
     </header>
