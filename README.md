@@ -82,7 +82,7 @@ WebMCP is the difference between an agent *operating a webpage* and an agent *pa
 | Needs a separate automation path | Uses the same mutation engine as human actions |
 | Has no mechanical model | Can query resource and geometry diagnostics |
 
-The result is a genuinely **human-agent collaborative workflow**: a person can make the subjective choices—case style, favorite CPU, a specific GPU—while the agent performs the repetitive catalog search and constraint checking. Either side can take over at any moment without translating the build into a chat transcript.
+The result is a genuinely **human-agent collaborative workflow**: a person can make subjective choices like case style, favorite CPU, or a specific GPU, while the agent performs the repetitive catalog search and constraint checking. Either side can take over at any moment without translating the build into a chat transcript.
 
 ### The important implementation detail
 
@@ -122,7 +122,7 @@ Open **[howtopc.vercel.app](https://howtopc.vercel.app)** in a WebMCP-capable cl
 These tools are registered with the browser's `document.modelContext` WebMCP surface and execute against the same application services used by the human interface.
 
 ```ts
-// Simplified registration shape — the real schemas and handlers live in the app.
+// Simplified registration shape; the real schemas and handlers live in the app.
 document.modelContext.registerTool({
   name: "catalog_search",
   description: "Search the public hardware catalog",
@@ -237,7 +237,7 @@ Challenge-period work in this submission includes the pieces that make the app a
 
 - normalized and generated the broad sourced hardware catalog used by both people and agents;
 - introduced full-dataset server search, category facets, sorting, and compatibility-before-pagination;
-- made compatibility resolver-aware so arbitrary catalog products—not only fixtures—can participate in a build;
+- made compatibility resolver-aware so arbitrary catalog products, not only fixtures, can participate in a build;
 - added a retained canonical builder session so installed products survive search/page changes;
 - added first-visit **RTX 4060 Gaming PC** and **High-End Gaming PC** templates that replace the same canonical session used by the UI and WebMCP;
 - added template regression gates requiring deterministic compatibility and zero modeled component collisions;
@@ -329,7 +329,7 @@ Third-party datasets keep their own licensing terms. In particular, BuildCores-d
 ---
 
 <details>
-<summary><strong>Current limitations — intentionally visible</strong></summary>
+<summary><strong>Current limitations: intentionally visible</strong></summary>
 
 - **Pricing is intentionally excluded** from this challenge build. Hardware identity/specifications and merchant offers are separate concerns.
 - **AIO radiator mount location is not guessed.** The CPU pump/block can be represented, while unsourced radiator topology is reported as `TOPOLOGY_UNKNOWN`.
