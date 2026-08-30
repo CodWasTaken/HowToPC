@@ -100,7 +100,10 @@ export function BuilderWorkspace() {
       onClose={()=>{if(!templateBusy){setTemplateOpen(false);setTemplateError(null);}}}
       onChoose={chooseTemplate} />
     <header className="topbar">
-      <div><strong>HowToPC</strong><span>engineering configurator</span></div>
+      <div className="brand-lockup">
+        <img className="brand-mark" src="/howtopc-logo.png" alt="HowToPC" width={30} height={30} />
+        <div className="brand-copy"><strong>HowToPC</strong><span>engineering configurator</span></div>
+      </div>
       <div className="top-status">
         <span className={`status-dot ${presentedStatus.toLowerCase()}`} />
         {presentedStatus}

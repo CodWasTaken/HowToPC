@@ -1,5 +1,9 @@
 <div align="center">
 
+<a href="https://howtopc.vercel.app">
+  <img src="docs/branding/howtopc-banner.png" alt="HowToPC engineering configurator" width="100%">
+</a>
+
 # HowToPC
 
 ### An agent-native PC configurator where humans and AI build the same machine together.
@@ -9,7 +13,7 @@
 [![WebMCP](https://img.shields.io/badge/WebMCP-Agent--Native-5B5BD6?style=for-the-badge)](https://webmachinelearning.github.io/webmcp/)
 [![OpenAI WebMCP Challenge](https://img.shields.io/badge/OpenAI-WebMCP%20Challenge%202026-111111?style=for-the-badge)](https://webmcp.devpost.com/)
 [![Catalog](https://img.shields.io/badge/Sourced%20Hardware-26%2C415%20Products-0A7B83?style=for-the-badge)](#real-hardware-not-a-demo-catalog)
-[![Tests](https://img.shields.io/badge/Tests-182%20Passing-2E7D32?style=for-the-badge)](#engineering-confidence)
+[![Tests](https://img.shields.io/badge/Tests-186%20Passing-2E7D32?style=for-the-badge)](#engineering-confidence)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F4C430?style=for-the-badge)](LICENSE)
@@ -62,7 +66,7 @@ The browser UI and the AI agent operate the **same canonical builder session**, 
 | **Deterministic compatibility** | The language model does not decide whether hardware fits |
 | **Server-side full-set search** | Query, facets, and compatibility run before pagination |
 | **Parametric Digital Twin** | Known geometry is placed and checked; missing topology stays unknown |
-| **182 automated tests** | Catalog, compatibility, geometry, WebMCP, API, onboarding, and session behavior |
+| **186 automated tests** | Catalog, compatibility, geometry, WebMCP, API, onboarding, and session behavior |
 
 > **Design rule: Unknown is not compatible.** Missing evidence never becomes a green checkmark.
 
@@ -260,7 +264,7 @@ The repository uses a workspace-wide verification gate covering TypeScript, unit
 pnpm verify
 ```
 
-Current verified checkpoint: **53 test files / 182 tests passing**, with all workspace typechecks and the production build passing.
+Current verified checkpoint: **54 test files / 186 tests passing**, with all workspace typechecks and the production build passing.
 
 Representative regression coverage includes shared builder sessions, full-set search before pagination, unknown capacity, PSU/GPU connector families, AIO geometry, storage/GPU collision placement, public catalog routes, and WebMCP tool behavior.
 
