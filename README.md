@@ -18,8 +18,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-F4C430?style=for-the-badge)](LICENSE)
 [![Live on Vercel](https://img.shields.io/badge/Live-howtopc.vercel.app-000000?style=for-the-badge&logo=vercel)](https://howtopc.vercel.app)
+[![Video Demo](https://img.shields.io/badge/Video_Demo-2%3A47-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=KEx9x5krkLs)
 
-[**Launch HowToPC →**](https://howtopc.vercel.app) · [**30-second WebMCP test →**](#try-it-in-30-seconds) · [**See the 10 tools →**](#10-structured-webmcp-tools)
+[**Launch HowToPC →**](https://howtopc.vercel.app) · [**Watch the 2:47 demo →**](https://www.youtube.com/watch?v=KEx9x5krkLs) · [**30-second WebMCP test →**](#try-it-in-30-seconds) · [**See the 10 tools →**](#10-structured-webmcp-tools)
 
 </div>
 
@@ -44,6 +45,14 @@
   </a>
 </p>
 </details>
+
+---
+
+## Watch the WebMCP demo
+
+[**Watch the 2:47 HowToPC WebMCP demo on YouTube →**](https://www.youtube.com/watch?v=KEx9x5krkLs)
+
+The demo shows the shared human-agent workflow end to end: WebMCP tool discovery, a deterministic CPU-socket incompatibility rejection, a compatible AM5 motherboard replacement, and a fresh agent read of the same changed builder state.
 
 ---
 
